@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>San Francisco — A Local's Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fog: #f0ede8;
+    --fog2: #e4dfd7;
+    --bay: #2d5986;
+    --bay-light: #4a7ab5;
+    --gold: #c8923a;
+    --gold-light: #e8b96a;
+    --terra: #b5503a;
+    --sage: #6b8c6e;
+    --ink: #1a1714;
+    --ink-soft: #3d3530;
+    --mist: #8a8280;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--fog);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    color: var(--fog);
+    padding: 80px 48px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 70% 40%, rgba(45,89,134,0.4) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 20% 80%, rgba(200,146,58,0.2) 0%, transparent 50%);
+  }
+
+  .hero-inner { position: relative; max-width: 900px; margin: 0 auto; }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 400;
+    line-height: 0.95;
+    margin-bottom: 8px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .hero-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--mist);
+    margin-top: 24px;
+    letter-spacing: 0.05em;
+  }
+
+  .hero-dates {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--mist);
+    text-align: right;
+    letter-spacing: 0.1em;
+  }
+
+  /* NAV */
+  .nav-strip {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 0 48px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .nav-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mist);
+    padding: 14px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+
+  .nav-btn:hover, .nav-btn.active {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold);
+  }
+
+  /* MAIN */
+  .main { max-width: 960px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  /* DAY CARDS */
+  .day-section {
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .day-section.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .day-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--fog2);
+  }
+
+  .day-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 64px;
+    font-weight: 400;
+    color: var(--fog2);
+    line-height: 1;
+  }
+
+  .day-meta { flex: 1; }
+
+  .day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .day-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+
+  .day-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    align-self: flex-start;
+  }
+  .tag-special { background: var(--gold); color: white; }
+  .tag-nature { background: var(--sage); color: white; }
+  .tag-culture { background: var(--bay); color: white; }
+  .tag-food { background: var(--terra); color: white; }
+
+  /* STOPS */
+  .stops { display: flex; flex-direction: column; gap: 16px; }
+
+  .stop {
+    background: white;
+    border-radius: 6px;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: 16px;
+    align-items: start;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s;
+    position: relative;
+  }
+
+  .stop:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+  .stop-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--mist);
+    letter-spacing: 0.08em;
+    padding-top: 3px;
+  }
+
+  .stop-content { flex: 1; }
+
+  .stop-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .stop-note {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .stop-tip {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: rgba(200,146,58,0.08);
+    border-left: 2px solid var(--gold);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .stop-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .type-eat { background: #fde8e0; color: var(--terra); }
+  .type-see { background: #e0ecf7; color: var(--bay); }
+  .type-walk { background: #e5efe6; color: var(--sage); }
+  .type-event { background: #fef3e0; color: var(--gold); }
+
+  /* CONNECTOR LINE */
+  .stop-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding-top: 6px;
+  }
+
+  .stop-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--fog2);
+    flex-shrink: 0;
+  }
+
+  .stop.highlight .stop-dot { background: var(--gold); }
+  .stop.highlight { border-left: 3px solid var(--gold); }
+
+  /* FOOD SECTION */
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .food-card {
+    background: white;
+    border-radius: 6px;
+    padding: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  .food-name { font-weight: 500; font-size: 14px; margin-bottom: 4px; }
+  .food-desc { font-size: 12px; color: var(--mist); line-height: 1.4; }
+  .food-tag { 
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin-bottom: 8px;
+  }
+
+  /* NOTES BOX */
+  .notes-box {
+    background: var(--ink);
+    color: var(--fog);
+    border-radius: 6px;
+    padding: 24px;
+    margin-top: 24px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .notes-box h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+  }
+  .notes-box ul { list-style: none; }
+  .notes-box li { padding: 4px 0; padding-left: 16px; position: relative; }
+  .notes-box li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--mist);
+  }
+
+  /* OVERVIEW TABLE */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .overview-card {
+    background: white;
+    border-radius: 6px;
+    padding: 16px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+  }
+  .overview-card:hover { border-left-color: var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .overview-card-day {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--mist);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .overview-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .overview-card-desc { font-size: 12px; color: var(--ink-soft); line-height: 1.4; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mist);
+    margin: 28px 0 12px;
+  }
+
+  .easter-banner {
+    background: linear-gradient(135deg, var(--gold) 0%, var(--terra) 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 48px 24px 40px; }
+    .main { padding: 32px 20px 60px; }
+    .nav-strip { padding: 0 20px; }
+    .stop { grid-template-columns: 36px 1fr; }
+    .stop-type { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-dates">Mar 30 – Apr 7, 2026<br>9 Days in The City</div>
+    <div class="hero-eyebrow">A Local's Guide to</div>
+    <h1>San<br><em>Francisco</em></h1>
+    <div class="hero-sub">Curated for CG & Bella · Authentic, not touristy</div>
+  </div>
+</div>
+
+<div class="nav-strip">
+  <button class="nav-btn active" onclick="show('overview')">Overview</button>
+  <button class="nav-btn" onclick="show('day1')">Mar 30</button>
+  <button class="nav-btn" onclick="show('day2')">Mar 31</button>
+  <button class="nav-btn" onclick="show('day3')">Apr 1</button>
+  <button class="nav-btn" onclick="show('day4')">Apr 2</button>
+  <button class="nav-btn" onclick="show('day5')">Apr 3</button>
+  <button class="nav-btn" onclick="show('day6')">Apr 4</button>
+  <button class="nav-btn" onclick="show('day7')">Apr 5 🐣</button>
+  <button class="nav-btn" onclick="show('day8')">Apr 6</button>
+  <button class="nav-btn" onclick="show('day9')">Apr 7</button>
+  <button class="nav-btn" onclick="show('food')">Food Guide</button>
+  <button class="nav-btn" onclick="show('bars')">Bars & Drinks</button>
+  <button class="nav-btn" onclick="show('hidden')">Hidden Gems</button>
+  <button class="nav-btn" onclick="show('neighborhoods')">Neighborhoods</button>
+  <button class="nav-btn" onclick="show('museums')">Museums</button>
+  <button class="nav-btn" onclick="show('nature')">🥾 Hikes & Outdoors</button>
+  <button class="nav-btn" onclick="show('marin')">🌲 Marin</button>
+  <button class="nav-btn" onclick="show('sonoma')">🍷 Sonoma</button>
+  <button class="nav-btn" onclick="show('santacruz')">🏄 Santa Cruz</button>
+  <button class="nav-btn" onclick="show('peninsula')">🌉 Peninsula</button>
+  <button class="nav-btn" onclick="show('daytrips')">Day Trip Map</button>
+</div>
+
+<div class="main">
+
+<!-- OVERVIEW -->
+<div id="overview" class="day-section active">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">The Full Picture</div>
+      <div class="day-date">March 30 – April 7, 2026 · 9 Days</div>
+    </div>
+  </div>
+
+  <div class="overview-grid">
+    <div class="overview-card" onclick="show('day1')">
+      <div class="overview-card-day">Day 1 · Mon Mar 30</div>
+      <div class="overview-card-title">The Waterfront</div>
+      <div class="overview-card-desc">Ferry Building, Fisherman's Wharf, Pier 39, Ghirardelli, Fort Mason</div>
+    </div>
+    <div class="overview-card" onclick="show('day2')">
+      <div class="overview-card-day">Day 2 · Tue Mar 31</div>
+      <div class="overview-card-title">Golden Gate & Presidio</div>
+      <div class="overview-card-desc">Crissy Field, Sea Organ, GG Bridge, Presidio, Baker Beach, Disney Museum</div>
+    </div>
+    <div class="overview-card" onclick="show('day3')">
+      <div class="overview-card-day">Day 3 · Wed Apr 1</div>
+      <div class="overview-card-title">North Beach + Cable Cars</div>
+      <div class="overview-card-desc">Chinatown, North Beach, Coit Tower, Cable Car ride, Lombard St</div>
+    </div>
+    <div class="overview-card" onclick="show('day4')">
+      <div class="overview-card-day">Day 4 · Thu Apr 2</div>
+      <div class="overview-card-title">Land's End & Haight</div>
+      <div class="overview-card-desc">Sutro Baths, Lands End, Ocean Beach, Haight-Ashbury, Painted Ladies</div>
+    </div>
+    <div class="overview-card" onclick="show('day5')">
+      <div class="overview-card-day">Day 5 · Fri Apr 3</div>
+      <div class="overview-card-title">Golden Gate Park</div>
+      <div class="overview-card-desc">Japanese Tea Garden, Botanical Garden, de Young, Academy of Sciences</div>
+    </div>
+    <div class="overview-card" onclick="show('day6')">
+      <div class="overview-card-day">Day 6 · Sat Apr 4</div>
+      <div class="overview-card-title">Marin County</div>
+      <div class="overview-card-desc">Sausalito, Muir Woods, Muir Beach, Mount Tam, Point Bonita</div>
+    </div>
+    <div class="overview-card" onclick="show('day7')">
+      <div class="overview-card-day">Day 7 · Sun Apr 5 🐣</div>
+      <div class="overview-card-title">Easter Sunday</div>
+      <div class="overview-card-desc">Dolores Park, Mission District, Castro, Alcatraz evening tour</div>
+    </div>
+    <div class="overview-card" onclick="show('day8')">
+      <div class="overview-card-day">Day 8 · Mon Apr 6</div>
+      <div class="overview-card-title">Bay Islands</div>
+      <div class="overview-card-desc">Angel Island ferry, Treasure Island, Tiburon or Sausalito return</div>
+    </div>
+    <div class="overview-card" onclick="show('day9')">
+      <div class="overview-card-day">Day 9 · Tue Apr 7</div>
+      <div class="overview-card-title">Peninsula & Farewell</div>
+      <div class="overview-card-desc">Farmer's Market, Sunset District, Palace of Fine Arts, Lyon Steps</div>
+    </div>
+    <div class="overview-card" onclick="show('daytrips')">
+      <div class="overview-card-day">Optional Day Trips</div>
+      <div class="overview-card-title">Beyond The City</div>
+      <div class="overview-card-desc">Monterey, Napa, Santa Cruz, Oakland, Berkeley, Palo Alto</div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>Jacquie's Local Notes</h3>
+    <ul>
+      <li>Book Alcatraz evening tour ASAP — sells out weeks in advance</li>
+      <li>Angel Island ferry runs from Pier 41 — check Blue & Gold Fleet schedule</li>
+      <li>Muir Woods requires timed entry reservations (recreation.gov)</li>
+      <li>Saturday Farmer's Market at Ferry Building is 8am–2pm — get there for chilaquiles</li>
+      <li>April 5 is Easter — Dolores Park will be packed & festive. Enjoy it!</li>
+      <li>4/20 falls after they leave — Golden Gate Park Strawberry Hill is still great any day</li>
+      <li>Arsicault croissants: arrive before 10am or they sell out</li>
+      <li>Sol in Mill Valley is worth the trip across the bridge for Puerto Rican food</li>
+    </ul>
+  </div>
+</div>
+
+<!-- DAY 1 -->
+<div id="day1" class="day-section">
+  <div class="day-header">
+    <div class="day-num">01</div>
+    <div class="day-meta">
+      <div class="day-title">The Waterfront</div>
+      <div class="day-date">Monday, March 30</div>
+    </div>
+    <span class="day-tag tag-culture">Arrival Day</span>
+  </div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">9am</div>
+      <div class="stop-content">
+        <div class="stop-name">Ferry Building Marketplace</div>
+        <div class="stop-note">Start here to orient themselves to the city. Great coffee, local vendors, and gorgeous bay views.</div>
+        <div class="stop-tip">☕ Get a pastry from Acme Bread or coffee from Blue Bottle inside</div>
+      </div>
+      <span class="stop-type type-eat">Food + See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">10:30</div>
+      <div class="stop-content">
+        <div class="stop-name">Embarcadero Stroll → Pier 39</div>
+        <div class="stop-note">Walk the waterfront north. Watch the sea lions at Pier 39 — they're loud, smelly, and wonderful.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Noon</div>
+      <div class="stop-content">
+        <div class="stop-name">Boudin Sourdough at Fisherman's Wharf</div>
+        <div class="stop-note">Classic SF institution. Get the clam chowder in a bread bowl — touristy but legitimately delicious.</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">2pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Ghirardelli Square</div>
+        <div class="stop-note">Walk up from Fisherman's Wharf. The square itself is a converted 1800s chocolate factory.</div>
+        <div class="stop-tip">🍫 Get the original hot fudge chocolate sundae at the Ghirardelli Ice Cream & Chocolate Shop</div>
+      </div>
+      <span class="stop-type type-eat">Eat + See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3:30pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Fort Mason</div>
+        <div class="stop-note">Beautiful former military post, now arts center. Walk the grounds for Golden Gate views. Check what's on at SFMOMA's Fort Mason outpost.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Evening</div>
+      <div class="stop-content">
+        <div class="stop-name">Dinner: Café Trieste (North Beach)</div>
+        <div class="stop-note">North Beach neighborhood dinner. Café Trieste for coffee & atmosphere, then explore the neighborhood.</div>
+        <div class="stop-tip">💡 Molinari Deli on Columbus Ave for provisions — one of the best Italian delis in the city</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 2 -->
+<div id="day2" class="day-section">
+  <div class="day-header">
+    <div class="day-num">02</div>
+    <div class="day-meta">
+      <div class="day-title">Golden Gate & The Presidio</div>
+      <div class="day-date">Tuesday, March 31</div>
+    </div>
+    <span class="day-tag tag-nature">Outdoors</span>
+  </div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">8:30am</div>
+      <div class="stop-content">
+        <div class="stop-name">Arsicault Bakery</div>
+        <div class="stop-note">Widely considered the best croissant in San Francisco. On Clement Street in the Richmond District.</div>
+        <div class="stop-tip">⏰ Go early — they sell out. Get there by 9am if possible.</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">10am</div>
+      <div class="stop-content">
+        <div class="stop-name">Crissy Field</div>
+        <div class="stop-note">Restored wetlands and beach with straight-on Golden Gate views. Perfect morning walk with coffee.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11am</div>
+      <div class="stop-content">
+        <div class="stop-name">Sea Organ SF</div>
+        <div class="stop-note">Hidden gem near Crissy Field — wave-powered sculpture that plays music. Eerie, beautiful.</div>
+        <div class="stop-tip">🌊 The sound changes with the tide and waves — totally unique</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop highlight">
+      <div class="stop-time">Noon</div>
+      <div class="stop-content">
+        <div class="stop-name">Golden Gate Bridge Walk</div>
+        <div class="stop-note">Walk the full bridge (or part of it). The east sidewalk is open to pedestrians daily.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">2pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Walt Disney Family Museum</div>
+        <div class="stop-note">Presidio. Surprisingly excellent — not a theme park museum. Covers Walt's actual life and creative process. Give it 2 hours.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">4:30pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Baker Beach</div>
+        <div class="stop-note">Best undercelebrated beach in SF. Golden Gate Bridge rising directly above you. Surreal.</div>
+        <div class="stop-tip">🌅 In the afternoon the light on the bridge is stunning</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 3 -->
+<div id="day3" class="day-section">
+  <div class="day-header">
+    <div class="day-num">03</div>
+    <div class="day-meta">
+      <div class="day-title">North Beach, Chinatown & Cable Cars</div>
+      <div class="day-date">Wednesday, April 1</div>
+    </div>
+    <span class="day-tag tag-culture">Culture</span>
+  </div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">9am</div>
+      <div class="stop-content">
+        <div class="stop-name">Chinatown: Grant Street & Fortune Cookie Factory</div>
+        <div class="stop-note">The Golden Gate Fortune Cookie Factory on Ross Alley is a tiny, magical place. They still make cookies by hand. $.75 for a bag.</div>
+        <div class="stop-tip">🥠 Ross Alley — look for the sign, easy to miss</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">10am</div>
+      <div class="stop-content">
+        <div class="stop-name">Hang Ah Tea Room</div>
+        <div class="stop-note">Oldest dim sum restaurant in the US (est. 1920). Tucked in a tiny alley — authentic, historic, delicious.</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11:30am</div>
+      <div class="stop-content">
+        <div class="stop-name">North Beach & City Lights Bookstore</div>
+        <div class="stop-note">Jack Kerouac's neighborhood. City Lights is legendary — the original Beat Generation bookshop. Washington Square Park right outside.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop highlight">
+      <div class="stop-time">1pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Coit Tower</div>
+        <div class="stop-note">Walk up Telegraph Hill for city views. The murals inside are incredible WPA-era frescoes. Worth the small admission to see them.</div>
+        <div class="stop-tip">🦜 Watch for the famous wild parrots of Telegraph Hill on the way up</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Cable Car Ride</div>
+        <div class="stop-note">Take the Powell-Hyde line for the most scenic ride — it goes down Russian Hill toward Fisherman's Wharf. Don't skip this.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">4pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Cable Car Museum</div>
+        <div class="stop-note">Free! The actual working machinery that runs all the cable cars is right there, churning away. Oddly fascinating.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">5pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Lombard Street</div>
+        <div class="stop-note">Yes, it's touristy. Yes, it's still fun. Walk down the crookedest block in SF and enjoy it.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 4 -->
+<div id="day4" class="day-section">
+  <div class="day-header">
+    <div class="day-num">04</div>
+    <div class="day-meta">
+      <div class="day-title">Land's End, Haight & Painted Ladies</div>
+      <div class="day-date">Thursday, April 2</div>
+    </div>
+    <span class="day-tag tag-nature">Outdoors + Neighborhoods</span>
+  </div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">9am</div>
+      <div class="stop-content">
+        <div class="stop-name">Sutro Baths & Land's End Trail</div>
+        <div class="stop-note">Ruins of the world's largest indoor swimming pool, right on the ocean. Take the Land's End trail along the cliffs — stunning views of the Marin Headlands.</div>
+        <div class="stop-tip">🌊 Check if the tide is low — you can explore inside the ruins</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11am</div>
+      <div class="stop-content">
+        <div class="stop-name">Ocean Beach & China Beach</div>
+        <div class="stop-note">Ocean Beach is wild and windswept — not for swimming, but dramatic and beautiful. China Beach is a calmer hidden cove nearby.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">1pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Lunch: Burma Love (Richmond District)</div>
+        <div class="stop-note">One of the best restaurants in SF, period. The tea leaf salad, rainbow salad, and coconut chicken noodles are all essential orders.</div>
+        <div class="stop-tip">🍜 Get the tea leaf salad — it's unlike anything you've had</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Haight-Ashbury</div>
+        <div class="stop-note">The original Summer of Love neighborhood. Still has its countercultural spirit — great vintage shops, record stores, and murals. Walk both Haight and the side streets.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop highlight">
+      <div class="stop-time">5pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Painted Ladies at Alamo Square</div>
+        <div class="stop-note">Sit in the park at golden hour with the Victorians in the foreground and downtown skyline behind. Bring snacks. This is the postcard view.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 5 -->
+<div id="day5" class="day-section">
+  <div class="day-header">
+    <div class="day-num">05</div>
+    <div class="day-meta">
+      <div class="day-title">Golden Gate Park</div>
+      <div class="day-date">Friday, April 3</div>
+    </div>
+    <span class="day-tag tag-culture">Museums + Nature</span>
+  </div>
+  <div class="stops">
+    <div class="stop">
+      <div class="stop-time">9am</div>
+      <div class="stop-content">
+        <div class="stop-name">Parachute or Butter & Crumble</div>
+        <div class="stop-note">Butter & Crumble is near the Cable Car Museum — best pastry shop in the city. Parachute is also excellent. Pick one for a proper morning start.</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop highlight">
+      <div class="stop-time">10am</div>
+      <div class="stop-content">
+        <div class="stop-name">Japanese Tea Garden</div>
+        <div class="stop-note">One of the most beautiful places in SF. The oldest public Japanese garden in the US. Go early before crowds. Have tea and mochi inside.</div>
+        <div class="stop-tip">🍵 Sip matcha tea served in the garden's teahouse — it's worth it</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11:30am</div>
+      <div class="stop-content">
+        <div class="stop-name">Botanical Garden & Strawberry Hill</div>
+        <div class="stop-note">55 acres of gardens. Walk to Strawberry Hill in the middle of Stow Lake — climb it for views over the park.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">1pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Dutch Windmills</div>
+        <div class="stop-note">Two 1902 windmills at the park's western end, flanked by tulip gardens in spring. Surreal to see them here.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">2:30pm</div>
+      <div class="stop-content">
+        <div class="stop-name">de Young Museum</div>
+        <div class="stop-note">World-class fine arts museum inside GG Park. Check what's currently showing. The tower observation deck is free and has panoramic city views.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">5pm</div>
+      <div class="stop-content">
+        <div class="stop-name">California Academy of Sciences</div>
+        <div class="stop-note">If energy allows — planetarium, rainforest dome, aquarium, all under a living roof. Or save for another day.</div>
+        <div class="stop-tip">🌿 Thursday NightLife events are 21+ and worth checking</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 6 -->
+<div id="day6" class="day-section">
+  <div class="day-header">
+    <div class="day-num">06</div>
+    <div class="day-meta">
+      <div class="day-title">Marin County Day Trip</div>
+      <div class="day-date">Saturday, April 4</div>
+    </div>
+    <span class="day-tag tag-nature">Day Trip</span>
+  </div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">8am</div>
+      <div class="stop-content">
+        <div class="stop-name">Muir Woods</div>
+        <div class="stop-note">Ancient coastal redwoods, 30 min from SF. Cathedral-like and awe-inspiring. Book timed entry in advance on recreation.gov — required.</div>
+        <div class="stop-tip">🌲 Book the earliest timed entry slot — parking is extremely limited, take the shuttle from Sausalito</div>
+      </div>
+      <span class="stop-type type-nature">Nature</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11am</div>
+      <div class="stop-content">
+        <div class="stop-name">Muir Beach</div>
+        <div class="stop-note">Just below Muir Woods. Secluded, dramatic, wild. The Pelican Inn nearby has a cozy British pub atmosphere if you need a pint.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">1pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Lunch: Sol Food in Mill Valley</div>
+        <div class="stop-note">Puerto Rican food that will blow your mind. The pernil, arroz con pollo, and tostones are required. Often a line — worth it.</div>
+        <div class="stop-tip">🍚 This is one of Jacquie's top recs — do not skip it</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Sausalito Waterfront</div>
+        <div class="stop-note">Walking the waterfront here genuinely looks like the Amalfi Coast — colorful hillside houses, boats, cafés. Take the ferry back to SF for sunset views.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop highlight">
+      <div class="stop-time">4:30pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Point Bonita — Battery Spencer View</div>
+        <div class="stop-note">The most dramatic view of the Golden Gate Bridge in existence. Park at the battery, walk to the overlook. The bridge below you, ocean all around.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">6pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Ferry from Sausalito → SF</div>
+        <div class="stop-note">The Golden Gate Ferry runs to the Ferry Building. 30-min ride at sunset with the city skyline in front of you. Perfect ending to the day.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 7 EASTER -->
+<div id="day7" class="day-section">
+  <div class="day-header">
+    <div class="day-num">07</div>
+    <div class="day-meta">
+      <div class="day-title">Easter Sunday: Mission & Castro</div>
+      <div class="day-date">Sunday, April 5</div>
+    </div>
+    <span class="day-tag tag-special">Easter 🐣</span>
+  </div>
+  <div class="easter-banner">🐣 Easter Sunday in SF — Dolores Park will be electric with festivities, people, and Easter-themed costumes</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">10am</div>
+      <div class="stop-content">
+        <div class="stop-name">Mission Dolores Park</div>
+        <div class="stop-note">On Easter Sunday this park is an SF institution. Hundreds of people in Easter bonnets, music, food vendors, dogs in costumes, citywide joy. Bring a blanket, get snacks from nearby taquerias.</div>
+        <div class="stop-tip">🌞 Sit on the hill facing downtown — greatest city panorama from any park in SF</div>
+      </div>
+      <span class="stop-type type-event">Event</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Noon</div>
+      <div class="stop-content">
+        <div class="stop-name">The Mission District</div>
+        <div class="stop-note">Walk Valencia Street and Mission Street. The murals on Clarion Alley and Balmy Alley are world-class street art. This neighborhood has more personality per block than anywhere in the city.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">1pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Lunch: El Combre (Mission District)</div>
+        <div class="stop-note">Authentic Mission-style Mexican. The real deal. Order the carnitas burrito — it's enormous and perfect.</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Castro District</div>
+        <div class="stop-note">Iconic neighborhood with huge heart. The Castro Theatre marquee, Harvey Milk Plaza, amazing cafés and bars. Walk it, feel it.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop highlight">
+      <div class="stop-time">Evening</div>
+      <div class="stop-content">
+        <div class="stop-name">Alcatraz Night Tour 🔦</div>
+        <div class="stop-note">The evening tour is genuinely different from the day tour — the island feels haunted, the cellhouse is lit dramatically, and you get the Bay at sunset/dusk. Don't miss this.</div>
+        <div class="stop-tip">⚠️ Book weeks in advance at alcatrazcruises.com — evening tours sell out far ahead</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 8 -->
+<div id="day8" class="day-section">
+  <div class="day-header">
+    <div class="day-num">08</div>
+    <div class="day-meta">
+      <div class="day-title">Bay Islands</div>
+      <div class="day-date">Monday, April 6</div>
+    </div>
+    <span class="day-tag tag-nature">Islands</span>
+  </div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">9am</div>
+      <div class="stop-content">
+        <div class="stop-name">Angel Island State Park</div>
+        <div class="stop-note">Take the Blue & Gold Fleet ferry from Pier 41. The island has 360° Bay views — you can see the entire Bay from the summit. Rent bikes or hike the perimeter trail. Historic immigration station on site.</div>
+        <div class="stop-tip">⛴ Check the ferry schedule — roughly every 2 hours. Bring lunch or grab food at the café.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Afternoon</div>
+      <div class="stop-content">
+        <div class="stop-name">Treasure Island</div>
+        <div class="stop-note">Man-made island in the middle of the Bay, connected by the Bay Bridge. Drive or rideshare out for views back at both bridges and the city skyline.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">5pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Mission Chinese Food (SoMa/Mission)</div>
+        <div class="stop-note">Modern Sichuan — creative, bold, and unlike any Chinese food you've had. The salt cod fried rice and mapo tofu are legendary.</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+  </div>
+</div>
+
+<!-- DAY 9 -->
+<div id="day9" class="day-section">
+  <div class="day-header">
+    <div class="day-num">09</div>
+    <div class="day-meta">
+      <div class="day-title">Farewell Day</div>
+      <div class="day-date">Tuesday, April 7</div>
+    </div>
+    <span class="day-tag tag-food">Last Day</span>
+  </div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">8am</div>
+      <div class="stop-content">
+        <div class="stop-name">Ferry Building Saturday Farmers Market</div>
+        <div class="stop-note">Wait — this is Tuesday, but the Ferry Building market also runs Tuesdays (smaller). Still get the chilaquiles from the tamale vendor. This is the best street food in SF, full stop.</div>
+        <div class="stop-tip">🌮 The chilaquiles vendor — look for the long line, that's the one</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">10am</div>
+      <div class="stop-content">
+        <div class="stop-name">Palace of Fine Arts</div>
+        <div class="stop-note">The most photogenic building in SF — Roman rotunda on a lagoon. Built for the 1915 Panama-Pacific Expo. Walk the lagoon, feed the ducks.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">11:30am</div>
+      <div class="stop-content">
+        <div class="stop-name">Lyon Street Steps</div>
+        <div class="stop-note">Staircase lined with manicured gardens leading up to the Presidio. Climb up and look back at the city. Hidden gem, low traffic.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">1pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Sunset District: Lunch & Hole-in-the-Wall</div>
+        <div class="stop-note">The Sunset is the most underrated neighborhood in SF — Irving Street has incredible Asian food gems. Let them wander and discover.</div>
+        <div class="stop-tip">🍜 Irving Street between 9th and 20th Ave: great pho, Japanese curry, and Burmese spots</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3pm</div>
+      <div class="stop-content">
+        <div class="stop-name">Union Square (if needed)</div>
+        <div class="stop-note">Last-minute shopping, city energy, the big department stores. Also nearby is the best stretch of Maiden Lane.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOD -->
+<div id="food" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">The Food Guide</div>
+      <div class="day-date">All the best spots, organized</div>
+    </div>
+  </div>
+
+  <div class="section-label">☕ Bakeries & Coffee</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Pastry</span>
+      <div class="food-name">Arsicault Bakery</div>
+      <div class="food-desc">Best croissant in SF. Richmond District. Go before 10am or weep.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Pastry</span>
+      <div class="food-name">Butter & Crumble</div>
+      <div class="food-desc">Best pastry shop in the city. Near Cable Car Museum. Get everything.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Pastry</span>
+      <div class="food-name">Parachute</div>
+      <div class="food-desc">Excellent pastry shop — great morning stop before Golden Gate Park.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Café</span>
+      <div class="food-name">Café Trieste</div>
+      <div class="food-desc">North Beach icon since 1956. Where the Beats drank espresso. Go for the vibe.</div>
+    </div>
+  </div>
+
+  <div class="section-label">🍜 Restaurants — Local Favorites</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#e5efe6;color:var(--sage)">Marin</span>
+      <div class="food-name">Sol Food</div>
+      <div class="food-desc">Puerto Rican in Mill Valley. The pernil and tostones are life-changing. Long line, zero regrets.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e5efe6;color:var(--sage)">Richmond</span>
+      <div class="food-name">Burma Love</div>
+      <div class="food-desc">One of the best restaurants in SF. Tea leaf salad, rainbow salad, coconut noodles. Must-order.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Mission</span>
+      <div class="food-name">El Combre</div>
+      <div class="food-desc">Authentic Mission Mexican. Carnitas burrito the size of your forearm.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Mission</span>
+      <div class="food-name">Mission Chinese Food</div>
+      <div class="food-desc">Modern Sichuan. Salt cod fried rice, mapo tofu. Bold, creative, unforgettable.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Chinatown</span>
+      <div class="food-name">Hang Ah Tea Room</div>
+      <div class="food-desc">Oldest dim sum in the US. Hidden in Pagoda Place alley. Historic, authentic.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Chinatown</span>
+      <div class="food-name">Wong Lee Dim Sum</div>
+      <div class="food-desc">Classic Chinatown dim sum. Great for a big group lunch.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">North Beach</span>
+      <div class="food-name">Molinari Deli</div>
+      <div class="food-desc">Italian deli on Columbus Ave since 1896. Get a sandwich to go. Seriously.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Wharf</span>
+      <div class="food-name">Boudin Sourdough</div>
+      <div class="food-desc">SF institution. Clam chowder in a bread bowl. Touristy but actually great.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fef3e0;color:var(--gold)">Iconic</span>
+      <div class="food-name">Ghirardelli Chocolate Sundae</div>
+      <div class="food-desc">The original hot fudge sundae at Ghirardelli Square. A SF rite of passage.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e5efe6;color:var(--sage)">Ferry Bldg</span>
+      <div class="food-name">Saturday Farmers Market Chilaquiles</div>
+      <div class="food-desc">8am–2pm Saturdays. The tamale/chilaquiles vendor has a line for a reason.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Mission</span>
+      <div class="food-name">La Palma Mexicatessen</div>
+      <div class="food-desc">Family-run since 1953. They make their own tortillas by hand in-store. Get the tamales and carnitas. 24th & Florida.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Richmond</span>
+      <div class="food-name">PPQ Dungeness Island</div>
+      <div class="food-desc">Garlic noodles and cracked Dungeness crab. A SF ritual. Messy, glorious, essential.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e5efe6;color:var(--sage)">Sunset</span>
+      <div class="food-name">San Tung</div>
+      <div class="food-desc">The dry-fried chicken wings will ruin all other chicken wings. Irving Street legend. Expect a wait.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">SoMa</span>
+      <div class="food-name">Bix</div>
+      <div class="food-desc">Glamorous supper club hidden in an alley off Kearny. Jazz, cocktails, steak tartare. Date night perfection.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Noe Valley</span>
+      <div class="food-name">Contigo</div>
+      <div class="food-desc">Catalan tapas with some of the best patatas bravas in the city. Neighborhood gem on Castro St.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e5efe6;color:var(--sage)">Richmond</span>
+      <div class="food-name">Nopa</div>
+      <div class="food-desc">SF institution. Wood-fired everything. Incredible burger at the bar late night. Lively, loud, quintessentially SF.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Mission</span>
+      <div class="food-name">Tartine Bakery</div>
+      <div class="food-desc">Lines form before they open. The country bread and morning buns are legendary. Worth every minute of waiting. 18th & Guerrero.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Inner Sunset</span>
+      <div class="food-name">Outerlands</div>
+      <div class="food-desc">Cozy beach-cottage vibes near Ocean Beach. Dutch pancakes, excellent brunch, housemade bread. Very SF.</div>
+    </div>
+  </div>
+
+  <div class="section-label">☕ Coffee, Bakeries & Sweets</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Pastry</span>
+      <div class="food-name">Arsicault Bakery</div>
+      <div class="food-desc">Best croissant in SF. Richmond District on Arguello. Go before 10am or it's gone.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Pastry</span>
+      <div class="food-name">Butter & Crumble</div>
+      <div class="food-desc">Best pastry shop in the city. Near Cable Car Museum. Get everything.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Pastry</span>
+      <div class="food-name">Parachute</div>
+      <div class="food-desc">Excellent pastry shop — great morning stop before Golden Gate Park.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Café</span>
+      <div class="food-name">Café Trieste</div>
+      <div class="food-desc">North Beach icon since 1956. Where the Beats drank espresso. Go for the vibe.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Coffee</span>
+      <div class="food-name">Sightglass Coffee</div>
+      <div class="food-desc">SoMa coffee institution in a stunning converted warehouse. One of SF's best roasters.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Coffee</span>
+      <div class="food-name">Ritual Coffee Roasters</div>
+      <div class="food-desc">SF's OG specialty coffee roaster. Multiple locations. Hayes Valley or Mission locations are nicest.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Ice Cream</span>
+      <div class="food-name">Bi-Rite Creamery</div>
+      <div class="food-desc">Salted caramel ice cream that will haunt your dreams. 18th Street in the Mission. Always a line. Always worth it.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Boba</span>
+      <div class="food-name">Boba Guys</div>
+      <div class="food-desc">SF-born boba chain that actually started as a blog. Matcha milk tea is the one. Multiple locations.</div>
+    </div>
+  </div>
+</div>
+
+<!-- BARS & DRINKS -->
+<div id="bars" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Bars & Drinks</div>
+      <div class="day-date">Where locals actually go</div>
+    </div>
+  </div>
+
+  <div class="section-label">🍸 Cocktail Bars</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#1a1714;color:#e8b96a">SoMa</span>
+      <div class="food-name">Trick Dog</div>
+      <div class="food-desc">One of the best cocktail bars in America. Menu changes themes — currently themed around something brilliant. Mission District. Book ahead or go early.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#1a1714;color:#e8b96a">Tenderloin</span>
+      <div class="food-name">Bourbon & Branch</div>
+      <div class="food-desc">Prohibition-era speakeasy with a real password at the door. Reservation required. Serious cocktails in a spectacular setting.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#1a1714;color:#e8b96a">North Beach</span>
+      <div class="food-name">Vesuvio Café</div>
+      <div class="food-desc">Next door to City Lights. Beat Generation watering hole since 1948. Jack Kerouac drank here. Get a bohemian at the bar upstairs.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#1a1714;color:#e8b96a">FiDi</span>
+      <div class="food-name">Pisco Lounge at Pisco Latin Gastrobar</div>
+      <div class="food-desc">Best pisco sours in SF. Lively atmosphere, Peruvian snacks, genuinely fun bar scene.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#1a1714;color:#e8b96a">Mission</span>
+      <div class="food-name">ABV</div>
+      <div class="food-desc">Neighborhood cocktail bar that feels like someone's very cool living room. Inventive drinks, great snacks, no attitude.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#1a1714;color:#e8b96a">Hayes Valley</span>
+      <div class="food-name">Smuggler's Cove</div>
+      <div class="food-desc">Tiki bar with 550+ rums and a three-story ship-wreck interior. Theatrical, delicious, and genuinely impressive. One of the world's best rum bars.</div>
+    </div>
+  </div>
+
+  <div class="section-label">🍺 Local Bars & Dives</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Mission</span>
+      <div class="food-name">The Elixir</div>
+      <div class="food-desc">Oldest saloon in the Mission (1858). Craft cocktails, neighborhood crowd, good vibes. On 16th & Guerrero.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Castro</span>
+      <div class="food-name">Twin Peaks Tavern</div>
+      <div class="food-desc">Historic LGBT bar with floor-to-ceiling windows — the first gay bar to open its curtains to the street in 1972. Landmark.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Richmond</span>
+      <div class="food-name">The Plough and Stars</div>
+      <div class="food-desc">Irish pub on Clement Street with live traditional music most nights. Authentic, warm, genuinely great.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">SoMa</span>
+      <div class="food-name">The Wooden Nickel</div>
+      <div class="food-desc">Dark, unpretentious dive bar with a great jukebox and cheap drinks. The antidote to SF's tech-bro bar scene.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Inner Sunset</span>
+      <div class="food-name">The Philosopher's Club</div>
+      <div class="food-desc">Best neighborhood bar in the Sunset. Eclectic regulars, a photo booth, pinball, and perfectly poured beers.</div>
+    </div>
+  </div>
+
+  <div class="section-label">🌅 Rooftops & Views</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">SoMa</span>
+      <div class="food-name">Charmaine's Rooftop (Proper Hotel)</div>
+      <div class="food-desc">Best rooftop bar in SF. Views of City Hall dome and downtown. Heated, chic, not overly pretentious.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">FiDi</span>
+      <div class="food-name">Top of the Mark (Mark Hopkins)</div>
+      <div class="food-desc">19th floor of a historic hotel on Nob Hill. Panoramic 360° views. Pricey, but worth one round at sunset.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">Embarcadero</span>
+      <div class="food-name">Waterbar SF</div>
+      <div class="food-desc">On the water with direct Bay Bridge views. Excellent oysters and happy hour. The view at dusk is hard to beat.</div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>Drinks Strategy for CG & Bella</h3>
+    <ul>
+      <li>Night 1 (arrival): Vesuvio in North Beach — low-key, atmospheric, historic</li>
+      <li>Cocktail night: Trick Dog or Bourbon & Branch — book ahead for the latter</li>
+      <li>Casual night: Plough and Stars for live Irish music on Clement St</li>
+      <li>Special night: Smuggler's Cove for the spectacle alone</li>
+      <li>Rooftop sunset: Charmaine's for the best SF skyline view over a drink</li>
+    </ul>
+  </div>
+</div>
+
+<!-- HIDDEN GEMS -->
+<div id="hidden" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Hidden Gems & Local Secrets</div>
+      <div class="day-date">The stuff tourists miss</div>
+    </div>
+  </div>
+
+  <div class="section-label">🗺 Secret Viewpoints</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">View</div>
+      <div class="stop-content">
+        <div class="stop-name">Grandview Park (Grand View Park)</div>
+        <div class="stop-note">Mosaic tile staircase leads up to the highest natural peak in SF. 360° views of the ocean, bay, downtown, and GG Bridge. Almost nobody goes here. Inner Sunset.</div>
+        <div class="stop-tip">🌅 Sunset here is one of the best in the city — bring wine</div>
+      </div>
+      <span class="stop-type type-walk">View</span>
+    </div>
+    <div class="stop highlight">
+      <div class="stop-time">View</div>
+      <div class="stop-content">
+        <div class="stop-name">Corona Heights Park</div>
+        <div class="stop-note">Rocky outcrop in the Castro with arguably the best downtown SF panorama. Easy 5-min hike to the top. Dogs everywhere, always a good vibe.</div>
+      </div>
+      <span class="stop-type type-walk">View</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">View</div>
+      <div class="stop-content">
+        <div class="stop-name">Bernal Heights Hill</div>
+        <div class="stop-note">The neighborhood park that locals use on weekends. Rope swing at the top, 360° views, sunset crowds with wine. Bernal Heights is also a great neighborhood to walk.</div>
+        <div class="stop-tip">🪢 The rope swing at the summit is iconic — look for it</div>
+      </div>
+      <span class="stop-type type-walk">View</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">View</div>
+      <div class="stop-content">
+        <div class="stop-name">Fort Funston</div>
+        <div class="stop-note">Cliffside park at the southwestern tip of SF. Hang gliders launch from here. Wild, windy, dramatic views over Ocean Beach and the Pacific. Dog paradise.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">View</div>
+      <div class="stop-content">
+        <div class="stop-name">Hawk Hill (Marin Headlands)</div>
+        <div class="stop-note">Just over the bridge in Marin. Drive up for the most jaw-dropping Golden Gate view you'll ever see — bridge in the foreground, city behind it, fog rolling in. Better than any postcard.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+  </div>
+
+  <div class="section-label">🏙 Hidden Neighborhood Gems</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">Stroll</div>
+      <div class="stop-content">
+        <div class="stop-name">Balmy Alley — Mission District</div>
+        <div class="stop-note">Every wall is a mural. One of the most concentrated collections of street art in the world, maintained by local artists. Walk the whole alley slowly. Between 24th and 25th, Treat to Harrison.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Stroll</div>
+      <div class="stop-content">
+        <div class="stop-name">Clarion Alley — Mission District</div>
+        <div class="stop-note">Another mural alley, politically charged and constantly updated. Between 17th and 18th, Valencia to Mission.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Stroll</div>
+      <div class="stop-content">
+        <div class="stop-name">Filbert Street Steps</div>
+        <div class="stop-note">Hidden wooden staircase through lush private gardens on Telegraph Hill. Like a secret garden path. The wild parrots live in the trees here. Between Sansome and Montgomery.</div>
+        <div class="stop-tip">🦜 The wild parrots of Telegraph Hill — this is where they actually live</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Stroll</div>
+      <div class="stop-content">
+        <div class="stop-name">16th Avenue Tiled Steps</div>
+        <div class="stop-note">163 mosaic-tiled steps leading up through the Inner Sunset to Grandview Park. Created by neighbors. A hidden art installation most tourists never find.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Explore</div>
+      <div class="stop-content">
+        <div class="stop-name">Wave Organ</div>
+        <div class="stop-note">You already have this — but worth repeating. Acoustic wave sculpture at the end of a jetty near Crissy Field. Only audible at high tide. Bizarre and beautiful.</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Explore</div>
+      <div class="stop-content">
+        <div class="stop-name">Macondray Lane</div>
+        <div class="stop-note">The secret alley that inspired "Barbary Lane" in Armistead Maupin's Tales of the City. Wooden boardwalk through lush vegetation on Russian Hill. Feels like a fairy tale.</div>
+        <div class="stop-tip">📚 Tales of the City fans will absolutely lose it here</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Explore</div>
+      <div class="stop-content">
+        <div class="stop-name">The Painted Caves (Seward Street Slides)</div>
+        <div class="stop-note">Two concrete slides cut into a hillside in the Castro — bring cardboard to slide down. Kids and adults both use them. Free, weird, very SF.</div>
+        <div class="stop-tip">📦 Bring a piece of cardboard — you'll need it to slide</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Explore</div>
+      <div class="stop-content">
+        <div class="stop-name">The Painted Stairways of Moraga Street</div>
+        <div class="stop-note">A 163-step mosaic in the Inner Sunset neighborhood. Less visited than the 16th Ave steps but equally beautiful — local families created both.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>Jacquie's True Hidden Picks</h3>
+    <ul>
+      <li>Grandview Park at sunset with snacks & drinks — beats Twin Peaks for views with fewer people</li>
+      <li>Macondray Lane on Russian Hill — barely anyone knows about it, total secret garden energy</li>
+      <li>Filbert Steps for the parrots — they're real and they're spectacular</li>
+      <li>Bernal Heights on a weekend afternoon — rope swing, panorama, the most SF thing possible</li>
+      <li>Hawk Hill in Marin for the Golden Gate view that makes every other GG view look basic</li>
+    </ul>
+  </div>
+</div>
+
+<!-- NEIGHBORHOODS -->
+<div id="neighborhoods" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Neighborhood Guides</div>
+      <div class="day-date">Each one its own world</div>
+    </div>
+  </div>
+
+  <div class="section-label">🏘 Inner Neighborhoods</div>
+
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">Noe Valley</div>
+      <div class="stop-content">
+        <div class="stop-name">Noe Valley — The Village</div>
+        <div class="stop-note">SF's sunniest neighborhood (literally — it's in a microclimate pocket). 24th Street is the main drag: independent bookstores, coffee shops, wine bars, and farmers market on Saturdays. Very local, very chill.</div>
+        <div class="stop-tip">☀️ 24th Street Farmers Market on Saturday mornings is smaller and less crowded than Ferry Building</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Glen Park</div>
+      <div class="stop-content">
+        <div class="stop-name">Glen Park — Hidden Canyon</div>
+        <div class="stop-note">The most underrated neighborhood in SF. Small village feel, Glen Canyon Park (wild and woody), excellent local coffee at Glen Park Station. Feels like a town within a city.</div>
+        <div class="stop-tip">🌿 Glen Canyon Park trail is wild and surprisingly remote feeling — 70 acres in the middle of the city</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">SoMa</div>
+      <div class="stop-content">
+        <div class="stop-name">SoMa — South of Market</div>
+        <div class="stop-note">SFMOMA anchor. Design district, gallery openings, excellent bars. The area around 4th and Howard has Yerba Buena Gardens (free outdoor art space), SFMOMA, and the Contemporary Jewish Museum in striking buildings.</div>
+        <div class="stop-tip">🎨 First Thursday gallery walk in SoMa — galleries open late on first Thursdays</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Hayes Valley</div>
+      <div class="stop-content">
+        <div class="stop-name">Hayes Valley — Boutique SF</div>
+        <div class="stop-note">Walkable neighborhood with the best independent boutiques, wine bars, and restaurants in the city. Patricia's Green (tiny park) is the neighborhood living room. Hayes Street is the main strip.</div>
+        <div class="stop-tip">🛍 Best neighborhood for independent shopping in SF — not chains, all local</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Bernal Heights</div>
+      <div class="stop-content">
+        <div class="stop-name">Bernal Heights — Local's Local</div>
+        <div class="stop-note">The neighborhood SF residents move to when they want to stay but want a real community. Cortland Avenue has independent restaurants and cafes. The hill above has the rope swing and best views. Extremely authentic.</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Richmond</div>
+      <div class="stop-content">
+        <div class="stop-name">Inner Richmond — Fog City's Heart</div>
+        <div class="stop-note">Clement Street is the other Chinatown — more authentic, less touristy. Russian bakeries, Vietnamese pho spots, hole-in-the-wall dim sum, and Arsicault Bakery. The Richmond is where SF locals eat.</div>
+        <div class="stop-tip">🥟 Clement St between 2nd and 9th Ave: best block of restaurants in SF that tourists don't visit</div>
+      </div>
+      <span class="stop-type type-eat">Eat</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Outer Sunset</div>
+      <div class="stop-content">
+        <div class="stop-name">Outer Sunset — Surf & Fog</div>
+        <div class="stop-note">Where the surfers live. Irving Street and Judah Street have exceptional Asian restaurants, indie coffee, and zero tourists. Walk to Ocean Beach after. Feels like a different city.</div>
+        <div class="stop-tip">🏄 Mollusk Surf Shop on Irving is a SF institution — great for browsing even if you don't surf</div>
+      </div>
+      <span class="stop-type type-walk">Walk</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Japantown</div>
+      <div class="stop-content">
+        <div class="stop-name">Japantown — Peace Plaza</div>
+        <div class="stop-note">One of only three remaining Japantowns in the US. The Japan Center mall has incredible Japanese food stalls, bookstores, and gift shops. Benkyodo for mochi. Izakaya Rintaro for dinner.</div>
+        <div class="stop-tip">🎎 Benkyodo on Sutter — the family has been making mochi and sembei here since 1906</div>
+      </div>
+      <span class="stop-type type-see">See</span>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>Neighborhood Pairing Logic</h3>
+    <ul>
+      <li>Noe Valley + Glen Park: pair together on an afternoon, both are walkable and close</li>
+      <li>Hayes Valley + Japantown: 10 min walk apart, great for a full afternoon into dinner</li>
+      <li>Inner Richmond + Outer Sunset: natural pair on one day — Clement St lunch, Irving St dinner</li>
+      <li>Bernal Heights: go Sunday morning with coffee from Ritual, climb the hill, watch the rope swingers</li>
+      <li>SoMa: pair with the Ferry Building and Embarcadero waterfront on the same day</li>
+    </ul>
+  </div>
+</div>
+
+<!-- MUSEUMS -->
+<div id="museums" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Museums & Culture</div>
+      <div class="day-date">Beyond the obvious</div>
+    </div>
+  </div>
+
+  <div class="section-label">🏛 Must-See Museums</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">GG Park</span>
+      <div class="food-name">de Young Museum</div>
+      <div class="food-desc">World-class fine art. The observation tower is free. Check current exhibitions — they often have major touring shows. Budget 2-3 hrs.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e5efe6;color:var(--sage)">GG Park</span>
+      <div class="food-name">California Academy of Sciences</div>
+      <div class="food-desc">Living roof, 4-story rainforest dome, planetarium, coral reef aquarium. One of the most extraordinary science museums in the world.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">SoMa</span>
+      <div class="food-name">SFMOMA</div>
+      <div class="food-desc">Seven floors of modern and contemporary art. One of the largest MoMA museums in the world. The Richter window alone is worth the trip. Free on Thursday evenings.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Presidio</span>
+      <div class="food-name">Walt Disney Family Museum</div>
+      <div class="food-desc">Not a theme park museum — a serious biographical institution covering Walt's life and artistic process. Stunning building inside the Presidio.</div>
+    </div>
+  </div>
+
+  <div class="section-label">🎭 Under-the-Radar Culture</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">SoMa</span>
+      <div class="food-name">Contemporary Jewish Museum</div>
+      <div class="food-desc">Daniel Libeskind-designed building that's a work of art itself. Rotating exhibitions on Jewish art, history, and culture. Often has surprisingly excellent shows.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e5efe6;color:var(--sage)">Mission</span>
+      <div class="food-name">Mission Dolores (Original Mission)</div>
+      <div class="food-desc">The oldest intact building in SF, built in 1776. The cemetery behind it is quiet, historic, and haunting. The painted ceiling inside is unique in California.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">Pacific Heights</span>
+      <div class="food-name">Haas-Lilienthal House</div>
+      <div class="food-desc">The only Victorian mansion open for tours in SF. Preserved from 1886 in extraordinary detail. Architecture nerds will love this.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Embarcadero</span>
+      <div class="food-name">Exploratorium</div>
+      <div class="food-desc">Adults-only after-dark Thursdays. Interactive science museum on Pier 15 with Bay views. More fun than it sounds — genuinely mind-bending exhibits.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#1a1714;color:#e8b96a">Castro</span>
+      <div class="food-name">GLBT History Museum</div>
+      <div class="food-desc">First LGBTQ+ history museum in the US. Small but extraordinarily moving. Essential context for understanding the Castro and SF's history.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e5efe6;color:var(--sage)">Presidio</span>
+      <div class="food-name">Presidio Tunnel Tops</div>
+      <div class="food-desc">Brand new park (opened 2022) built on top of the Presidio tunnel. Stunning lawns with Golden Gate views, fire pits, a playground, and food vendors. SF's newest great public space.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#e0ecf7;color:var(--bay)">Treasure Island</span>
+      <div class="food-name">Treasure Island Museum</div>
+      <div class="food-desc">Free small museum on Treasure Island covering the 1939 World's Fair and WWII naval history. Interesting context for the island itself.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#fde8e0;color:var(--terra)">North Beach</span>
+      <div class="food-name">Beat Museum</div>
+      <div class="food-desc">Tiny museum on Broadway dedicated to the Beat Generation — Kerouac, Ginsberg, Cassady. Artifacts, rare books, original manuscripts. Essential for literary types.</div>
+    </div>
+  </div>
+
+  <div class="section-label">🎬 Live Culture</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">Castro</span>
+      <div class="food-name">Castro Theatre</div>
+      <div class="food-desc">1922 movie palace — one of the most beautiful movie theaters in America. Check what's playing. Even if it's a random film, sit in the main house just to see the Wurlitzer organ.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">Mission</span>
+      <div class="food-name">Alamo Drafthouse SF</div>
+      <div class="food-desc">Cinema with food and drinks served at your seat. Strict no-talking policy. Best movie experience in the city.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">Haight</span>
+      <div class="food-name">The Fillmore</div>
+      <div class="food-desc">Historic music venue from the psychedelic era. If anything good is playing while CG & Bella are here, this is the venue. Free apple in the lobby is a Fillmore tradition.</div>
+    </div>
+  </div>
+</div>
+
+<!-- HIKES & OUTDOORS SF -->
+<div id="nature" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Hikes & Outdoor SF</div>
+      <div class="day-date">Right inside the city limits</div>
+    </div>
+    <span class="day-tag tag-nature">All Levels</span>
+  </div>
+
+  <div class="section-label">🥾 Easy — Under 3 Miles, Under 200ft Gain</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">2.2 mi · Easy</div>
+      <div class="stop-content">
+        <div class="stop-name">Land's End Trail</div>
+        <div class="stop-note">Cliff-side trail hugging the northwest corner of SF above the Golden Gate. You pass the ruins of the Sutro Baths, the Lands End Lookout, and get views of the Marin Headlands across the water. Best trail in the city, hands down.</div>
+        <div class="stop-tip">🌅 Do it at golden hour. Start from the Sutro Baths parking lot and walk toward the Golden Gate.</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">1.5 mi · Easy</div>
+      <div class="stop-content">
+        <div class="stop-name">Crissy Field & East Beach</div>
+        <div class="stop-note">Flat restored wetlands loop from the Wave Organ to Fort Point, directly under the Golden Gate Bridge. Stunning in morning fog or afternoon sun. The Warming Hut café at the far end is a perfect turnaround point.</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">0.8 mi · Easy</div>
+      <div class="stop-content">
+        <div class="stop-name">Grandview Park via 16th Ave Tiled Steps</div>
+        <div class="stop-note">Climb 163 mosaic steps through the Inner Sunset to the highest natural point in SF. Short but rewarding — ocean, bay, and downtown all visible from the summit.</div>
+        <div class="stop-tip">🎨 The tiled steps are a neighborhood art project — look at every one on the way up</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">1.0 mi · Easy</div>
+      <div class="stop-content">
+        <div class="stop-name">Bernal Heights Loop</div>
+        <div class="stop-note">Paved path circles the rocky hilltop with a rope swing at the summit. 360° views on a clear day. Best on Sunday morning with coffee from Ritual.</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+  </div>
+
+  <div class="section-label">🥾 Moderate — 3–6 Miles, 400–800ft Gain</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">5.0 mi · Moderate</div>
+      <div class="stop-content">
+        <div class="stop-name">Batteries to Bluffs → Baker Beach Loop</div>
+        <div class="stop-note">One of the best urban hikes in America. From the Golden Gate Bridge toll plaza, descend through the old military battery tunnels, emerge on the bluffs above Baker Beach, walk the beach, and loop back. Jaw-dropping the entire way.</div>
+        <div class="stop-tip">🏖 Pack a lunch and stop at Baker Beach to eat with the bridge above you</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3.5 mi · Moderate</div>
+      <div class="stop-content">
+        <div class="stop-name">Twin Peaks Summit Loop</div>
+        <div class="stop-note">Twin summits in the geographic center of SF. The climb is exposed and windy but the views are the best in the city — on a clear day you see the Farallon Islands 27 miles offshore. Bring a layer.</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">4.2 mi · Moderate</div>
+      <div class="stop-content">
+        <div class="stop-name">Glen Canyon Park Trail</div>
+        <div class="stop-note">70 acres of wild canyon in the middle of the city. Feels nothing like SF — creeks, red rock formations, raptors overhead. The Billy Goat Hill staircase at the end is a local secret.</div>
+        <div class="stop-tip">🦅 Red-tailed hawks nest here — keep an eye on the cliffs</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+  </div>
+
+  <div class="section-label">🥾 Strenuous — 6+ Miles, 1000ft+ Gain</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">8.5 mi · Hard</div>
+      <div class="stop-content">
+        <div class="stop-name">Fort Funston → Ocean Beach → Sutro Baths</div>
+        <div class="stop-note">The great SF coastal walk. Start at Fort Funston's clifftop with hang gliders above you, walk 4+ miles of wild Ocean Beach, climb to the Cliff House, end at Sutro Baths ruins. Pack water and a wind layer.</div>
+        <div class="stop-tip">🪁 Fort Funston: hang gliders launch from the bluffs — arrive early to watch them take off</div>
+      </div>
+      <span class="stop-type type-walk">Hard</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">6.5 mi · Hard</div>
+      <div class="stop-content">
+        <div class="stop-name">Angel Island Perimeter Trail</div>
+        <div class="stop-note">Ferry to the island, then circumnavigate the entire thing. Every quarter mile brings a different vista — Golden Gate, Bay Bridge, Marin hills, downtown SF. The summit adds another 788ft. Best full-day outdoor adventure in the Bay.</div>
+      </div>
+      <span class="stop-type type-walk">Hard</span>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>SF Outdoors Essentials</h3>
+    <ul>
+      <li>Always bring a wind layer — fog and wind can appear instantly even on sunny days</li>
+      <li>AllTrails has offline maps for all SF trails — download before you go</li>
+      <li>The Marin Headlands (just over the bridge) are an extension of SF — Hawk Hill and the Tennessee Valley trail are 20 min away</li>
+      <li>Ocean Beach is not for swimming — rip currents are dangerous year-round</li>
+      <li>Golden Gate Park has 25+ miles of trails — the panhandle and east meadows are easy; the western park near the windmills is wilder</li>
+    </ul>
+  </div>
+</div>
+
+<!-- MARIN COUNTY -->
+<div id="marin" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Marin County</div>
+      <div class="day-date">30 min from SF · Ancient redwoods, wild coast, best views on Earth</div>
+    </div>
+    <span class="day-tag tag-nature">Day Trip</span>
+  </div>
+
+  <div class="section-label">🥾 Marin Hikes — The Best in the Bay Area</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">4.7 mi · Moderate · Marin Headlands</div>
+      <div class="stop-content">
+        <div class="stop-name">Hawk Hill & Marin Headlands Loop</div>
+        <div class="stop-note">Drive over the Golden Gate, park at Battery Spencer. Hike the headlands ridge for the most staggering Golden Gate views you'll ever see — bridge below you, city skyline behind it, Pacific in front. Connects to Rodeo Beach, a wild pebble beach at the base of the cliffs.</div>
+        <div class="stop-tip">🦅 Sept–Nov: golden eagles and hawks migrate over Hawk Hill by the thousands. April still has raptors.</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop highlight">
+      <div class="stop-time">2.4 mi · Easy · Muir Woods</div>
+      <div class="stop-content">
+        <div class="stop-name">Muir Woods Cathedral Grove Loop</div>
+        <div class="stop-note">The main loop through ancient coastal redwoods. The trees are 1,000+ years old and 250 feet tall. Cathedral Grove is genuinely awe-inspiring — silence, filtered light, immense scale. Book timed entry at recreation.gov. Takes the Dipsea Trail connection up into the hills if energy allows.</div>
+        <div class="stop-tip">🌲 Go first thing in the morning — the light through the canopy is magical before 9am</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">6.2 mi · Moderate · Mount Tam</div>
+      <div class="stop-content">
+        <div class="stop-name">Matt Davis Trail → Bootjack → Ben Johnson Loop</div>
+        <div class="stop-note">The classic Mount Tamalpais loop. Traverse the south face through oak woodland and open chaparral, summit views of SF Bay, and descend through Cathedral Redwoods back to Muir Woods. Pair with a Muir Woods morning for the full Marin experience.</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">8.4 mi · Strenuous · Point Reyes</div>
+      <div class="stop-content">
+        <div class="stop-name">Alamere Falls via Palomarin Trailhead</div>
+        <div class="stop-note">One of California's great hikes. The reward: a waterfall that drops directly onto a beach — a "tidefall," one of only two in California. Rollings hills, three coastal lakes, wildflowers in April, the ocean visible the whole way. Start early.</div>
+        <div class="stop-tip">🌊 Check tide charts — low tide makes the beach at the base of the falls accessible</div>
+      </div>
+      <span class="stop-type type-walk">Strenuous</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3.8 mi · Easy · Stinson Beach</div>
+      <div class="stop-content">
+        <div class="stop-name">Dipsea Trail to Stinson Beach</div>
+        <div class="stop-note">Historic trail from Mill Valley down to Stinson Beach. One of California's oldest trail races (since 1905). Drop into the famous Dipsea steps, through redwood shade, emerge at the beach. Have lunch at Stinson before hiking back or getting a shuttle.</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3.5 mi · Easy · Tennessee Valley</div>
+      <div class="stop-content">
+        <div class="stop-name">Tennessee Valley Trail → Cove</div>
+        <div class="stop-note">Flat valley walk through Marin Headlands to a wild, isolated cove. No development, dramatic cliffs, crashing surf. 20 minutes from the Golden Gate. One of the most accessible true wilderness experiences near SF.</div>
+        <div class="stop-tip">🐘 Keep eyes peeled for elephant seals on the rocks at the cove seasonally</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+  </div>
+
+  <div class="section-label">🍽 Marin Food — Where to Eat</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Mill Valley</span>
+      <div class="food-name">Sol Food</div>
+      <div class="food-desc">Puerto Rican food that redefines the genre. Pernil, tostones, arroz con pollo, pasteles. Lines form before they open. Jacquie's top rec — mandatory.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Mill Valley</span>
+      <div class="food-name">Bungalow 44</div>
+      <div class="food-desc">Upscale but warm neighborhood restaurant on Miller Ave. Rotisserie chicken, excellent cocktails, locally sourced seasonal menu. The best sit-down dinner in Mill Valley.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Sausalito</span>
+      <div class="food-name">Fish Restaurant</div>
+      <div class="food-desc">All sustainable seafood on a wooden dock over the water. Clam chowder, grilled halibut, Dungeness crab. Cash only, picnic tables, incredible. Order at the counter and eat with the bay view.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Sausalito</span>
+      <div class="food-name">Sushi Ran</div>
+      <div class="food-desc">One of the best sushi restaurants in the Bay Area. Michelin-recognized. If budget allows, this is a special meal. Reserve in advance.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Stinson Beach</span>
+      <div class="food-name">Parkside Snack Bar</div>
+      <div class="food-desc">Classic California beach café on Stinson Beach. Fish tacos, craft burgers, local beer. Right on the sand. Post-hike perfection.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Muir Beach</span>
+      <div class="food-name">The Pelican Inn</div>
+      <div class="food-desc">16th-century English pub replica a mile from Muir Beach. Real ale on tap, beef and kidney pie, roaring fireplace. Surreal to find in Marin but absolutely delightful.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Fairfax</span>
+      <div class="food-name">Gestalt Haus</div>
+      <div class="food-desc">German beer hall in a tiny Marin town. 40 beers on tap, sausages, pretzels, outdoor patio. Local favorite — far from the tourist trail.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Tiburon</span>
+      <div class="food-name">Sam's Anchor Café</div>
+      <div class="food-desc">Outdoor deck dining on the water with the SF skyline directly across the Bay. Brunch classics, fresh seafood, cold beer. One of the great Bay Area lunch spots.</div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>Perfect Marin Day</h3>
+    <ul>
+      <li>8am: Muir Woods (first entry slot) → walk Cathedral Grove</li>
+      <li>11am: Drive up Mount Tam for summit views, short hike on the ridge</li>
+      <li>1pm: Sol Food in Mill Valley (pernil plate, tostones, plantain, rice)</li>
+      <li>3pm: Stinson Beach or Tennessee Valley afternoon walk</li>
+      <li>5pm: Sausalito waterfront stroll — looks exactly like Amalfi Coast</li>
+      <li>6:30pm: Fish Restaurant on the dock for sunset dinner</li>
+      <li>8pm: Ferry back to SF from Sausalito — city skyline lit up at night</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SONOMA COUNTY -->
+<div id="sonoma" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Sonoma County</div>
+      <div class="day-date">1–1.5 hrs from SF · Wine, redwoods, coast, and incredible food</div>
+    </div>
+    <span class="day-tag tag-special">Day Trip</span>
+  </div>
+
+  <div class="section-label">🥾 Sonoma Hikes & Outdoors</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">3.5 mi · Easy · Armstrong Redwoods</div>
+      <div class="stop-content">
+        <div class="stop-name">Armstrong Redwoods State Reserve</div>
+        <div class="stop-note">Near Guerneville. Coastal redwoods just as magnificent as Muir Woods but with a fraction of the visitors. No reservation required. The Colonel Armstrong Tree is 1,400 years old. Continue on the East Ridge Trail for old-growth forest and ridge views.</div>
+        <div class="stop-tip">🌲 Free to walk in. The Icicle Tree — 308 feet tall — is at the end of the main grove trail</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">5.2 mi · Moderate · Bodega Head</div>
+      <div class="stop-content">
+        <div class="stop-name">Bodega Head Loop & Coastal Bluffs</div>
+        <div class="stop-note">Dramatic headland trail on the Sonoma Coast. Walk the bluff edge above crashing surf, spot gray whales (April is migration season), and look back at a wild coastline with no development in sight. One of the most raw coastal hikes in California.</div>
+        <div class="stop-tip">🐋 April is prime gray whale migration season — bring binoculars</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">4.0 mi · Easy · Doran Beach</div>
+      <div class="stop-content">
+        <div class="stop-name">Doran Beach & Bodega Bay</div>
+        <div class="stop-note">Sandy spit between the Pacific and Bodega Harbor. Walk the full length of the spit in the morning when it's quiet. Harbor seals haul out on the rocks. The town of Bodega Bay has excellent fresh seafood right off the boat.</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">2.0 mi · Easy · Sonoma Valley</div>
+      <div class="stop-content">
+        <div class="stop-name">Sonoma State Historic Park & Plaza</div>
+        <div class="stop-note">Walk the 8-acre town plaza — the largest historic plaza in California. The old Mexican-era mission, barracks, and vineyards are on foot. Pair with a wine tasting at one of the tasting rooms right on the square.</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+  </div>
+
+  <div class="section-label">🍷 Wineries Worth the Visit</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">Healdsburg</span>
+      <div class="food-name">Dry Creek Vineyard</div>
+      <div class="food-desc">Historic Dry Creek Valley winery. Fume blanc and zinfandel are legendary. Beautiful picnic grounds. One of Sonoma's originals, family-run since 1972.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">Healdsburg</span>
+      <div class="food-name">Jordan Winery</div>
+      <div class="food-desc">Château-style estate with olive groves and spectacular grounds. Known for Cabernet and Chardonnay. The library tasting is worth booking — older vintages in the estate library.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">Sebastopol</span>
+      <div class="food-name">Dutton-Goldfield Winery</div>
+      <div class="food-desc">Small-production Pinot Noir and Chardonnay from the cool Sonoma Coast. No appointment needed. One of the best value/quality wineries in Sonoma.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#c8923a;color:white">Guerneville</span>
+      <div class="food-name">Korbel Champagne Cellars</div>
+      <div class="food-desc">Historic 1882 winery on the Russian River. Stunning estate, free tours, and their brut is genuinely good. The gardens in spring are beautiful.</div>
+    </div>
+  </div>
+
+  <div class="section-label">🍽 Sonoma Food — Where to Eat</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Healdsburg</span>
+      <div class="food-name">Shed</div>
+      <div class="food-desc">Farm-to-table fermentation-focused café and market. The larder and pantry section is extraordinary. Breakfast and lunch only. This is what California food culture looks like at its best.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Healdsburg</span>
+      <div class="food-name">Costeaux French Bakery</div>
+      <div class="food-desc">Healdsburg institution since 1923. Incredible croissants, morning pastries, rustic loaves. Get here for breakfast before the wineries open.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Bodega Bay</span>
+      <div class="food-name">Spud Point Crab Company</div>
+      <div class="food-desc">Dock-side shack run by a family of local crabbers. The Dungeness crab sandwich and clam chowder are made from crabs pulled that morning. Order at the window, eat at picnic tables overlooking the marina.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Guerneville</span>
+      <div class="food-name">Big Bottom Market</div>
+      <div class="food-desc">Tiny market-café on the Russian River. The biscuits with local honey have been featured on Food Network. Breakfast sandwiches, local provisions, incredible coffee.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Sonoma</span>
+      <div class="food-name">The Girl & the Fig</div>
+      <div class="food-desc">Sonoma institution on the plaza. French country bistro with Rhône-focused wine list. Duck confit, charcuterie, fig & arugula salad. Book ahead for dinner.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Petaluma</span>
+      <div class="food-name">Central Market</div>
+      <div class="food-desc">Farm-driven seasonal restaurant in a historic building in Petaluma. Hyper-local sourcing — most ingredients from within 50 miles. One of the best value fine-dining meals in the Bay Area.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Sebastopol</span>
+      <div class="food-name">Ramen Gaijin</div>
+      <div class="food-desc">Outstanding ramen in an unlikely location — Sebastopol. Long fermented broths, local pork, house-made noodles. Often considered the best ramen outside SF proper.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Healdsburg</span>
+      <div class="food-name">Oakville Grocery (Healdsburg)</div>
+      <div class="food-desc">Legendary California gourmet market. Build the ultimate wine-country picnic: local cheese, charcuterie, fresh bread, olives. Take it to a winery lawn.</div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>Perfect Sonoma Day</h3>
+    <ul>
+      <li>8am: Costeaux French Bakery in Healdsburg — croissant and coffee on the plaza</li>
+      <li>9:30am: Armstrong Redwoods — 1,400-year-old trees, no crowds</li>
+      <li>Noon: Spud Point Crab Co in Bodega Bay — fresh Dungeness crab dock-side</li>
+      <li>2pm: Bodega Head cliff walk — spot gray whales in April</li>
+      <li>4pm: Dry Creek Vineyard tasting — zinfandel in the valley that invented it</li>
+      <li>6:30pm: Dinner at Shed or The Girl & the Fig in Healdsburg/Sonoma</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SANTA CRUZ -->
+<div id="santacruz" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Santa Cruz County</div>
+      <div class="day-date">1.5 hrs from SF · Surf town, redwoods, boardwalk, and killer food</div>
+    </div>
+    <span class="day-tag tag-nature">Day Trip</span>
+  </div>
+
+  <div class="section-label">🥾 Santa Cruz Hikes & Outdoors</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">5.0 mi · Moderate · Big Basin</div>
+      <div class="stop-content">
+        <div class="stop-name">Big Basin Redwoods State Park</div>
+        <div class="stop-note">California's oldest state park — old-growth redwoods some of which are 2,000 years old and 300 feet tall. The Redwood Loop Trail is 4.5 miles through the ancient grove. Note: much of the park is being restored after the 2020 CZU Lightning Fire; check current trail status at parks.ca.gov before visiting.</div>
+        <div class="stop-tip">🌲 The Berry Creek Falls trail (11 mi round trip) rewards with three stunning waterfalls — an epic full day</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3.0 mi · Easy · West Cliff Drive</div>
+      <div class="stop-content">
+        <div class="stop-name">West Cliff Drive Coastal Walk</div>
+        <div class="stop-note">Santa Cruz's iconic coastal path runs 2.75 miles along dramatic cliffs above the Pacific. Watch surfers at Steamer Lane (one of California's most famous surf breaks), see the Surfing Museum, and end at Natural Bridges State Beach with its monarch butterfly colony in season.</div>
+        <div class="stop-tip">🏄 Steamer Lane: some of the best surf in California. Watch from the bluff — incredible even if you don't surf.</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">4.5 mi · Moderate · Henry Cowell</div>
+      <div class="stop-content">
+        <div class="stop-name">Henry Cowell Redwoods State Park</div>
+        <div class="stop-note">Just north of Santa Cruz town — easier to access than Big Basin. Ancient redwood grove loop plus connector trails along the San Lorenzo River. Swim in the river pools in summer. The Pipeline Road gives a longer moderate option into the chaparral above.</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">2.0 mi · Easy · Natural Bridges</div>
+      <div class="stop-content">
+        <div class="stop-name">Natural Bridges State Beach</div>
+        <div class="stop-note">Wave-cut arch over the Pacific, tide pools full of sea stars and anemones, and the world's largest overwintering monarch butterfly colony (October–February). In April it's quieter but the tide pools are outstanding. Great beach even without the butterflies.</div>
+        <div class="stop-tip">🦋 The eucalyptus grove behind the beach has monarch butterflies year-round in smaller numbers</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">Beach · All Day</div>
+      <div class="stop-content">
+        <div class="stop-name">Capitola Village & Beginner Surf</div>
+        <div name="stop-note" class="stop-note">Capitola is the most charming beach town in the Bay Area — colorful Mediterranean-style buildings, a village beach, mellow surf. Rent a board and wetsuit at O'Neill (the surf brand that started here). Capitola Beginner Surf is ideal for first-timers.</div>
+        <div class="stop-tip">🏄 O'Neill Surf Shop is right here — this is where the wetsuit was invented</div>
+      </div>
+      <span class="stop-type type-see">Beach</span>
+    </div>
+  </div>
+
+  <div class="section-label">🍽 Santa Cruz Food — Where to Eat</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Downtown SC</span>
+      <div class="food-name">Penny Ice Creamery</div>
+      <div class="food-desc">Artisan small-batch ice cream made daily with local ingredients. Inventive seasonal flavors — Mexican chocolate, strawberry balsamic, cardamom rose. A Santa Cruz institution. Two locations.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Westside</span>
+      <div class="food-name">Verve Coffee Roasters</div>
+      <div class="food-desc">Santa Cruz's cult coffee roaster, now with SF locations. The original Westside café is the best one. Single-origin pour-overs, exceptional espresso, beautiful space. A California coffee benchmark.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Downtown</span>
+      <div class="food-name">Bantam</div>
+      <div class="food-desc">Wood-fired pizza and small plates. Local seasonal ingredients, excellent cocktails, warm atmosphere. One of the best restaurants on the Central Coast.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Eastside</span>
+      <div class="food-name">Hula's Island Grill</div>
+      <div class="food-desc">Beloved Santa Cruz institution. Tiki cocktails, fish tacos, macadamia nut chicken. Colorful, loud, fun. Has been packed every night since 1994.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Westside</span>
+      <div class="food-name">Surf City Sandwich</div>
+      <div class="food-desc">Local surf-culture sandwich shop. Incredible Italian sub, the Caprese, and the Veggie on housemade bread. Get it to go and eat on West Cliff while watching surfers.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Capitola</span>
+      <div class="food-name">Gayle's Bakery</div>
+      <div class="food-desc">Legendary Capitola bakery operating since 1978. Enormous case of pastries, sandwiches, and hot food. The almond croissant and morning buns are locally iconic. Get there early.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Wharf</span>
+      <div class="food-name">Stagnaro Bros.</div>
+      <div class="food-desc">Family-run seafood restaurant on the Santa Cruz Wharf since 1937. Cioppino, Dungeness crab, fresh fish. The old-school SF Italian seafood tradition, preserved perfectly.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Downtown</span>
+      <div class="food-name">Picnic Basket</div>
+      <div class="food-desc">Local favourite right across from the beach. Elevated breakfast and lunch classics. The smash burger and breakfast burritos are outstanding. Casual, fast, excellent.</div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>Perfect Santa Cruz Day</h3>
+    <ul>
+      <li>8am: Verve Coffee on the Westside — best coffee in the county</li>
+      <li>9am: West Cliff Drive walk — watch surfers at Steamer Lane from the bluff</li>
+      <li>11am: Henry Cowell Redwoods — old-growth grove, river swimming</li>
+      <li>1pm: Gayle's Bakery in Capitola for a picnic lunch, eat on the village beach</li>
+      <li>3pm: Rent a board/wetsuit, try beginner surf at Capitola</li>
+      <li>5pm: Natural Bridges tide pools before the light goes</li>
+      <li>7pm: Bantam for wood-fired dinner and cocktails downtown</li>
+    </ul>
+  </div>
+</div>
+
+<!-- PENINSULA / SANTA CLARA -->
+<div id="peninsula" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Peninsula & Santa Clara</div>
+      <div class="day-date">30–60 min from SF · Redwood trails, farm stands, coastal gems</div>
+    </div>
+    <span class="day-tag tag-culture">Day Trip</span>
+  </div>
+
+  <div class="section-label">🥾 Peninsula Hikes — Underrated & Outstanding</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">6.5 mi · Moderate · Portola Redwoods</div>
+      <div class="stop-content">
+        <div class="stop-name">Portola Redwoods State Park</div>
+        <div class="stop-note">La Honda, 45 min from SF. Deep canyon redwoods with almost no visitors — one of the least-known old-growth groves in California. The Sequoia Nature Trail connects to the Summit Trail for ridge views. Completely different feel from Muir Woods — wild and quiet.</div>
+        <div class="stop-tip">🌲 Backcountry camping available — this is one of the most beautiful overnight spots in the Bay Area</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop highlight">
+      <div class="stop-time">4.2 mi · Moderate · Purisima Creek</div>
+      <div class="stop-content">
+        <div class="stop-name">Purisima Creek Redwoods Open Space</div>
+        <div class="stop-note">Halfmoon Bay hills above the coast. The canyon drops 1,500 feet through ancient redwoods to the coast below. On clear days you can see the Farallon Islands from the ridge. One of the most beautiful open-space preserves in the Bay Area and almost nobody knows about it.</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">3.0 mi · Easy · Año Nuevo</div>
+      <div class="stop-content">
+        <div class="stop-name">Año Nuevo State Park — Elephant Seals</div>
+        <div class="stop-note">1.5 hrs south of SF. Guided tours let you walk within feet of thousands of elephant seals on the beach. The males can be 5,000 lbs. One of the most extraordinary wildlife encounters in California. April: post-breeding season, juveniles still present. Book tours at reserveamerica.com.</div>
+        <div class="stop-tip">🦭 Not April peak season but juveniles ("weaners") are still on the beach — still spectacular</div>
+      </div>
+      <span class="stop-type type-see">Wildlife</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">5.0 mi · Moderate · Monte Bello</div>
+      <div class="stop-content">
+        <div class="stop-name">Monte Bello Open Space (Above Palo Alto)</div>
+        <div class="stop-note">Ridge above the Santa Clara Valley. Walk the San Andreas Fault directly — you can see the offset in the landscape. Views of the entire Bay, South Bay, and coastal hills. The Stevens Creek headwaters trail connects through wildflower meadows in April.</div>
+        <div class="stop-tip">🌸 April: this ridge has spectacular wildflower blooms — poppies, lupine, owl's clover</div>
+      </div>
+      <span class="stop-type type-walk">Moderate</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">2.0 mi · Easy · Pescadero</div>
+      <div class="stop-content">
+        <div class="stop-name">Pescadero Marsh & Bean Hollow Beach</div>
+        <div class="stop-note">Small coastal marsh full of shore birds just above a driftwood-strewn beach. Take Pescadero Road from Hwy 1. Walk the marsh boardwalk, then Bean Hollow State Beach (dramatic sculptured sandstone) five minutes south. Pair with a stop in Pescadero town.</div>
+      </div>
+      <span class="stop-type type-walk">Easy</span>
+    </div>
+  </div>
+
+  <div class="section-label">🍽 Peninsula & Santa Clara Food</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Pescadero</span>
+      <div class="food-name">Duarte's Tavern</div>
+      <div class="food-desc">Family-run since 1894. The artichoke soup is made from artichokes grown in the field next door. Green chile omelettes, Olallieberry pie, local crab. A National Register-listed landmark that still serves outstanding food.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Half Moon Bay</span>
+      <div class="food-name">Barbara's Fish Trap</div>
+      <div class="food-desc">Tiny roadside shack on the water at Princeton Harbor. The fresh fish and chips and cioppino are made from catches landed that morning at the dock 50 yards away.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Half Moon Bay</span>
+      <div class="food-name">Pasta Moon</div>
+      <div class="food-desc">Italian trattoria that's been a Half Moon Bay anchor since 1988. Handmade pasta, local Dungeness crab, wood oven. The butternut squash ravioli with sage brown butter is legendary locally.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">San Jose</span>
+      <div class="food-name">Original Joe's</div>
+      <div class="food-desc">Italian-American institution in downtown San Jose since 1956. The meatballs, veal parmigiana, and the whole supper-club atmosphere feel like a time capsule. Go for the experience.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Palo Alto</span>
+      <div class="food-name">Tamarine</div>
+      <div class="food-desc">Contemporary Vietnamese in Palo Alto. Elegant, creative, and far better than the surrounding Silicon Valley food scene deserves. The shaking beef and caramelized clay pot fish are standouts.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">San Jose</span>
+      <div class="food-name">Santana Row</div>
+      <div class="food-desc">Open-air dining street in San Jose with a surprisingly good mix of restaurants. Ozumo for sushi, La Strada for Italian, and ROW Bar for cocktails — all in a walkable European-style block.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">San Jose</span>
+      <div class="food-name">Pho Kim Long</div>
+      <div class="food-desc">San Jose's Vietnamese community (the largest outside Vietnam) means extraordinary pho. On Story Road in East San Jose — the real deal, massive portions, open at 7am.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#2d5986;color:white">Los Altos</span>
+      <div class="food-name">Cascal</div>
+      <div class="food-desc">Pan-Latin tapas in a lively setting. The ceviche, empanadas, and sangria flight are all excellent. Peninsula locals have been coming here for 20 years.</div>
+    </div>
+  </div>
+
+  <div class="section-label">🌾 Peninsula Farm Stands & Markets</div>
+  <div class="food-grid">
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Half Moon Bay</span>
+      <div class="food-name">Half Moon Bay Farmers Market</div>
+      <div class="food-desc">Saturday mornings on Main Street. The coast's microclimate grows exceptional Brussels sprouts, artichokes, and strawberries. In April: first strawberries of the season.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">San Martin</span>
+      <div class="food-name">Gizdich Ranch</div>
+      <div class="food-desc">U-pick apple and berry farm in the Santa Cruz Mountains. The homemade pies are locally famous. Pure California farm experience, 50 min south of SF.</div>
+    </div>
+    <div class="food-card">
+      <span class="food-tag" style="background:#6b8c6e;color:white">Pescadero</span>
+      <div class="food-name">Harley Farms Goat Dairy</div>
+      <div class="food-desc">Artisan goat cheese farm on the coast. Tours on weekends. The fresh chèvre and aged rounds are sold at the farm store. One of the most beautiful farms in California.</div>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>Perfect Peninsula Day</h3>
+    <ul>
+      <li>9am: Drive Hwy 1 south from SF — cliff edge, artichoke farms, pumpkin fields</li>
+      <li>10am: Purisima Creek Redwoods hike — 4 miles through ancient canyon redwoods</li>
+      <li>1pm: Duarte's Tavern in Pescadero — artichoke soup, fish, olallieberry pie</li>
+      <li>3pm: Bean Hollow Beach + Pescadero Marsh birdwatching</li>
+      <li>5pm: Half Moon Bay Main Beach sunset, stroll the town</li>
+      <li>7pm: Pasta Moon for dinner — handmade pasta and local crab</li>
+    </ul>
+  </div>
+</div>
+
+<!-- DAY TRIPS MAP/OVERVIEW -->
+<div id="daytrips" class="day-section">
+  <div class="day-header">
+    <div class="day-meta">
+      <div class="day-title">Day Trip Overview</div>
+      <div class="day-date">All options at a glance — pick your adventure</div>
+    </div>
+  </div>
+
+  <div class="section-label">📍 By Drive Time from SF</div>
+  <div class="stops">
+    <div class="stop highlight">
+      <div class="stop-time">20–30 min</div>
+      <div class="stop-content">
+        <div class="stop-name">Marin County Headlands, Sausalito, Tiburon</div>
+        <div class="stop-note">Literally just across the Golden Gate Bridge. No excuse not to go. Hawk Hill views, waterfront dining, ferry back to SF. Half-day minimum, full day ideal.</div>
+      </div>
+      <span class="stop-type type-walk">Drive</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">35–45 min</div>
+      <div class="stop-content">
+        <div class="stop-name">Muir Woods, Muir Beach, Stinson Beach</div>
+        <div class="stop-note">Book Muir Woods timed entry. Drive up over Mount Tam. Descend to Stinson Beach for lunch. The most spectacular 40-mile drive in the Bay Area.</div>
+      </div>
+      <span class="stop-type type-walk">Drive</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">45–60 min</div>
+      <div class="stop-content">
+        <div class="stop-name">Half Moon Bay, Pacifica, Pescadero Coast</div>
+        <div class="stop-note">Drive Hwy 1 south. Dramatic coastal views, artichoke farms, elephant seal beaches (Año Nuevo, 1.5 hrs). Duarte's Tavern in Pescadero for lunch.</div>
+      </div>
+      <span class="stop-type type-walk">Drive</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">1–1.5 hrs</div>
+      <div class="stop-content">
+        <div class="stop-name">Sonoma (Healdsburg, Guerneville, Bodega Bay), Napa Valley, Point Reyes</div>
+        <div class="stop-note">Full-day destinations. Wine country needs 6+ hours minimum to do properly. Point Reyes is its own world — tule elk, lighthouse, dramatic coast.</div>
+      </div>
+      <span class="stop-type type-walk">Drive</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">1.5 hrs</div>
+      <div class="stop-content">
+        <div class="stop-name">Santa Cruz</div>
+        <div class="stop-note">Via Hwy 17 through the Santa Cruz Mountains (windy mountain road). Or scenic Hwy 1 along the coast (adds 30 min). Full day destination — beach, redwoods, food, surfing.</div>
+      </div>
+      <span class="stop-type type-walk">Drive</span>
+    </div>
+    <div class="stop">
+      <div class="stop-time">2 hrs</div>
+      <div class="stop-content">
+        <div class="stop-name">Monterey, Carmel-by-the-Sea</div>
+        <div class="stop-note">Worth the drive — Monterey Bay Aquarium is world-class (book ahead!). Carmel has white sand beach, galleries, and fairytale architecture. Spend the night if possible.</div>
+      </div>
+      <span class="stop-type type-walk">Drive</span>
+    </div>
+  </div>
+
+  <div class="notes-box">
+    <h3>Trip Planning for CG & Bella</h3>
+    <ul>
+      <li>Muir Woods reservation: recreation.gov — book NOW, April fills up</li>
+      <li>Alcatraz evening tour: alcatrazcruises.com — book immediately</li>
+      <li>Angel Island ferry: blueandgoldfleet.com — check schedule, runs 2–3x daily</li>
+      <li>Año Nuevo elephant seals: reserveamerica.com — guided tours required Jan–Mar; self-guided April+</li>
+      <li>Monterey Bay Aquarium: montereybayaquarium.org — advance tickets strongly recommended</li>
+      <li>Hwy 1 coastal drive south: one of the world's great drives, especially at sunset heading north back to SF</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<script>
+function show(id) {
+  document.querySelectorAll('.day-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btns = document.querySelectorAll('.nav-btn');
+  const map = {overview:0,day1:1,day2:2,day3:3,day4:4,day5:5,day6:6,day7:7,day8:8,day9:9,food:10,bars:11,hidden:12,neighborhoods:13,museums:14,nature:15,marin:16,sonoma:17,santacruz:18,peninsula:19,daytrips:20};
+  if (map[id] !== undefined) btns[map[id]].classList.add('active');
+  window.scrollTo({top: document.querySelector('.nav-strip').offsetTop - 8, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>
