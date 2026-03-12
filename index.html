@@ -3,296 +3,633 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>City Guides — San Francisco & New York City</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
+<title>City Guides — SF · NYC · DC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet">
 <style>
+/* ════════════════════════════════════════════════
+   CITY GUIDES — Redesigned: Soft · Luminous · Alive
+   Palette: warm cream base, city-specific accent glow
+   ════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Outfit:wght@300;400;500;600&family=Space+Mono:ital@0;1&display=swap');
+
 :root {
-  --gold:#D4A847; --ember:#C0392B; --fog:#F5F0E8; --bark:#1C1008;
-  --sage:#3D6B4F; --sky:#2C5F8A; --sand:#EDE5D0; --cream:#FDFAF4;
-  --mist:#8C7E70; --warm:#B5503A; --teal:#2A7A6F; --plum:#5C3D6B;
-  --ink:#1A1210; --light:#FAF6EE;
-  --nyc:#0D0D1E; --neon:#E8C547;
+  /* Base palette */
+  --cream: #FBF7F0;
+  --fog:   #F5EFE6;
+  --sand:  #EAE0CE;
+  --mist:  #9C8E82;
+  --ink:   #1C1510;
+  --smoke: #5A504A;
+
+  /* SF: warm terracotta + coastal blue */
+  --sf-bg:     #1A0E06;
+  --sf-gold:   #E8A84A;
+  --sf-ember:  #D4573C;
+  --sf-teal:   #3A8A7A;
+  --sf-sky:    #4A85B5;
+  --sf-sage:   #4A7A5A;
+  --sf-plum:   #7A5080;
+
+  /* NYC: deep slate + warm amber */
+  --nyc-bg:    #0C0E18;
+  --nyc-amber: #E8B84A;
+  --nyc-rose:  #C8506A;
+  --nyc-steel: #4A6888;
+
+  /* DC: deep navy + cherry blossom + marble */
+  --dc-bg:     #0A0F1E;
+  --dc-cherry: #D4687A;
+  --dc-gold:   #C8A058;
+  --dc-sage:   #5A8A6A;
+  --dc-marble: #E8DDD0;
+
+  /* Shared utility */
+  --bark:  #1A0E06;
+  --gold:  #E8A84A;
+  --ember: #D4573C;
+  --sage:  #4A7A5A;
+  --sky:   #4A85B5;
+  --teal:  #3A8A7A;
+  --plum:  #7A5080;
+  --warm:  #C06840;
 }
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--cream);color:var(--ink);font-family:'Outfit',sans-serif;font-weight:300;overflow-x:hidden}
 
-/* ── CITY SWITCHER ── */
-.city-switcher{
-  position:fixed;top:0;left:0;right:0;z-index:500;height:50px;
-  background:rgba(6,6,6,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  display:flex;align-items:stretch;justify-content:center;
-  border-bottom:1px solid rgba(255,255,255,.08);
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box }
+html { scroll-behavior:smooth }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  padding-top: 52px;
 }
-.city-btn{
-  font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  padding:0 36px;background:none;border:none;border-bottom:3px solid transparent;
-  cursor:pointer;color:rgba(255,255,255,.32);transition:all .25s ease;display:flex;align-items:center;gap:8px;
+
+/* soft grain texture overlay */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
 }
-.city-btn:hover{color:rgba(255,255,255,.65)}
-.city-btn.sf-on{color:var(--gold);border-bottom-color:var(--gold)}
-.city-btn.nyc-on{color:var(--neon);border-bottom-color:var(--neon)}
-.city-divider{width:1px;background:rgba(255,255,255,.1);margin:10px 0}
 
-body{padding-top:50px}
+/* ── CITY SWITCHER ─────────────────────────────── */
+.city-switcher {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 600;
+  height: 52px;
+  display: flex; align-items: stretch; justify-content: center; gap: 0;
+  background: rgba(8, 6, 4, 0.92);
+  backdrop-filter: blur(20px) saturate(1.8);
+  -webkit-backdrop-filter: blur(20px) saturate(1.8);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.city-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  padding: 0 32px; background: none; border: none; border-bottom: 3px solid transparent;
+  cursor: pointer; color: rgba(255,255,255,.28);
+  transition: all .3s cubic-bezier(.34,1.56,.64,1);
+  display: flex; align-items: center; gap: 9px;
+  position: relative;
+}
+.city-btn::after {
+  content: ''; position: absolute; bottom: -1px; left: 50%; right: 50%;
+  height: 3px; border-radius: 2px 2px 0 0;
+  transition: all .35s cubic-bezier(.34,1.56,.64,1);
+}
+.city-btn:hover { color: rgba(255,255,255,.65); transform: none }
+.city-btn.sf-on  { color: var(--sf-gold);   border-bottom-color: var(--sf-gold) }
+.city-btn.nyc-on { color: var(--nyc-amber); border-bottom-color: var(--nyc-amber) }
+.city-btn.dc-on  { color: var(--dc-cherry); border-bottom-color: var(--dc-cherry) }
+.city-divider { width: 1px; background: rgba(255,255,255,.09); margin: 10px 0 }
+@media(max-width:600px){.city-btn{padding:0 16px;font-size:9px;letter-spacing:.12em}}
 
-/* ── CITY SECTIONS ── */
-.city-section{display:none}
-.city-section.active{display:block}
+/* ── SECTIONS ────────────────────────────────────── */
+.city-section { display: none; position: relative; z-index: 1 }
+.city-section.active { display: block; animation: cityFadeIn .5s ease }
+@keyframes cityFadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 
-/* ── HEROES ── */
-.sf-hero,.nyc-hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 80px;position:relative;overflow:hidden}
-.sf-hero{background:var(--bark)}
-.nyc-hero{background:var(--nyc)}
-.sf-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 90% 10%,rgba(212,168,71,.35) 0%,transparent 55%),radial-gradient(ellipse 50% 70% at 5% 85%,rgba(44,95,138,.45) 0%,transparent 55%),radial-gradient(ellipse 40% 40% at 55% 45%,rgba(192,57,43,.2) 0%,transparent 55%)}
-.nyc-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 90% 10%,rgba(232,197,71,.22) 0%,transparent 55%),radial-gradient(ellipse 50% 70% at 5% 85%,rgba(192,57,43,.28) 0%,transparent 55%),radial-gradient(ellipse 40% 40% at 55% 45%,rgba(44,95,138,.16) 0%,transparent 55%)}
-.hero-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
-.sf-hero .hero-orb.o1{width:500px;height:500px;top:-120px;right:-80px;background:rgba(212,168,71,.12)}
-.sf-hero .hero-orb.o2{width:300px;height:300px;bottom:-60px;left:30%;background:rgba(192,57,43,.12)}
-.sf-hero .hero-orb.o3{width:200px;height:200px;top:40%;left:-50px;background:rgba(44,95,138,.15)}
-.nyc-orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
-.nyc-orb.o1{width:600px;height:600px;top:-150px;right:-100px;background:rgba(232,197,71,.07)}
-.nyc-orb.o2{width:350px;height:350px;bottom:-80px;left:25%;background:rgba(192,57,43,.09)}
-.nyc-orb.o3{width:250px;height:250px;top:30%;left:-60px;background:rgba(44,95,138,.1)}
-.nyc-skyline{position:absolute;bottom:0;left:0;right:0;height:260px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 260' preserveAspectRatio='xMidYMax meet'%3E%3Cpath fill='rgba(255,255,255,0.022)' d='M0,260 L0,190 L30,190 L30,130 L40,130 L40,110 L55,110 L55,85 L60,85 L60,52 L65,52 L65,36 L70,36 L70,22 L74,22 L74,8 L78,8 L78,0 L82,0 L82,8 L86,8 L86,22 L90,22 L90,36 L95,36 L95,52 L100,52 L100,85 L112,85 L112,110 L130,110 L130,85 L140,85 L140,65 L148,65 L148,52 L153,52 L153,36 L157,36 L157,22 L161,22 L161,8 L165,8 L165,0 L169,0 L169,8 L173,8 L173,22 L177,22 L177,36 L181,36 L181,52 L186,52 L186,65 L194,65 L194,85 L210,85 L210,110 L245,110 L245,85 L258,85 L258,65 L268,65 L268,52 L275,52 L275,45 L282,45 L282,52 L292,52 L292,65 L308,65 L308,85 L328,85 L328,110 L365,110 L365,85 L380,85 L380,65 L393,65 L393,52 L400,52 L400,36 L404,36 L404,22 L408,22 L408,8 L412,8 L412,0 L416,0 L416,8 L420,8 L420,22 L424,22 L424,36 L428,36 L428,52 L435,52 L435,65 L448,65 L448,85 L468,85 L468,110 L510,110 L510,85 L525,85 L525,65 L540,65 L540,52 L548,52 L548,45 L556,45 L556,52 L566,52 L566,65 L580,65 L580,85 L598,85 L598,110 L648,110 L648,85 L665,85 L665,65 L680,65 L680,85 L700,85 L700,110 L750,110 L750,85 L768,85 L768,65 L782,65 L782,52 L790,52 L790,45 L798,45 L798,52 L808,52 L808,65 L825,65 L825,85 L848,85 L848,110 L898,110 L898,85 L916,85 L916,65 L930,65 L930,85 L950,85 L950,110 L1000,110 L1000,85 L1018,85 L1018,65 L1032,65 L1032,52 L1040,52 L1040,45 L1048,45 L1048,52 L1058,52 L1058,65 L1075,65 L1075,85 L1098,85 L1098,110 L1148,110 L1148,85 L1175,85 L1175,65 L1200,65 L1200,85 L1228,85 L1228,110 L1290,110 L1290,130 L1340,130 L1340,150 L1440,150 L1440,260 Z'/%3E%3C/svg%3E") no-repeat bottom center/cover;pointer-events:none}
+/* ── HEROES ──────────────────────────────────────── */
+.sf-hero, .nyc-hero, .dc-hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 0 80px; position: relative; overflow: hidden;
+}
+.sf-hero  { background: var(--sf-bg) }
+.nyc-hero { background: var(--nyc-bg) }
+.dc-hero  { background: var(--dc-bg) }
 
-.hero-inner{position:relative;z-index:2;padding:0 60px;max-width:1100px}
-.hero-pre{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:16px}
-.sf-hero .hero-pre{color:var(--gold)}
-.sf-hero .hero-pre::before{content:'';width:40px;height:1px;background:var(--gold)}
-.nyc-hero .hero-pre{color:var(--neon)}
-.nyc-hero .hero-pre::before{content:'';width:40px;height:1px;background:var(--neon)}
-.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(60px,12vw,130px);font-weight:700;line-height:.88;color:var(--fog);letter-spacing:-3px}
-.hero-h1 em{display:block;font-style:italic;font-weight:400;font-size:.72em;letter-spacing:-1px;margin-top:8px}
-.sf-hero .hero-h1 em{color:var(--gold)}
-.nyc-hero .hero-h1 em{color:var(--neon)}
-.hero-sub{font-size:14px;color:rgba(245,240,232,.5);margin-top:32px;font-family:'Space Mono',monospace;letter-spacing:.08em;line-height:2;max-width:520px}
-.hero-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px}
-.hero-pill{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:8px 18px;border-radius:2px;transition:all .25s cubic-bezier(.34,1.56,.64,1);cursor:default}
-.sf-hero .hero-pill{border:1px solid rgba(212,168,71,.3);color:rgba(212,168,71,.8)}
-.sf-hero .hero-pill:hover{background:rgba(212,168,71,.12);border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
-.nyc-hero .hero-pill{border:1px solid rgba(232,197,71,.3);color:rgba(232,197,71,.8)}
-.nyc-hero .hero-pill:hover{background:rgba(232,197,71,.1);border-color:var(--neon);color:var(--neon);transform:translateY(-2px)}
+/* SF hero background: warm sunset gradient */
+.sf-hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 70% at 85% 5%,  rgba(232,168,74,.38) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 80% at 0% 90%,   rgba(74,133,181,.42) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 45% at 50% 50%,  rgba(212,87,60,.18) 0%, transparent 55%),
+    radial-gradient(ellipse 30% 30% at 20% 20%,  rgba(232,168,74,.12) 0%, transparent 60%);
+}
+/* NYC hero background: midnight electric */
+.nyc-hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 65% at 88% 8%,   rgba(232,184,74,.22) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 75% at 3% 88%,   rgba(200,80,106,.28) 0%, transparent 55%),
+    radial-gradient(ellipse 45% 45% at 50% 50%,  rgba(74,104,136,.2)  0%, transparent 55%);
+}
+/* DC hero background: cherry blossom dusk */
+.dc-hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 75% 60% at 90% 10%,  rgba(212,104,122,.32) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 70% at 5%  85%,  rgba(200,160,88,.28)  0%, transparent 55%),
+    radial-gradient(ellipse 40% 50% at 50% 50%,  rgba(90,138,106,.18)  0%, transparent 55%),
+    radial-gradient(ellipse 30% 40% at 30% 20%,  rgba(212,104,122,.15) 0%, transparent 60%);
+}
 
-/* ── NAV ── */
-.nav{border-bottom:1px solid rgba(255,255,255,.1);position:sticky;top:50px;z-index:200;overflow-x:auto;scrollbar-width:none;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.nav::-webkit-scrollbar{display:none}
-.sf-section .nav{background:rgba(28,16,8,.96);border-bottom-color:rgba(212,168,71,.2)}
-.nyc-section .nav{background:rgba(13,13,30,.96);border-bottom-color:rgba(232,197,71,.18)}
-.nav-inner{display:flex;padding:0 24px;white-space:nowrap;min-width:max-content}
-.nb{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,240,232,.4);padding:16px 20px;background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
-.nb:hover{color:rgba(255,255,255,.7)}
-.sf-section .nb.on{color:var(--gold);border-bottom-color:var(--gold)}
-.nyc-section .nb.on{color:var(--neon);border-bottom-color:var(--neon)}
-.ndiv{width:1px;background:rgba(255,255,255,.08);margin:8px 4px;align-self:stretch}
+/* floating orbs */
+.hero-orb, .nyc-orb, .dc-orb {
+  position: absolute; border-radius: 50%; pointer-events: none;
+}
+.sf-hero .hero-orb.o1 { width:600px;height:600px;top:-160px;right:-100px;background:rgba(232,168,74,.1);filter:blur(90px) }
+.sf-hero .hero-orb.o2 { width:350px;height:350px;bottom:-80px;left:28%;background:rgba(212,87,60,.1);filter:blur(70px) }
+.sf-hero .hero-orb.o3 { width:260px;height:260px;top:38%;left:-60px;background:rgba(74,133,181,.12);filter:blur(80px) }
+.nyc-orb.o1 { width:700px;height:700px;top:-200px;right:-120px;background:rgba(232,184,74,.07);filter:blur(100px) }
+.nyc-orb.o2 { width:400px;height:400px;bottom:-100px;left:22%;background:rgba(200,80,106,.09);filter:blur(80px) }
+.nyc-orb.o3 { width:280px;height:280px;top:32%;left:-70px;background:rgba(74,104,136,.1);filter:blur(90px) }
+.dc-orb.o1  { width:650px;height:650px;top:-180px;right:-110px;background:rgba(212,104,122,.09);filter:blur(95px) }
+.dc-orb.o2  { width:380px;height:380px;bottom:-90px;left:25%;background:rgba(200,160,88,.09);filter:blur(85px) }
+.dc-orb.o3  { width:270px;height:270px;top:35%;left:-65px;background:rgba(90,138,106,.1);filter:blur(90px) }
 
-/* ── MAIN ── */
-.main{max-width:1080px;margin:0 auto;padding:60px 28px 120px}
-.tab{display:none;animation:fadein .35s ease}
-.tab.on{display:block}
-@keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes slideUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
-.reveal{animation:slideUp .45s cubic-bezier(.22,1,.36,1) both}
+/* NYC skyline silhouette */
+.nyc-skyline {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 240px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 240' preserveAspectRatio='xMidYMax meet'%3E%3Cpath fill='rgba(255,255,255,0.018)' d='M0,240 L0,180 L30,180 L30,120 L45,120 L45,95 L55,95 L55,70 L60,70 L60,48 L65,48 L65,34 L70,34 L70,20 L74,20 L74,7 L78,7 L78,0 L82,0 L82,7 L86,7 L86,20 L90,20 L90,34 L95,34 L95,48 L100,48 L100,70 L112,70 L112,95 L130,95 L130,120 L155,120 L155,95 L165,95 L165,70 L172,70 L172,55 L178,55 L178,40 L183,40 L183,25 L188,25 L188,12 L193,12 L193,0 L198,0 L198,12 L203,12 L203,25 L208,25 L208,40 L213,40 L213,55 L218,55 L218,70 L228,70 L228,95 L248,95 L248,120 L280,120 L280,95 L295,95 L295,70 L305,70 L305,55 L312,55 L312,48 L318,48 L318,55 L328,55 L328,70 L345,70 L345,95 L368,95 L368,120 L405,120 L405,95 L420,95 L420,70 L432,70 L432,55 L440,55 L440,40 L446,40 L446,28 L452,28 L452,14 L458,14 L458,2 L464,2 L464,0 L470,0 L470,2 L476,2 L476,14 L482,14 L482,28 L488,28 L488,40 L494,40 L494,55 L504,55 L504,70 L520,70 L520,95 L545,95 L545,120 L588,120 L588,95 L605,95 L605,70 L618,70 L618,55 L626,55 L626,48 L634,48 L634,55 L644,55 L644,70 L660,70 L660,95 L682,95 L682,120 L730,120 L730,95 L748,95 L748,70 L762,70 L762,55 L770,55 L770,48 L778,48 L778,55 L788,55 L788,70 L805,70 L805,95 L828,95 L828,120 L875,120 L875,95 L892,95 L892,70 L905,70 L905,55 L912,55 L912,48 L920,48 L920,55 L930,55 L930,70 L948,70 L948,95 L970,95 L970,120 L1015,120 L1015,95 L1032,95 L1032,70 L1045,70 L1045,55 L1053,55 L1053,48 L1061,48 L1061,55 L1071,55 L1071,70 L1088,70 L1088,95 L1112,95 L1112,120 L1158,120 L1158,95 L1182,95 L1182,70 L1208,70 L1208,95 L1238,95 L1238,120 L1298,120 L1298,138 L1350,138 L1350,155 L1440,155 L1440,240 Z'/%3E%3C/svg%3E") no-repeat bottom center / cover;
+  pointer-events: none;
+}
+/* DC monument silhouette */
+.dc-columns {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200' preserveAspectRatio='xMidYMax meet'%3E%3Cpath fill='rgba(255,255,255,0.016)' d='M0,200 L0,160 L80,160 L80,120 L120,120 L120,80 L140,80 L140,60 L160,60 L160,0 L165,0 L165,60 L180,60 L180,80 L200,80 L200,120 L240,120 L240,160 L320,160 L320,120 L360,120 L360,80 L380,80 L380,60 L400,60 L400,0 L405,0 L405,60 L425,60 L425,80 L445,80 L445,120 L480,120 L480,80 L500,80 L500,60 L520,60 L520,80 L540,80 L540,120 L580,120 L580,60 L590,60 L590,40 L600,40 L600,20 L610,20 L610,0 L615,0 L615,20 L625,20 L625,40 L635,40 L635,60 L645,60 L645,120 L680,120 L680,80 L700,80 L700,60 L720,60 L720,80 L740,80 L740,120 L780,120 L780,160 L860,160 L860,120 L900,120 L900,80 L920,80 L920,60 L940,60 L940,40 L950,40 L950,20 L960,20 L960,0 L965,0 L965,20 L975,20 L975,40 L985,40 L985,60 L1000,60 L1000,80 L1020,80 L1020,120 L1060,120 L1060,160 L1140,160 L1140,120 L1180,120 L1180,80 L1200,80 L1200,60 L1220,60 L1220,80 L1240,80 L1240,120 L1280,120 L1280,160 L1360,160 L1360,180 L1440,180 L1440,200 Z'/%3E%3C/svg%3E") no-repeat bottom center / cover;
+  pointer-events: none;
+}
 
-/* ── SECTION HEAD ── */
-.sh{margin-bottom:44px}
-.sh-tag{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--mist);margin-bottom:12px;display:flex;align-items:center;gap:14px}
-.sf-section .sh-tag::before{content:'';width:28px;height:1px;background:var(--gold)}
-.nyc-section .sh-tag::before{content:'';width:28px;height:1px;background:var(--neon)}
-.sh h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,60px);font-weight:600;line-height:1.05;color:var(--ink)}
-.sh h2 em{font-style:italic;color:var(--ember)}
-.sh p{font-size:14px;color:var(--mist);margin-top:12px;max-width:640px;line-height:1.85}
+/* ── HERO CONTENT ─────────────────────────────── */
+.hero-inner {
+  position: relative; z-index: 2;
+  padding: 0 64px; max-width: 1120px;
+}
+.hero-pre {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+  margin-bottom: 22px; display: flex; align-items: center; gap: 18px;
+  opacity: .8;
+}
+.hero-pre::before { content: ''; width: 36px; height: 1px; background: currentColor; opacity: .5 }
+.sf-hero  .hero-pre { color: var(--sf-gold) }
+.nyc-hero .hero-pre { color: var(--nyc-amber) }
+.dc-hero  .hero-pre { color: var(--dc-cherry) }
 
-/* ── DIVIDER ── */
-.dl{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--mist);margin:52px 0 20px;display:flex;align-items:center;gap:14px}
-.sf-section .dl::before,.nyc-section .dl::before{content:'';width:3px;height:3px;border-radius:50%;flex-shrink:0}
-.sf-section .dl::before{background:var(--gold)}
-.nyc-section .dl::before{background:var(--neon)}
-.dl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--sand),transparent)}
+.hero-h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(64px, 12vw, 136px);
+  font-weight: 700; line-height: .87;
+  color: rgba(245,238,228,.95); letter-spacing: -3px;
+}
+.hero-h1 em {
+  display: block; font-style: italic; font-weight: 300;
+  font-size: .7em; letter-spacing: -1px; margin-top: 10px;
+  opacity: .9;
+}
+.sf-hero  .hero-h1 em { color: var(--sf-gold) }
+.nyc-hero .hero-h1 em { color: var(--nyc-amber) }
+.dc-hero  .hero-h1 em { color: var(--dc-cherry) }
 
-/* ── GRIDS ── */
-.g2{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
-.g3{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
-.g4{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.hero-sub {
+  font-size: 13px; color: rgba(245,240,232,.45); margin-top: 34px;
+  font-family: 'Space Mono', monospace; letter-spacing: .08em;
+  line-height: 2.1; max-width: 500px;
+}
+.hero-pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 44px }
+.hero-pill {
+  font-family: 'Space Mono', monospace; font-size: 9.5px;
+  letter-spacing: .14em; text-transform: uppercase;
+  padding: 8px 20px; border-radius: 3px;
+  transition: all .3s cubic-bezier(.34,1.56,.64,1); cursor: default;
+}
+.sf-hero  .hero-pill { border:1px solid rgba(232,168,74,.28); color:rgba(232,168,74,.75) }
+.nyc-hero .hero-pill { border:1px solid rgba(232,184,74,.28); color:rgba(232,184,74,.75) }
+.dc-hero  .hero-pill { border:1px solid rgba(212,104,122,.28); color:rgba(212,104,122,.75) }
+.sf-hero  .hero-pill:hover { background:rgba(232,168,74,.12); border-color:var(--sf-gold);  color:var(--sf-gold);  transform:translateY(-3px); box-shadow:0 8px 24px rgba(232,168,74,.18) }
+.nyc-hero .hero-pill:hover { background:rgba(232,184,74,.1);  border-color:var(--nyc-amber); color:var(--nyc-amber); transform:translateY(-3px); box-shadow:0 8px 24px rgba(232,184,74,.18) }
+.dc-hero  .hero-pill:hover { background:rgba(212,104,122,.1); border-color:var(--dc-cherry); color:var(--dc-cherry); transform:translateY(-3px); box-shadow:0 8px 24px rgba(212,104,122,.18) }
 
-/* ── CARDS ── */
-.card{background:white;border-radius:14px;padding:22px;box-shadow:0 2px 16px rgba(0,0,0,.07);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;position:relative;overflow:hidden}
-.card::before{content:'';position:absolute;inset:0;border-radius:14px;background:linear-gradient(135deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 60%);pointer-events:none;opacity:0;transition:opacity .25s}
-.card:hover::before{opacity:1}
-.card:hover{transform:translateY(-6px) scale(1.01)}
-.card.gold{border-top:3px solid var(--gold)}
-.card.red{border-top:3px solid var(--ember)}
-.card.sage{border-top:3px solid var(--sage)}
-.card.sky{border-top:3px solid var(--sky)}
-.card.teal{border-top:3px solid var(--teal)}
-.card.plum{border-top:3px solid var(--plum)}
-.card.warm{border-top:3px solid var(--warm)}
-.card.neon{border-top:3px solid var(--neon)}
-.card.gold:hover{box-shadow:0 16px 48px rgba(212,168,71,.28),0 0 0 1px rgba(212,168,71,.12)}
-.card.red:hover{box-shadow:0 16px 48px rgba(192,57,43,.22),0 0 0 1px rgba(192,57,43,.1)}
-.card.sage:hover{box-shadow:0 16px 48px rgba(61,107,79,.22),0 0 0 1px rgba(61,107,79,.1)}
-.card.sky:hover{box-shadow:0 16px 48px rgba(44,95,138,.22),0 0 0 1px rgba(44,95,138,.1)}
-.card.teal:hover{box-shadow:0 16px 48px rgba(42,122,111,.22),0 0 0 1px rgba(42,122,111,.1)}
-.card.plum:hover{box-shadow:0 16px 48px rgba(92,61,107,.22),0 0 0 1px rgba(92,61,107,.1)}
-.card.warm:hover{box-shadow:0 16px 48px rgba(181,80,58,.22),0 0 0 1px rgba(181,80,58,.1)}
-.card.neon:hover{box-shadow:0 16px 48px rgba(232,197,71,.22),0 0 0 1px rgba(232,197,71,.1)}
+/* ── NAV ──────────────────────────────────────── */
+.nav {
+  position: sticky; top: 52px; z-index: 400;
+  overflow-x: auto; scrollbar-width: none;
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.nav::-webkit-scrollbar { display: none }
+.sf-section  .nav { background: rgba(26,14,6,.94);  border-bottom-color:rgba(232,168,74,.15) }
+.nyc-section .nav { background: rgba(12,14,24,.94); border-bottom-color:rgba(232,184,74,.12) }
+.dc-section  .nav { background: rgba(10,15,30,.94); border-bottom-color:rgba(212,104,122,.12) }
+.nav-inner { display: flex; padding: 0 28px; white-space: nowrap; min-width: max-content }
+.nb {
+  font-family: 'Space Mono', monospace;
+  font-size: 9.5px; letter-spacing: .15em; text-transform: uppercase;
+  color: rgba(245,240,232,.35); padding: 16px 18px;
+  background: none; border: none; cursor: pointer;
+  border-bottom: 2px solid transparent; transition: all .22s; white-space: nowrap;
+}
+.nb:hover { color: rgba(255,255,255,.7) }
+.sf-section  .nb.on { color: var(--sf-gold);   border-bottom-color: var(--sf-gold) }
+.nyc-section .nb.on { color: var(--nyc-amber); border-bottom-color: var(--nyc-amber) }
+.dc-section  .nb.on { color: var(--dc-cherry); border-bottom-color: var(--dc-cherry) }
+.ndiv { width:1px; background:rgba(255,255,255,.07); margin:8px 4px; align-self:stretch }
 
-.ctag{display:inline-block;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:11px}
-.ctag.c-gold{background:#FFF3D0;color:#8A6000}
-.ctag.c-red{background:#FDECEA;color:#9B2C1E}
-.ctag.c-sage{background:#E8F4ED;color:#2A5238}
-.ctag.c-sky{background:#E0EDF7;color:#1D4E75}
-.ctag.c-teal{background:#E0F4F2;color:#1A5A54}
-.ctag.c-plum{background:#F0E8F7;color:#3E2560}
-.ctag.c-mist{background:#F0EDE8;color:#6B5E54}
-.ctag.c-warm{background:#FDEAE5;color:#7A2E1E}
-.ctag.c-neon{background:#FFFBE0;color:#7A6500}
-.ctag.c-green{background:#E8F7E8;color:#1A6020}
+/* ── MAIN CONTENT AREA ────────────────────────── */
+.main { max-width: 1080px; margin: 0 auto; padding: 68px 32px 130px }
+.tab { display: none; animation: tabIn .4s cubic-bezier(.22,1,.36,1) }
+.tab.on { display: block }
+@keyframes tabIn { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+.reveal { animation: slideUp .5s cubic-bezier(.22,1,.36,1) both }
 
-.cname{font-weight:600;font-size:15px;color:var(--ink);margin-bottom:4px;line-height:1.25}
-.cloc{font-family:'Space Mono',monospace;font-size:9px;color:var(--mist);letter-spacing:.08em;margin-bottom:9px;text-transform:uppercase}
-.cdesc{font-size:12.5px;color:#5A4F47;line-height:1.7}
-.ctip{font-size:11px;font-family:'Space Mono',monospace;margin-top:11px;padding-top:11px;border-top:1px solid var(--sand);letter-spacing:.04em}
-.sf-section .ctip{color:var(--gold)}
-.nyc-section .ctip{color:var(--neon)}
-.cstar{position:absolute;top:14px;right:16px;font-size:13px}
+/* ── SECTION HEADER ───────────────────────────── */
+.sh { margin-bottom: 48px }
+.sh-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 9.5px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--mist); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 14px;
+}
+.sh-tag::before { content: ''; width: 24px; height: 1px }
+.sf-section  .sh-tag::before { background: var(--sf-gold) }
+.nyc-section .sh-tag::before { background: var(--nyc-amber) }
+.dc-section  .sh-tag::before { background: var(--dc-cherry) }
+.sh h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(38px, 5.5vw, 64px); font-weight: 600;
+  line-height: 1.04; color: var(--ink); letter-spacing: -1px;
+}
+.sh h2 em { font-style: italic; color: var(--ember) }
+.sf-section  .sh h2 em { color: var(--sf-ember) }
+.nyc-section .sh h2 em { color: var(--nyc-rose) }
+.dc-section  .sh h2 em { color: var(--dc-cherry) }
+.sh p { font-size: 14px; color: var(--smoke); margin-top: 14px; max-width: 640px; line-height: 1.88 }
 
-/* ── BANNER ── */
-.banner{border-radius:14px;padding:32px 36px;margin:24px 0;position:relative;overflow:hidden;color:var(--fog)}
-.sf-section .banner{background:var(--bark)}
-.nyc-section .banner{background:var(--nyc)}
-.banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 90% 50%,rgba(212,168,71,.18) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 5% 80%,rgba(44,95,138,.15) 0%,transparent 55%)}
-.banner>*{position:relative}
-.banner h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:10px}
-.sf-section .banner h3{color:var(--gold)}
-.nyc-section .banner h3{color:var(--neon)}
-.banner p{font-size:13px;line-height:1.85;color:rgba(245,240,232,.72);max-width:700px}
+/* ── DIVIDER ──────────────────────────────────── */
+.dl {
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--mist); margin: 56px 0 22px;
+  display: flex; align-items: center; gap: 14px;
+}
+.dl::before { content: ''; width: 4px; height: 4px; border-radius: 50%; flex-shrink: 0 }
+.sf-section  .dl::before { background: var(--sf-gold) }
+.nyc-section .dl::before { background: var(--nyc-amber) }
+.dc-section  .dl::before { background: var(--dc-cherry) }
+.dl::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--sand), transparent) }
 
-/* ── STATS ── */
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:36px}
-.stat{background:white;border-radius:12px;padding:20px 22px;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:transform .2s,box-shadow .2s;cursor:default}
-.stat:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.1)}
-.stat-n{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:700;color:var(--ember);line-height:1;margin-bottom:4px}
-.stat-l{font-family:'Space Mono',monospace;font-size:9px;color:var(--mist);letter-spacing:.15em;text-transform:uppercase}
-.stat-d{font-size:12px;color:var(--mist);margin-top:5px;line-height:1.55}
+/* ── GRIDS ────────────────────────────────────── */
+.g2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 18px }
+.g3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 16px }
+.g4 { display: grid; grid-template-columns: repeat(auto-fill, minmax(205px,1fr)); gap: 14px }
 
-/* ── NEIGHBORHOOD ── */
-.hc{border-radius:12px;padding:24px;min-height:180px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .3s;cursor:pointer}
-.hc:hover{transform:scale(1.03);box-shadow:0 20px 48px rgba(0,0,0,.28)}
-.hc-bg{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.1) 100%)}
-.hc-tag{font-family:'Space Mono',monospace;font-size:9px;color:rgba(255,255,255,.6);letter-spacing:.12em;text-transform:uppercase;position:relative;margin-bottom:5px}
-.hc-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:white;position:relative;text-shadow:0 2px 8px rgba(0,0,0,.4)}
-.hc-desc{font-size:11.5px;color:rgba(255,255,255,.75);line-height:1.55;position:relative;margin-top:5px}
-.hood-panel{display:none;background:white;border-radius:0 0 12px 12px;padding:24px;border:1px solid rgba(212,168,71,.15);border-top:none;margin-top:-8px;margin-bottom:16px}
-.hood-panel.open{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.hood-section-title{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--ink);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--sand)}
-.hood-list{list-style:none}
-.hood-list li{font-size:12.5px;color:#5A4F47;padding:5px 0;border-bottom:1px solid rgba(237,229,208,.5);display:flex;gap:8px}
-.sf-section .hood-list li::before{content:'›';color:var(--gold);font-weight:600;flex-shrink:0}
-.nyc-section .hood-list li::before{content:'›';color:var(--neon);font-weight:600;flex-shrink:0}
-@media(max-width:600px){.hood-panel.open{grid-template-columns:1fr}}
+/* ── CARDS ────────────────────────────────────── */
+.card {
+  background: rgba(255,255,255,.92);
+  border-radius: 18px; padding: 24px;
+  box-shadow: 0 2px 12px rgba(28,21,16,.06), 0 0 0 1px rgba(28,21,16,.04);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease;
+  position: relative; overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+.card::before {
+  content: ''; position: absolute; inset: 0; border-radius: 18px;
+  background: linear-gradient(140deg, rgba(255,255,255,.7) 0%, rgba(255,255,255,0) 55%);
+  pointer-events: none; opacity: 0; transition: opacity .3s;
+}
+.card:hover { transform: translateY(-7px) scale(1.008); }
+.card:hover::before { opacity: 1 }
+.card.gold  { border-top: 3px solid var(--sf-gold); }
+.card.red   { border-top: 3px solid var(--sf-ember); }
+.card.sage  { border-top: 3px solid var(--sf-sage); }
+.card.sky   { border-top: 3px solid var(--sf-sky); }
+.card.teal  { border-top: 3px solid var(--sf-teal); }
+.card.plum  { border-top: 3px solid var(--sf-plum); }
+.card.warm  { border-top: 3px solid var(--warm); }
+.card.neon  { border-top: 3px solid var(--nyc-amber); }
+.card.dc    { border-top: 3px solid var(--dc-cherry); }
+.card.gold:hover  { box-shadow: 0 18px 52px rgba(232,168,74,.22), 0 0 0 1px rgba(232,168,74,.12) }
+.card.red:hover   { box-shadow: 0 18px 52px rgba(212,87,60,.2),  0 0 0 1px rgba(212,87,60,.1) }
+.card.sage:hover  { box-shadow: 0 18px 52px rgba(74,122,90,.2),  0 0 0 1px rgba(74,122,90,.1) }
+.card.sky:hover   { box-shadow: 0 18px 52px rgba(74,133,181,.2), 0 0 0 1px rgba(74,133,181,.1) }
+.card.teal:hover  { box-shadow: 0 18px 52px rgba(58,138,122,.2), 0 0 0 1px rgba(58,138,122,.1) }
+.card.plum:hover  { box-shadow: 0 18px 52px rgba(122,80,128,.2), 0 0 0 1px rgba(122,80,128,.1) }
+.card.warm:hover  { box-shadow: 0 18px 52px rgba(192,104,64,.2), 0 0 0 1px rgba(192,104,64,.1) }
+.card.neon:hover  { box-shadow: 0 18px 52px rgba(232,184,74,.2), 0 0 0 1px rgba(232,184,74,.1) }
+.card.dc:hover    { box-shadow: 0 18px 52px rgba(212,104,122,.2),0 0 0 1px rgba(212,104,122,.1) }
 
-/* ── FOOD FILTER ── */
-.filter-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.filt{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:8px 18px;border-radius:24px;border:1px solid rgba(0,0,0,.12);color:var(--mist);background:white;cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1)}
-.sf-section .filt:hover{border-color:var(--gold);color:#8A6000}
-.nyc-section .filt:hover{border-color:var(--neon);color:#7A6500}
-.sf-section .filt.on{background:var(--bark);color:var(--gold);border-color:var(--bark)}
-.nyc-section .filt.on{background:var(--nyc);color:var(--neon);border-color:var(--nyc)}
-.food-item.hidden{display:none}
+/* card internals */
+.ctag {
+  display: inline-block; font-family: 'Space Mono', monospace;
+  font-size: 8.5px; letter-spacing: .13em; text-transform: uppercase;
+  padding: 3px 11px; border-radius: 20px; margin-bottom: 12px;
+}
+.ctag.c-gold  { background: rgba(232,168,74,.12); color: #8A5C00 }
+.ctag.c-red   { background: rgba(212,87,60,.1);   color: #962A1A }
+.ctag.c-sage  { background: rgba(74,122,90,.1);   color: #2A5A3A }
+.ctag.c-sky   { background: rgba(74,133,181,.1);  color: #1E5080 }
+.ctag.c-teal  { background: rgba(58,138,122,.1);  color: #1E6058 }
+.ctag.c-plum  { background: rgba(122,80,128,.1);  color: #5A2E68 }
+.ctag.c-mist  { background: rgba(156,142,130,.1); color: #5A4E48 }
+.ctag.c-warm  { background: rgba(192,104,64,.1);  color: #7A3820 }
+.ctag.c-neon  { background: rgba(232,184,74,.12); color: #8A6000 }
+.ctag.c-dc    { background: rgba(212,104,122,.1); color: #8A2840 }
+.ctag.c-green { background: rgba(80,160,90,.1);   color: #1A5A28 }
 
-/* ── COASTAL/EVENTS/BEACH ── */
-.cc{background:white;border-radius:10px;padding:18px 22px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-left:4px solid var(--sky);margin-bottom:12px;transition:box-shadow .2s}
-.cc:hover{box-shadow:0 6px 24px rgba(44,95,138,.12)}
-.cc.gold{border-left-color:var(--gold)}.cc.sage{border-left-color:var(--sage)}.cc.ember{border-left-color:var(--ember)}
-.cc-name{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;margin-bottom:3px;color:var(--ink)}
-.cc-sub{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;color:var(--sky)}
-.cc.gold .cc-sub{color:var(--gold)}.cc.sage .cc-sub{color:var(--sage)}.cc.ember .cc-sub{color:var(--ember)}
-.cc-body{font-size:12.5px;color:#5A4F47;line-height:1.65}
-.ev{background:white;border-radius:10px;padding:18px 22px;box-shadow:0 2px 12px rgba(0,0,0,.06);display:flex;gap:18px;align-items:flex-start;margin-bottom:10px;transition:transform .2s,box-shadow .2s}
-.ev:hover{transform:translateX(4px);box-shadow:0 8px 28px rgba(0,0,0,.1)}
-.ev-icon{font-size:32px;flex-shrink:0;line-height:1;margin-top:2px}
-.ev-when{font-family:'Space Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
-.sf-section .ev-when{color:var(--gold)}
-.nyc-section .ev-when{color:var(--neon)}
-.ev-name{font-weight:600;font-size:14px;color:var(--ink);margin-bottom:4px}
-.ev-desc{font-size:12.5px;color:var(--mist);line-height:1.6}
-.beach{background:white;border-radius:10px;padding:16px 20px;box-shadow:0 1px 10px rgba(0,0,0,.06);border-left:3px solid var(--sky);display:flex;gap:16px;align-items:flex-start;margin-bottom:10px;transition:box-shadow .2s}
-.beach:hover{box-shadow:0 5px 20px rgba(44,95,138,.12)}
-.beach-icon{font-size:24px;flex-shrink:0;margin-top:2px}
-.beach-name{font-weight:600;font-size:13.5px;color:var(--ink);margin-bottom:3px}
-.beach-sub{font-family:'Space Mono',monospace;font-size:8.5px;color:var(--sky);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.beach-desc{font-size:12px;color:#5A4F47;line-height:1.6}
+.cname { font-weight: 600; font-size: 15px; color: var(--ink); margin-bottom: 5px; line-height: 1.25 }
+.cloc  { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--mist); letter-spacing: .08em; margin-bottom: 10px; text-transform: uppercase }
+.cdesc { font-size: 12.5px; color: var(--smoke); line-height: 1.74 }
+.ctip  { font-size: 10.5px; font-family: 'Space Mono', monospace; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(234,224,206,.6); letter-spacing: .04em }
+.sf-section  .ctip { color: var(--sf-gold) }
+.nyc-section .ctip { color: var(--nyc-amber) }
+.dc-section  .ctip { color: var(--dc-cherry) }
+.cstar { position: absolute; top: 16px; right: 18px; font-size: 13px }
 
-/* ── PARK ── */
-.pk{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.08);transition:transform .25s,box-shadow .25s}
-.pk:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(61,107,79,.18)}
-.pk-header{height:80px;display:flex;align-items:center;justify-content:center;font-size:36px}
-.pk-body{padding:18px 20px}
-.pk-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:6px}
-.pk-desc{font-size:12px;color:#5A4F47;line-height:1.6;margin-bottom:10px}
-.pk-tags{display:flex;flex-wrap:wrap;gap:5px}
-.pk-tag{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;background:var(--fog);color:var(--mist);border-radius:20px}
+/* ── DARK BANNERS ─────────────────────────────── */
+.banner {
+  border-radius: 18px; padding: 36px 40px; margin: 28px 0;
+  position: relative; overflow: hidden; color: rgba(245,238,228,.88);
+}
+.sf-section  .banner { background: linear-gradient(135deg, #1A0E06 0%, #2A1808 100%) }
+.nyc-section .banner { background: linear-gradient(135deg, #0C0E18 0%, #141828 100%) }
+.dc-section  .banner { background: linear-gradient(135deg, #0A0F1E 0%, #121828 100%) }
+.banner::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 80% at 90% 50%, rgba(232,168,74,.14) 0%, transparent 60%),
+              radial-gradient(ellipse 45% 60% at 5% 80%, rgba(74,133,181,.12) 0%, transparent 55%);
+}
+.banner > * { position: relative }
+.banner h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 600; margin-bottom: 12px }
+.sf-section  .banner h3 { color: var(--sf-gold) }
+.nyc-section .banner h3 { color: var(--nyc-amber) }
+.dc-section  .banner h3 { color: var(--dc-cherry) }
+.banner p { font-size: 13.5px; line-height: 1.88; max-width: 700px; opacity: .82 }
 
-/* ── MUSEUM ── */
-.mc{background:white;border-radius:12px;padding:22px;box-shadow:0 2px 16px rgba(0,0,0,.07);border-top:3px solid var(--plum);transition:transform .25s,box-shadow .25s}
-.mc:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(92,61,107,.18)}
-.mc-icon{font-size:28px;margin-bottom:12px}
-.mc-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:5px}
-.mc-loc{font-family:'Space Mono',monospace;font-size:9px;color:var(--mist);letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px}
-.mc-desc{font-size:12.5px;color:#5A4F47;line-height:1.65}
-.mc-tip{font-size:11px;color:var(--plum);font-family:'Space Mono',monospace;margin-top:10px;padding-top:10px;border-top:1px solid var(--sand)}
+/* ── STATS ────────────────────────────────────── */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(188px,1fr)); gap: 15px; margin-bottom: 40px }
+.stat {
+  background: rgba(255,255,255,.85);
+  border-radius: 16px; padding: 22px 24px;
+  box-shadow: 0 2px 12px rgba(28,21,16,.05), 0 0 0 1px rgba(28,21,16,.04);
+  transition: transform .25s, box-shadow .25s; cursor: default;
+}
+.stat:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(28,21,16,.1) }
+.stat-n { font-family: 'Cormorant Garamond', serif; font-size: 54px; font-weight: 700; line-height: 1; margin-bottom: 4px }
+.sf-section  .stat-n { color: var(--sf-ember) }
+.nyc-section .stat-n { color: var(--nyc-rose) }
+.dc-section  .stat-n { color: var(--dc-cherry) }
+.stat-l { font-family: 'Space Mono', monospace; font-size: 8.5px; color: var(--mist); letter-spacing: .18em; text-transform: uppercase }
+.stat-d { font-size: 11.5px; color: var(--smoke); margin-top: 6px; line-height: 1.58 }
 
-/* ── TRANSIT ── */
-.tc{background:white;border-radius:10px;padding:16px 20px;box-shadow:0 1px 10px rgba(0,0,0,.06);border-left:4px solid var(--ember);margin-bottom:10px;transition:box-shadow .2s}
-.tc:hover{box-shadow:0 5px 20px rgba(192,57,43,.15)}
-.tc-line{display:inline-block;font-family:'Space Mono',monospace;font-size:10px;font-weight:600;width:24px;height:24px;border-radius:50%;background:var(--ember);color:white;text-align:center;line-height:24px;margin-right:10px}
-.tc-body{font-size:12.5px;color:#5A4F47;line-height:1.65;margin-top:8px}
+/* ── NEIGHBORHOOD CARDS ──────────────────────── */
+.hc {
+  border-radius: 16px; padding: 26px; min-height: 190px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  position: relative; overflow: hidden;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,.22);
+}
+.hc:hover { transform: scale(1.035) translateY(-4px); box-shadow: 0 24px 56px rgba(0,0,0,.3) }
+.hc-bg { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.08) 100%) }
+.hc-tag { font-family: 'Space Mono', monospace; font-size: 8.5px; color: rgba(255,255,255,.55); letter-spacing: .13em; text-transform: uppercase; position: relative; margin-bottom: 6px }
+.hc-name { font-family: 'Cormorant Garamond', serif; font-size: 23px; font-weight: 600; color: white; position: relative; text-shadow: 0 2px 12px rgba(0,0,0,.5) }
+.hc-desc { font-size: 11.5px; color: rgba(255,255,255,.72); line-height: 1.58; position: relative; margin-top: 6px }
+.hood-panel {
+  display: none; background: rgba(255,255,255,.95);
+  border-radius: 0 0 16px 16px; padding: 26px;
+  border: 1px solid rgba(232,168,74,.12); border-top: none;
+  margin-top: -8px; margin-bottom: 18px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(28,21,16,.08);
+}
+.hood-panel.open { display: grid; grid-template-columns: 1fr 1fr; gap: 22px }
+.hood-section-title { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 11px; padding-bottom: 7px; border-bottom: 1px solid var(--sand) }
+.hood-list { list-style: none }
+.hood-list li { font-size: 12.5px; color: var(--smoke); padding: 5px 0; border-bottom: 1px solid rgba(234,224,206,.5); display: flex; gap: 9px; line-height: 1.5 }
+.sf-section  .hood-list li::before { content: '›'; color: var(--sf-gold);   font-weight: 600; flex-shrink: 0 }
+.nyc-section .hood-list li::before { content: '›'; color: var(--nyc-amber); font-weight: 600; flex-shrink: 0 }
+.dc-section  .hood-list li::before { content: '›'; color: var(--dc-cherry); font-weight: 600; flex-shrink: 0 }
+@media(max-width:600px){ .hood-panel.open { grid-template-columns: 1fr } }
 
-/* ── DETAILS ── */
-details{margin-bottom:10px}
-details>summary{background:white;border-radius:10px;padding:16px 20px;list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,.06);font-weight:500;font-size:13.5px;color:var(--ink);transition:box-shadow .2s}
-details>summary:hover{box-shadow:0 5px 20px rgba(0,0,0,.1)}
-details>summary::after{content:'+';color:var(--gold);font-size:20px;font-weight:300;line-height:1}
-details[open]>summary::after{content:'−'}
-details[open]>summary{border-radius:10px 10px 0 0;border-bottom:1px solid var(--sand)}
-.detail-body{background:white;border-radius:0 0 10px 10px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,.07);font-size:12.5px;color:#5A4F47;line-height:1.75}
-.hbox{background:#FFFBF0;border:1px solid rgba(212,168,71,.3);border-radius:10px;padding:22px 26px;margin:20px 0;font-size:13px;line-height:1.9;color:var(--bark)}
-.hbox strong{color:var(--ember)}
+/* ── FOOD FILTERS ─────────────────────────────── */
+.filter-row { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 30px }
+.filt {
+  font-family: 'Space Mono', monospace;
+  font-size: 8.5px; letter-spacing: .13em; text-transform: uppercase;
+  padding: 9px 20px; border-radius: 28px;
+  border: 1px solid rgba(28,21,16,.1); color: var(--mist);
+  background: rgba(255,255,255,.8); cursor: pointer;
+  transition: all .25s cubic-bezier(.34,1.56,.64,1);
+  box-shadow: 0 1px 4px rgba(28,21,16,.04);
+}
+.filt:hover { transform: translateY(-2px); box-shadow: 0 5px 14px rgba(28,21,16,.1) }
+.sf-section  .filt:hover { border-color: var(--sf-gold);   color: #7A5000; background:rgba(232,168,74,.08) }
+.nyc-section .filt:hover { border-color: var(--nyc-amber); color: #7A6000; background:rgba(232,184,74,.08) }
+.dc-section  .filt:hover { border-color: var(--dc-cherry); color: #8A2840; background:rgba(212,104,122,.08) }
+.sf-section  .filt.on { background: var(--sf-bg);  color: var(--sf-gold);   border-color: var(--sf-bg);  box-shadow: 0 4px 18px rgba(26,14,6,.3) }
+.nyc-section .filt.on { background: var(--nyc-bg); color: var(--nyc-amber); border-color: var(--nyc-bg); box-shadow: 0 4px 18px rgba(12,14,24,.3) }
+.dc-section  .filt.on { background: var(--dc-bg);  color: var(--dc-cherry); border-color: var(--dc-bg);  box-shadow: 0 4px 18px rgba(10,15,30,.3) }
+.food-item.hidden { display: none }
 
-/* ── SHIMMER ── */
-@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
-.chip-new{display:inline-block;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--ember),var(--gold));background-size:200% auto;animation:shimmer 3s linear infinite;color:white;margin-left:8px;vertical-align:middle}
+/* ── COASTAL / EVENT / BEACH CARDS ──────────────── */
+.cc {
+  background: rgba(255,255,255,.88); border-radius: 12px; padding: 20px 24px;
+  box-shadow: 0 2px 12px rgba(28,21,16,.06);
+  border-left: 4px solid var(--sf-sky); margin-bottom: 13px;
+  transition: box-shadow .22s, transform .22s;
+}
+.cc:hover { box-shadow: 0 8px 28px rgba(74,133,181,.14); transform: translateX(4px) }
+.cc.gold   { border-left-color: var(--sf-gold) }
+.cc.sage   { border-left-color: var(--sf-sage) }
+.cc.ember  { border-left-color: var(--sf-ember) }
+.cc-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; margin-bottom: 4px; color: var(--ink) }
+.cc-sub  { font-family: 'Space Mono', monospace; font-size: 8.5px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 10px; color: var(--sf-sky) }
+.cc.gold .cc-sub { color: var(--sf-gold) }
+.cc.sage .cc-sub { color: var(--sf-sage) }
+.cc.ember .cc-sub { color: var(--sf-ember) }
+.cc-body { font-size: 12.5px; color: var(--smoke); line-height: 1.68 }
 
-/* ── BACK TO TOP ── */
-#btt{position:fixed;bottom:32px;right:32px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.2);font-size:18px;cursor:pointer;z-index:400;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:all .25s;opacity:0;pointer-events:none;background:var(--bark);color:var(--gold)}
-#btt.vis{opacity:1;pointer-events:all}
-#btt:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.3)}
+.ev {
+  background: rgba(255,255,255,.88); border-radius: 12px; padding: 20px 24px;
+  box-shadow: 0 2px 12px rgba(28,21,16,.06);
+  display: flex; gap: 20px; align-items: flex-start; margin-bottom: 11px;
+  transition: transform .25s, box-shadow .25s;
+}
+.ev:hover { transform: translateX(5px); box-shadow: 0 8px 28px rgba(28,21,16,.1) }
+.ev-icon { font-size: 34px; flex-shrink: 0; line-height: 1; margin-top: 2px }
+.ev-when { font-family: 'Space Mono', monospace; font-size: 8.5px; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 5px }
+.sf-section  .ev-when { color: var(--sf-gold) }
+.nyc-section .ev-when { color: var(--nyc-amber) }
+.dc-section  .ev-when { color: var(--dc-cherry) }
+.ev-name { font-weight: 600; font-size: 14px; color: var(--ink); margin-bottom: 5px }
+.ev-desc { font-size: 12.5px; color: var(--smoke); line-height: 1.62 }
 
-/* ── FOOTER ── */
-.footer{text-align:center;padding:48px 24px;font-family:'Space Mono',monospace;font-size:10px;color:rgba(245,240,232,.35);letter-spacing:.12em;line-height:2.2}
-.sf-section .footer{background:var(--bark)}
-.nyc-section .footer{background:var(--nyc)}
-.footer strong{display:block;font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;font-style:italic;margin-bottom:12px;letter-spacing:0}
-.sf-section .footer strong{color:var(--gold)}
-.nyc-section .footer strong{color:var(--neon)}
-.footer a{text-decoration:none;opacity:.55;cursor:pointer}
-.footer a:hover{opacity:1}
-.sf-section .footer a{color:var(--gold)}
-.nyc-section .footer a{color:var(--neon)}
+.beach {
+  background: rgba(255,255,255,.88); border-radius: 12px; padding: 17px 22px;
+  box-shadow: 0 1px 10px rgba(28,21,16,.06);
+  border-left: 3px solid var(--sf-sky); display: flex; gap: 16px;
+  align-items: flex-start; margin-bottom: 11px; transition: box-shadow .2s;
+}
+.beach:hover { box-shadow: 0 6px 22px rgba(74,133,181,.14) }
+.beach-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px }
+.beach-name { font-weight: 600; font-size: 13.5px; color: var(--ink); margin-bottom: 3px }
+.beach-sub  { font-family: 'Space Mono', monospace; font-size: 8px; color: var(--sf-sky); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px }
+.beach-desc { font-size: 12px; color: var(--smoke); line-height: 1.62 }
 
-/* ── TOOLTIP ── */
-[data-tip]{position:relative}
-[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(1);background:var(--bark);color:var(--fog);font-family:'Space Mono',monospace;font-size:10px;padding:6px 12px;border-radius:6px;white-space:nowrap;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+/* ── PARK CARDS ──────────────────────────────── */
+.pk {
+  background: rgba(255,255,255,.88); border-radius: 16px; overflow: hidden;
+  box-shadow: 0 2px 14px rgba(28,21,16,.08);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+}
+.pk:hover { transform: translateY(-7px) scale(1.01); box-shadow: 0 22px 52px rgba(74,122,90,.18) }
+.pk-header { height: 84px; display: flex; align-items: center; justify-content: center; font-size: 38px }
+.pk-body { padding: 20px 22px }
+.pk-name { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 600; color: var(--ink); margin-bottom: 7px }
+.pk-desc { font-size: 12px; color: var(--smoke); line-height: 1.62; margin-bottom: 11px }
+.pk-tags { display: flex; flex-wrap: wrap; gap: 5px }
+.pk-tag  { font-family: 'Space Mono', monospace; font-size: 7.5px; letter-spacing: .08em; text-transform: uppercase; padding: 3px 9px; background: var(--fog); color: var(--mist); border-radius: 20px }
 
+/* ── MUSEUM CARDS ─────────────────────────────── */
+.mc {
+  background: rgba(255,255,255,.88); border-radius: 16px; padding: 24px;
+  box-shadow: 0 2px 14px rgba(28,21,16,.07); border-top: 3px solid var(--sf-plum);
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+}
+.mc:hover { transform: translateY(-6px) scale(1.008); box-shadow: 0 18px 44px rgba(122,80,128,.18) }
+.mc-icon { font-size: 30px; margin-bottom: 13px }
+.mc-name { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 600; color: var(--ink); margin-bottom: 6px }
+.mc-loc  { font-family: 'Space Mono', monospace; font-size: 8.5px; color: var(--mist); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10px }
+.mc-desc { font-size: 12.5px; color: var(--smoke); line-height: 1.68 }
+.mc-tip  { font-size: 10.5px; color: var(--sf-plum); font-family: 'Space Mono', monospace; margin-top: 11px; padding-top: 11px; border-top: 1px solid rgba(234,224,206,.6) }
+
+/* ── TRANSIT CARDS ─────────────────────────────── */
+.tc {
+  background: rgba(255,255,255,.88); border-radius: 12px; padding: 18px 22px;
+  box-shadow: 0 1px 10px rgba(28,21,16,.06);
+  border-left: 4px solid var(--sf-ember); margin-bottom: 11px; transition: box-shadow .2s, transform .2s;
+}
+.tc:hover { box-shadow: 0 6px 22px rgba(212,87,60,.14); transform: translateX(4px) }
+.tc-line { display: inline-block; font-family: 'Space Mono', monospace; font-size: 10px; font-weight: 600; width: 25px; height: 25px; border-radius: 50%; background: var(--sf-ember); color: white; text-align: center; line-height: 25px; margin-right: 10px }
+.tc-body { font-size: 12.5px; color: var(--smoke); line-height: 1.68; margin-top: 9px }
+
+/* ── DETAILS / EXPAND ──────────────────────────── */
+details { margin-bottom: 11px }
+details > summary {
+  background: rgba(255,255,255,.88); border-radius: 12px; padding: 17px 22px;
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 0 2px 10px rgba(28,21,16,.06); font-weight: 500; font-size: 13.5px; color: var(--ink);
+  transition: box-shadow .2s; user-select: none;
+}
+details > summary:hover { box-shadow: 0 6px 22px rgba(28,21,16,.1) }
+details > summary::after { content: '+'; color: var(--sf-gold); font-size: 22px; font-weight: 300; line-height: 1 }
+details[open] > summary::after { content: '−' }
+details[open] > summary { border-radius: 12px 12px 0 0; border-bottom: 1px solid var(--sand) }
+.detail-body {
+  background: rgba(255,255,255,.88); border-radius: 0 0 12px 12px; padding: 22px;
+  box-shadow: 0 5px 18px rgba(28,21,16,.07); font-size: 12.5px; color: var(--smoke); line-height: 1.78;
+}
+
+/* ── HBOX ─────────────────────────────────────── */
+.hbox {
+  background: rgba(255,248,228,.6); border: 1px solid rgba(232,168,74,.25);
+  border-radius: 12px; padding: 24px 28px; margin: 22px 0;
+  font-size: 13px; line-height: 1.9; color: var(--ink);
+  backdrop-filter: blur(4px);
+}
+.hbox strong { color: var(--sf-ember) }
+
+/* ── SHIMMER CHIP ──────────────────────────────── */
+@keyframes shimmer { 0%{background-position:200% center} 100%{background-position:-200% center} }
+.chip-new {
+  display: inline-block; font-family: 'Space Mono', monospace;
+  font-size: 7.5px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 2px 9px; border-radius: 3px;
+  background: linear-gradient(90deg, var(--sf-gold), var(--sf-ember), var(--sf-gold));
+  background-size: 200% auto; animation: shimmer 3s linear infinite;
+  color: white; margin-left: 9px; vertical-align: middle;
+}
+
+/* ── BACK TO TOP ────────────────────────────────── */
+#btt {
+  position: fixed; bottom: 34px; right: 34px;
+  width: 46px; height: 46px; border-radius: 50%;
+  font-size: 18px; cursor: pointer; z-index: 500;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 5px 24px rgba(0,0,0,.22), 0 0 0 1px rgba(255,255,255,.1);
+  transition: all .3s cubic-bezier(.34,1.56,.64,1); opacity: 0; pointer-events: none;
+  border: none;
+}
+#btt.vis { opacity: 1; pointer-events: all }
+#btt:hover { transform: translateY(-4px) scale(1.08); box-shadow: 0 10px 32px rgba(0,0,0,.3) }
+.sf-active-btt  #btt { background: var(--sf-bg); color: var(--sf-gold) }
+.nyc-active-btt #btt { background: var(--nyc-bg); color: var(--nyc-amber) }
+.dc-active-btt  #btt { background: var(--dc-bg); color: var(--dc-cherry) }
+
+/* ── FOOTER ─────────────────────────────────────── */
+.footer {
+  text-align: center; padding: 52px 28px;
+  font-family: 'Space Mono', monospace; font-size: 9.5px;
+  color: rgba(245,238,228,.3); letter-spacing: .14em; line-height: 2.4;
+}
+.sf-section  .footer { background: var(--sf-bg) }
+.nyc-section .footer { background: var(--nyc-bg) }
+.dc-section  .footer { background: var(--dc-bg) }
+.footer strong {
+  display: block; font-family: 'Cormorant Garamond', serif;
+  font-size: 34px; font-weight: 600; font-style: italic;
+  margin-bottom: 14px; letter-spacing: 0;
+}
+.sf-section  .footer strong { color: var(--sf-gold) }
+.nyc-section .footer strong { color: var(--nyc-amber) }
+.dc-section  .footer strong { color: var(--dc-cherry) }
+.footer a { text-decoration: none; opacity: .5; cursor: pointer; transition: opacity .2s }
+.footer a:hover { opacity: 1 }
+.sf-section  .footer a { color: var(--sf-gold) }
+.nyc-section .footer a { color: var(--nyc-amber) }
+.dc-section  .footer a { color: var(--dc-cherry) }
+
+/* ── TOOLTIP ─────────────────────────────────────── */
+[data-tip] { position: relative }
+[data-tip]:hover::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 9px); left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26,14,6,.95); color: rgba(245,238,228,.9);
+  font-family: 'Space Mono', monospace; font-size: 9px;
+  padding: 7px 13px; border-radius: 8px; white-space: nowrap;
+  pointer-events: none; box-shadow: 0 5px 18px rgba(0,0,0,.25);
+}
+
+/* ── RESPONSIVE ─────────────────────────────────── */
 @media(max-width:700px){
-  .hero-inner{padding:0 24px}
-  .hero-h1{letter-spacing:-1.5px}
-  .main{padding:36px 16px 80px}
-  .g2,.g3,.g4{grid-template-columns:1fr}
-  .banner{padding:22px 20px}
-  .ev{gap:12px}
-  .city-btn{padding:0 18px;font-size:9px;letter-spacing:.1em}
+  .hero-inner { padding: 0 28px }
+  .hero-h1 { letter-spacing: -2px }
+  .main { padding: 40px 18px 90px }
+  .g2, .g3, .g4 { grid-template-columns: 1fr }
+  .banner { padding: 24px 22px }
+  .ev { gap: 14px }
+  #btt { bottom: 22px; right: 22px; width: 42px; height: 42px }
 }
 </style>
 </head>
@@ -300,16 +637,14 @@ details[open]>summary{border-radius:10px 10px 0 0;border-bottom:1px solid var(--
 
 <!-- ══ CITY SWITCHER ══ -->
 <div class="city-switcher">
-  <button class="city-btn sf-on" id="btn-sf" onclick="switchCity('sf')">
-    🌉 &nbsp;San Francisco
-  </button>
+  <button class="city-btn sf-on" id="btn-sf" onclick="switchCity('sf')">🌉&nbsp; San Francisco</button>
   <div class="city-divider"></div>
-  <button class="city-btn" id="btn-nyc" onclick="switchCity('nyc')">
-    🗽 &nbsp;New York City
-  </button>
+  <button class="city-btn" id="btn-nyc" onclick="switchCity('nyc')">🗽&nbsp; New York City</button>
+  <div class="city-divider"></div>
+  <button class="city-btn" id="btn-dc" onclick="switchCity('dc')">🏛️&nbsp; Washington D.C.</button>
 </div>
 
-<!-- ══════════════ SF SECTION ══════════════ -->
+<!-- ══════════════ SF ══════════════ -->
 <div id="sf-section" class="city-section sf-section active">
   <section class="sf-hero">
     <div class="sf-hero-bg"></div>
@@ -3238,6 +3573,14 @@ details[open]>summary{border-radius:10px 10px 0 0;border-bottom:1px solid var(--
 </div>
 
 <!-- ══════════════ NYC SECTION ══════════════ -->
+<div >
+  <div class="footer">
+    <strong>San Francisco</strong>
+    <a onclick="switchCity('nyc')">New York City →</a>&nbsp; · &nbsp;<a onclick="switchCity('dc')">Washington D.C. →</a>
+  </div>
+</div>
+
+<!-- ══════════════ NYC ══════════════ -->
 <div id="nyc-section" class="city-section nyc-section">
   <section class="nyc-hero">
     <div class="nyc-hero-bg"></div>
@@ -4311,113 +4654,1140 @@ details[open]>summary{border-radius:10px 10px 0 0;border-bottom:1px solid var(--
   </div>
 </div>
 
+<button >
+  <div class="footer">
+    <strong>New York City</strong>
+    <a onclick="switchCity('sf')">← San Francisco</a>&nbsp; · &nbsp;<a onclick="switchCity('dc')">Washington D.C. →</a>
+  </div>
+</div>
+
+<!-- ══════════════ DC ══════════════ -->
+<div id="dc-section" class="city-section dc-section">
+
+  <section class="dc-hero">
+    <div class="dc-hero-bg"></div>
+    <div class="dc-orb o1"></div><div class="dc-orb o2"></div><div class="dc-orb o3"></div>
+    <div class="dc-columns"></div>
+    <div class="hero-inner">
+      <div class="hero-pre">A Local's Guide · Washington D.C. &amp; the DMV</div>
+      <h1 class="hero-h1">Washington<em>D.C.</em></h1>
+      <p class="hero-sub">District · Maryland · Virginia<br>Free museums. Cherry blossoms. Federal power. Real neighborhoods.</p>
+      <div class="hero-pills">
+        <span class="hero-pill">🏛️ Monuments + Memorials</span>
+        <span class="hero-pill">🌸 Neighborhoods</span>
+        <span class="hero-pill">🍽️ Eat + Drink</span>
+        <span class="hero-pill">🎨 Museums + Arts</span>
+        <span class="hero-pill">🌿 Parks + Outdoors</span>
+        <span class="hero-pill">🚇 Getting Around</span>
+        <span class="hero-pill">🗺️ DMV Day Trips</span>
+      </div>
+    </div>
+  </section>
+
+  <nav class="nav" id="dc-nav">
+    <div class="nav-inner">
+      <button class="nb on" onclick="goDC('dc-home')">Home</button>
+      <button class="nb" onclick="goDC('dc-monuments')">Monuments</button>
+      <div class="ndiv"></div>
+      <button class="nb" onclick="goDC('dc-hoods')">Neighborhoods</button>
+      <button class="nb" onclick="goDC('dc-food')">Eat + Drink</button>
+      <div class="ndiv"></div>
+      <button class="nb" onclick="goDC('dc-museums')">Museums + Arts</button>
+      <button class="nb" onclick="goDC('dc-parks')">Parks</button>
+      <button class="nb" onclick="goDC('dc-transit')">Getting Around</button>
+      <button class="nb" onclick="goDC('dc-dmv')">DMV Day Trips</button>
+    </div>
+  </nav>
+
+  <div class="main" id="dc-main">
+
+<!-- ══ DC HOME ══ -->
+<div id="dc-home" class="tab on">
+  <div class="sh">
+    <div class="sh-tag">Welcome to the District</div>
+    <h2>Power, Cherry Blossoms, <em>&amp; Real Culture</em></h2>
+    <p>DC gets written off as a government city by people who haven't spent time in it. The reality: world-class free museums, one of the best dining scenes on the East Coast, distinct neighborhoods each with their own character, and a Ring of parks and trails that most cities would envy. The DMV — DC, Maryland, Virginia — adds the Blue Ridge foothills, the Chesapeake, Annapolis, and Colonial Williamsburg within two hours in any direction.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-n">20</div><div class="stat-l">Free Smithsonian Museums</div><div class="stat-d">The largest museum complex in the world — every single one free to enter, always</div></div>
+    <div class="stat"><div class="stat-n">3,800</div><div class="stat-l">Cherry Trees</div><div class="stat-d">Gifted by Japan in 1912. Peak bloom around the Tidal Basin: late March to early April</div></div>
+    <div class="stat"><div class="stat-n">6</div><div class="stat-l">Metro Lines</div><div class="stat-d">Clean, reliable, marble stations. The second-most-ridden subway in the US</div></div>
+    <div class="stat"><div class="stat-n">2hr</div><div class="stat-l">To Blue Ridge Mountains</div><div class="stat-d">Shenandoah National Park, Skyline Drive, and the Appalachian Trail all reachable in one morning drive</div></div>
+    <div class="stat"><div class="stat-n">177</div><div class="stat-l">Countries Represented</div><div class="stat-d">More embassies than any other US city — the diplomatic community drives one of America's most diverse food scenes</div></div>
+  </div>
+
+  <div class="dl">Navigate the guide</div>
+  <div class="g2">
+    <div class="card dc"><span class="ctag c-dc">First time?</span>
+      <div class="cname">🏛️ Monuments + Memorials</div>
+      <div class="cdesc">The Mall, Lincoln Memorial, Vietnam Wall, MLK Memorial, the Capitol — everything iconic with real context on when to go and how to actually see it without fighting crowds.</div>
+    </div>
+    <div class="card red"><span class="ctag c-red">Food</span>
+      <div class="cname">🍽️ Eat + Drink</div>
+      <div class="cdesc">Ethiopian in Adams Morgan, half-smoke at Ben's Chili Bowl, raw bars in the Wharf, Vietnamese in Eden Center, Peruvian in Rockville, dim sum in Wheaton. The DMV eats incredibly well.</div>
+    </div>
+    <div class="card sage"><span class="ctag c-sage">Culture</span>
+      <div class="cname">🎨 Smithsonians + Arts</div>
+      <div class="cdesc">20 free Smithsonian museums — Natural History, Air and Space, American History, the Portrait Gallery, the African American History Museum (book ahead). Plus the Phillips Collection, Hirshhorn, and the Kennedy Center.</div>
+    </div>
+    <div class="card sky"><span class="ctag c-sky">Neighborhoods</span>
+      <div class="cname">🌸 DC Neighborhoods</div>
+      <div class="cdesc">Adams Morgan, Georgetown, Shaw, Capitol Hill, Navy Yard, 14th Street, Columbia Heights, Brookland, U Street. DC's neighborhoods are as distinct from each other as SF's — and most visitors see almost none of them.</div>
+    </div>
+    <div class="card warm"><span class="ctag c-warm">Day Trips</span>
+      <div class="cname">🗺️ DMV + Beyond</div>
+      <div class="cdesc">Annapolis (45 min), Shenandoah (90 min), Colonial Williamsburg (2.5 hr), Virginia wine country (1 hr), the Eastern Shore, Harpers Ferry. The DMV is a base camp for extraordinary day trips in every direction.</div>
+    </div>
+  </div>
+
+  <div class="banner">
+    <h3>The One Thing to Know About DC</h3>
+    <p>Everything on the National Mall is free. The Smithsonians are free. The monuments are free. The National Gallery is free. You can spend a week in DC spending almost nothing on culture — and it would be the most museum-dense week of your life. DC punishes people who budget for admission because there's almost nothing to pay for.</p>
+  </div>
+</div>
+
+<!-- ══ DC MONUMENTS ══ -->
+<div id="dc-monuments" class="tab">
+  <div class="sh">
+    <div class="sh-tag">The National Mall + Beyond</div>
+    <h2>Monuments <em>&amp; Memorials</em></h2>
+    <p>The two-mile stretch from the Capitol to the Lincoln Memorial is the most symbolically loaded public space in America. Every monument here is free. The best time: sunrise or after dark — the crowds vanish and the marble glows.</p>
+  </div>
+
+  <div class="dl">🏛️ The National Mall</div>
+  <div class="g3">
+    <div class="card dc">
+      <span class="ctag c-dc">West End of the Mall · Free · 24/7</span>
+      <div class="cname">Lincoln Memorial</div>
+      <div class="cdesc">The most emotionally powerful monument in the US. The 19-foot marble Lincoln, the Gettysburg Address on the walls, the view of the Reflecting Pool and Washington Monument framed perfectly. MLK delivered "I Have a Dream" from these steps in 1963. Go at sunrise or after 10pm when the tourists thin out — the Lincoln at night, lit in white light, is extraordinary.</div>
+      <div class="ctip">🌅 Sunrise visit — the gold light on the Reflecting Pool with almost no other visitors is one of the great free experiences in America</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">National Mall Center · Free · Always</span>
+      <div class="cname">Washington Monument</div>
+      <div class="cdesc">555 feet of white marble obelisk — the tallest stone structure in the world when completed in 1884. The observation level at 500 feet requires free timed tickets (get them at recreation.gov or the monument itself at 8:30am). The view is the best panorama of DC available. The subtle color change in the stone two-thirds up marks where construction paused during the Civil War.</div>
+      <div class="ctip">🎟️ Free timed-entry tickets at recreation.gov — book as early as possible, same-day tickets available at 8:30am</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">West Mall · Free · Profoundly Moving</span>
+      <div class="cname">Vietnam Veterans Memorial</div>
+      <div class="cdesc">Maya Lin's black granite wall listing 58,318 names — the most visited memorial in Washington. The design was controversial when built (1982) and is now considered the greatest war memorial in the world. The reflective surface shows your own face alongside the names. Go quietly. The Three Soldiers statue nearby is the realistic counterpart to the Wall's abstraction.</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">West Mall · Free</span>
+      <div class="cname">MLK Memorial + FDR Memorial</div>
+      <div class="cdesc">The MLK Memorial (2011) — the Stone of Hope carved from white granite, MLK emerging from the Mountain of Despair. The inscription on the wall quotes from the "I Have a Dream" speech. Walk the full Tidal Basin loop: MLK, FDR (the most intimate presidential memorial, a series of outdoor rooms), and Jefferson — the full circuit is 2 miles and passes all three.</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">East End of the Mall · Tours Available</span>
+      <div class="cname">US Capitol Building</div>
+      <div class="cdesc">Free public tours of the Capitol through your Congressional representative's office (book weeks or months ahead). The Capitol Visitor Center underground has free self-guided exploration. The dome interior (the Rotunda) is one of the most beautiful interior spaces in America. Walk around the exterior — the east and west fronts each look completely different. The grounds are free, always open.</div>
+      <div class="ctip">📋 Contact your US Representative or Senator for free tour tickets — book 3+ months in advance for best availability</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">Tidal Basin · March–April</span>
+      <div class="cname">Tidal Basin Cherry Blossoms</div>
+      <div class="cdesc">The 3,800 cherry trees gifted by Japan in 1912 bloom around the Tidal Basin — peak bloom is typically late March to mid-April, but varies by year. The National Cherry Blossom Festival runs concurrent. The Jefferson Memorial with pink blossoms framing it is the iconic image. Go at sunrise on a weekday — the crowds on weekends during peak bloom are extraordinary. Check the NPS peak bloom forecast at nps.gov/cherry.</div>
+      <div class="ctip">🌸 nps.gov/cherry has the official peak bloom forecast — check starting in February</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">Southwest Mall · Free</span>
+      <div class="cname">WWII Memorial</div>
+      <div class="cdesc">The 2004 WWII memorial at the center of the Mall — two pavilions for the Atlantic and Pacific theaters, 56 pillars for states and territories, and the Field of Stars (4,048 gold stars, one per 100 American deaths). The location between the Lincoln and Washington monuments means it anchors the entire sight line. Beautiful at night when the fountains are lit.</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">Foggy Bottom · Tours Required</span>
+      <div class="cname">The White House</div>
+      <div class="cdesc">The exterior is always visible from Pennsylvania Ave (north side) and the Ellipse (south side) — free, no tickets. Public tours of the interior must be arranged through your Congressional representative at least 21 days ahead; they're not guaranteed. The White House Visitor Center on 15th St NW (free) has the best permanent exhibition on the building's history. The north portico view from Lafayette Square is the classic image.</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">West of the Mall · Free</span>
+      <div class="cname">Korean + WWII Memorials + The Mall Loop</div>
+      <div class="cdesc">The Korean War Veterans Memorial (19 stainless steel soldiers in formation, eerie and perfect at night), the DC War Memorial, and Constitution Gardens all cluster west of the WWII Memorial. The full National Mall loop — from the Capitol steps to Lincoln and back along the south side — is 4.5 miles and passes every major monument. The best free walk in the United States.</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">East of the Capitol · Free</span>
+      <div class="cname">Supreme Court + Library of Congress</div>
+      <div class="cdesc">The Supreme Court building (1935, Cass Gilbert) is free to visit — the marble Great Hall and the courtroom (when not in session) are open to the public. Oral arguments (Oct–April) are public but arrive by 8am for same-day seating. The Library of Congress Jefferson Building across the street has the most beautiful interior in DC — the Great Hall and the Main Reading Room are extraordinary. Free, no tickets needed for the public areas.</div>
+      <div class="ctip">📚 Library of Congress Jefferson Building Main Reading Room — the most beautiful interior space in Washington, completely free and usually uncrowded</div>
+    </div>
+    <div class="card dc">
+      <span class="ctag c-dc">Southwest Waterfront · Pentagon City</span>
+      <div class="cname">Pentagon Memorial + Arlington</div>
+      <div class="cdesc">The Pentagon Memorial (9/11) is a 5-acre park of 184 benches — free, accessible, moving. Arlington National Cemetery across the river: the Changing of the Guard at the Tomb of the Unknown Soldier (every hour on the hour, every 30 min May–September), JFK's eternal flame, and the graves stretching across 624 acres. Free, open daily. The cemetery is a pilgrimage, not a tourist attraction.</div>
+    </div>
+  </div>
+
+  <div class="dl">🍽️ Essential DC Eats Near the Mall</div>
+  <div class="g3">
+    <div class="card red">
+      <span class="ctag c-red">U Street · Since 1958</span>
+      <div class="cname">Ben's Chili Bowl ⭐</div>
+      <div class="cloc">1213 U St NW · The DC Classic</div>
+      <div class="cdesc">The half-smoke (a DC-specific smoked pork-beef sausage in a steamed bun with chili, mustard, and onions) is the dish that defines Washington. Ben's has been serving it on U Street since 1958 — through riots, gentrification, and every president since LBJ. Obama ate here on Inauguration Night 2009. The chili dog is the backup order. Cash-friendly, open late, never changes.</div>
+      <div class="ctip">🌭 Half-smoke with chili and mustard — the single most DC thing you can eat</div>
+    </div>
+    <div class="card red">
+      <span class="ctag c-red">Penn Quarter · Food Hall</span>
+      <div class="cname">Union Market + District Wharf</div>
+      <div class="cloc">1309 5th St NE · Southwest Waterfront</div>
+      <div class="cdesc">Union Market (NoMa neighborhood) — DC's best food hall with local vendors, excellent produce, fishmonger, cheese, and a rotating cast of excellent food stalls. The District Wharf on the Southwest Waterfront is the best place to eat in DC with a view — the Maine Avenue Fish Market (oldest outdoor fish market in the US, since 1805) right next to upscale waterfront restaurants.</div>
+    </div>
+    <div class="card red">
+      <span class="ctag c-red">Penn Quarter · Since 1993</span>
+      <div class="cname">Jaleo</div>
+      <div class="cloc">480 7th St NW · José Andrés</div>
+      <div class="cdesc">José Andrés' Spanish restaurant that launched his DC empire — the best tapas in the city. The pan con tomate, the jamón ibérico, the gambas al ajillo. A DC institution that sparked the city's transformation into a serious restaurant town. Near the Smithsonians, perfect for a post-museum dinner.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DC NEIGHBORHOODS ══ -->
+<div id="dc-hoods" class="tab">
+  <div class="sh">
+    <div class="sh-tag">The Real DC</div>
+    <h2>DC <em>Neighborhoods</em></h2>
+    <p>Most visitors see the Mall and nothing else. DC's neighborhoods — Adams Morgan, Shaw, Georgetown, Capitol Hill, Dupont Circle — are where the city actually lives. Click any card to expand.</p>
+  </div>
+
+  <div class="dl">🏘️ Northwest DC</div>
+  <div class="g3">
+    <div class="hc" style="background:linear-gradient(135deg,#1a0f2e,#2a1a4e)" onclick="toggleHood('dc-hood-adams')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">18th St · Columbia Rd</div>
+      <div class="hc-name">Adams Morgan</div>
+      <div class="hc-desc">The most ethnically diverse neighborhood in DC — Ethiopian restaurants, late-night bars, vintage shops. 18th St NW is the main artery.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-adams">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>Dolan's Tibetan — one of very few Tibetan restaurants on the East Coast</li>
+          <li>Mintwood Place — seasonal American, one of DC's best neighborhood spots</li>
+          <li>Amsterdam Falafelshop — legendary late-night falafel, open until 3am on weekends</li>
+          <li>Tail Up Goat — James Beard-winning cocktail bar + Caribbean-influenced food</li>
+          <li>Roofers Union — rooftop bar with DC skyline views, craft beers</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>18th St NW — the main strip, bar-hopping on weekend nights</li>
+          <li>Meridian Hill Park — cascades fountain, Saturday drum circle (weekly tradition)</li>
+          <li>Columbia Heights — just south, the Latino commercial corridor on 14th St</li>
+          <li>Kalorama — the embassy neighborhood just north, beautiful residential streets</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hc" style="background:linear-gradient(135deg,#0f1f2e,#1a3a2e)" onclick="toggleHood('dc-hood-georgetown')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">M St · Wisconsin Ave</div>
+      <div class="hc-name">Georgetown</div>
+      <div class="hc-desc">DC's oldest neighborhood — Federal-era brick townhouses, the C&O Canal towpath, Georgetown University. The most European-feeling urban district in DC.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-georgetown">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>1789 Restaurant — intimate Federal-era townhouse, the classic Georgetown dinner</li>
+          <li>Filomena — old-school Italian-American, red sauce, massive portions, legendary</li>
+          <li>Martin's Tavern — since 1933, JFK proposed to Jackie here (Booth 3)</li>
+          <li>Baked & Wired — the best cupcakes and coffee in DC, no debate</li>
+          <li>Georgetown Cupcake — the famous one, long line, worth it at least once</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>C&O Canal towpath — walk or bike 184 miles to Cumberland, MD (or just a mile)</li>
+          <li>Georgetown Waterfront Park — Potomac views, Key Bridge, kayak rentals</li>
+          <li>Exorcist Steps — 75 steep steps made famous by the 1973 film</li>
+          <li>Tudor Place — Federal-era mansion, 5.5-acre gardens, free to walk</li>
+          <li>M St and Wisconsin Ave — shopping, galleries, the main pedestrian corridor</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hc" style="background:linear-gradient(135deg,#1a1f0f,#2e3a1a)" onclick="toggleHood('dc-hood-dupont')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">Connecticut Ave · P St</div>
+      <div class="hc-name">Dupont Circle</div>
+      <div class="hc-desc">The intellectual and LGBTQ+ heart of DC — bookstores, coffee shops, embassies, and the best Sunday farmers market in the city.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-dupont">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>The Palm — the classic DC power lunch steakhouse, political art on the walls</li>
+          <li>Kramerbooks & Afterwords Café — bookstore + café + bar, open 24/7 on weekends</li>
+          <li>Firefly — cozy neighborhood American bistro, excellent brunch</li>
+          <li>Pizzeria Paradiso — wood-fired pizza, the Dupont Circle standard bearer</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>FRESHFARM Dupont Circle Market — Sunday 8:30am–1:30pm, best farmers market in DC</li>
+          <li>The Phillips Collection — America's first modern art museum, intimate and excellent</li>
+          <li>Kramerbooks — 24/7 on weekends, the most DC bookstore that exists</li>
+          <li>Embassy Row — Massachusetts Ave NW, walk past 50+ embassies in one mile</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hc" style="background:linear-gradient(135deg,#1f1a0f,#3a2e1a)" onclick="toggleHood('dc-hood-14th')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">14th St NW · Logan Circle</div>
+      <div class="hc-name">14th Street + Logan Circle</div>
+      <div class="hc-desc">DC's dining and nightlife spine — the most restaurant-dense corridor in the city, anchored by Logan Circle's Victorian rowhouses.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-14th">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>Le Diplomate — French brasserie, the most coveted reservation in DC for a decade</li>
+          <li>Estadio — Spanish tapas, James Beard-nominated, one of DC's best</li>
+          <li>Maydan — whole-animal Middle Eastern, wood-fire, the hottest table in DC</li>
+          <li>Columbia Room — the pinnacle of DC cocktail bars, tasting menu format</li>
+          <li>Chez Billy Sud — French bistro, excellent steak tartare, warm neighborhood feel</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>Logan Circle — the Victorian rowhouse circle, beautiful evening walks</li>
+          <li>U Street Corridor (just east) — the Black Broadway, great music venues</li>
+          <li>9:30 Club — the best mid-size music venue in DC, legendary acts</li>
+          <li>Studio Theatre — excellent regional theater, Logan Circle</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="dl">🏘️ Central + East DC</div>
+  <div class="g3">
+    <div class="hc" style="background:linear-gradient(135deg,#1a0f0f,#3a1a1a)" onclick="toggleHood('dc-hood-shaw')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">U St · 7th St · Howard U</div>
+      <div class="hc-name">Shaw + U Street</div>
+      <div class="hc-desc">The historic heart of Black DC — "Black Broadway" where Duke Ellington, Pearl Bailey, and Marvin Gaye grew up. Ben's Chili Bowl, the Howard Theatre, the 9:30 Club.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-shaw">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>Ben's Chili Bowl — half-smoke since 1958, the definitive DC food experience</li>
+          <li>Dabney — hyper-local Mid-Atlantic cooking, James Beard winner</li>
+          <li>Compass Rose — global comfort foods, cozy hidden gem on 14th St</li>
+          <li>Right Proper Brewing — the best craft brewery in DC, in a historic building</li>
+          <li>Pearl Dive Oyster Palace — raw bar, good happy hour, Shaw anchor</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>Howard Theatre — since 1910, the flagship Black Broadway venue, still operating</li>
+          <li>Lincoln Theatre — 1922, still hosts concerts and events on U St</li>
+          <li>Duke Ellington mural + birthplace marker — 1212 T St NW</li>
+          <li>Banneker Recreation Center — community hub, city views from the tennis courts</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hc" style="background:linear-gradient(135deg,#0f1a1f,#1a2e3a)" onclick="toggleHood('dc-hood-capitol')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">Pennsylvania Ave SE · Eastern Market</div>
+      <div class="hc-name">Capitol Hill</div>
+      <div class="hc-desc">Victorian rowhouses, Eastern Market, independent restaurants, and Congressional staffers. The neighborhood that lives in the shadow of the Capitol and is significantly better for it.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-capitol">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>Eastern Market — farmers market + flea market Sat/Sun since 1873, the Hill's living room</li>
+          <li>Ambar — Balkan small plates, bottomless brunch, Capitol Hill standard</li>
+          <li>The Monocle — the oldest Capitol Hill restaurant, political power lunch</li>
+          <li>Beuchert's Saloon — American craft cocktails, neighborhood gem</li>
+          <li>Ted's Bulletin — all-day American diner with adult milkshakes, great breakfast</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>Eastern Market — 225 7th St SE, Tue–Fri indoor, weekend outdoor market and flea</li>
+          <li>Folger Shakespeare Library — the world's largest Shakespeare collection, free exhibitions</li>
+          <li>Library of Congress — across from the Capitol, the most beautiful building in DC</li>
+          <li>Barracks Row (8th St SE) — restaurant row, the oldest commercial district on the Hill</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hc" style="background:linear-gradient(135deg,#0f1a2e,#1a2e1f)" onclick="toggleHood('dc-hood-navy')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">M St SW · Waterfront</div>
+      <div class="hc-name">Navy Yard + The Wharf</div>
+      <div class="hc-desc">DC's newest waterfront neighborhoods. Nationals Park, the District Wharf's restaurant row on the Potomac, and the Maine Avenue Fish Market operating since 1805.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-navy">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>Maine Avenue Fish Market — oldest open-air fish market in the US, since 1805</li>
+          <li>Hank's Oyster Bar — DC's best raw bar, multiple locations, The Wharf original</li>
+          <li>Mi Vida — Roberto Santibañez's Mexican, Wharf waterfront location</li>
+          <li>Cranes — Spanish-Japanese fusion, one of DC's most interesting restaurants</li>
+          <li>Kaliwa — Korean-Filipino-Thai fusion, Cathal Armstrong, The Wharf</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>Nationals Park — MLB, great stadium food, good sight lines, riverfront location</li>
+          <li>District Wharf boardwalk — 1.2 miles of Potomac waterfront, free, beautiful</li>
+          <li>Yards Park — waterfront park with splash pads, summer concerts, free</li>
+          <li>Water taxis — from The Wharf to Georgetown, Alexandria, and National Harbor</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hc" style="background:linear-gradient(135deg,#1f0f2e,#2e1a3a)" onclick="toggleHood('dc-hood-penn')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">7th St NW · Gallery Place</div>
+      <div class="hc-name">Penn Quarter + Chinatown</div>
+      <div class="hc-desc">DC's arts district — the Smithsonian American Art Museum, the Newseum site, José Andrés restaurant row, and DC's very small but lively Chinatown.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-penn">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>Jaleo — José Andrés' Spanish tapas flagship, outstanding</li>
+          <li>Oyamel — Andrés' Mexican, excellent tacos and mole, next door to Jaleo</li>
+          <li>Zaytinya — Andrés' Eastern Mediterranean, the most reliable in the group</li>
+          <li>Fiola — upscale Italian, Mario Batali-level cooking without the baggage</li>
+          <li>Full Kee — the last real Cantonese restaurant in Chinatown, wonton noodle soup</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>Smithsonian American Art Museum + Portrait Gallery — free, in a stunning building</li>
+          <li>Capital One Arena — Capitals, Wizards, major concerts, Gallery Place Metro</li>
+          <li>International Spy Museum — $25, the most entertaining paid museum in DC</li>
+          <li>National Building Museum — free, beautiful atrium, architecture exhibitions</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="dl">🌆 DMV Metro Area Highlights</div>
+  <div class="g3">
+    <div class="hc" style="background:linear-gradient(135deg,#0f2e1a,#1a3e2a)" onclick="toggleHood('dc-hood-arlington')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">Virginia · Orange + Silver Line</div>
+      <div class="hc-name">Arlington + Clarendon</div>
+      <div class="hc-desc">Virginia's urban edge of DC — Arlington Cemetery, the Pentagon, Clarendon's restaurant strip, and Crystal City's growing tech scene. Walkable from the Metro.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-arlington">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>Pupatella — the best Neapolitan pizza in the entire DMV, Ballston</li>
+          <li>Green Pig Bistro — local, seasonal, the best neighborhood restaurant in Clarendon</li>
+          <li>Pamplona — excellent Spanish tapas, Lyon Village</li>
+          <li>Ray's the Steaks — the best value steakhouse in the DMV, Courthouse</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>Arlington National Cemetery — Tomb of the Unknown Soldier, JFK eternal flame, free</li>
+          <li>Pentagon Memorial — 9/11 memorial, 184 benches, free</li>
+          <li>Rosslyn Metro — the overlook park above the station has the best DC skyline view</li>
+          <li>Columbia Pike — the most diverse food street in Virginia</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hc" style="background:linear-gradient(135deg,#2e1f0f,#4a3a1a)" onclick="toggleHood('dc-hood-alexandria')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">Virginia · Yellow Line · Historic</div>
+      <div class="hc-name">Old Town Alexandria</div>
+      <div class="hc-desc">George Washington's hometown — cobblestone streets, Georgian townhouses, the Torpedo Factory art center, and the best waterfront dining outside of DC itself.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-alexandria">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>Hank's Oyster Bar — the Old Town raw bar, excellent happy hour</li>
+          <li>Brabo Tasting Room — Belgian-influenced, one of the best restaurants in Northern VA</li>
+          <li>The Majestic — since 1932, American comfort food, Art Deco interior</li>
+          <li>Vermilion — seasonal New American, one of Alexandria's finest</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>King Street walkable waterfront — from the Metro to the Potomac, gorgeous</li>
+          <li>Torpedo Factory Art Center — working artists' studios in a converted WWII factory</li>
+          <li>Gadsby's Tavern — 1792, where Washington hosted his birthday ball, still a restaurant</li>
+          <li>George Washington's Mount Vernon — 16 miles south, 30 min drive or Potomac riverboat</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="hc" style="background:linear-gradient(135deg,#1a0f2e,#2e1a40)" onclick="toggleHood('dc-hood-maryland')">
+      <div class="hc-bg"></div>
+      <div class="hc-tag">Maryland · Red + Green Lines</div>
+      <div class="hc-name">Bethesda + Silver Spring</div>
+      <div class="hc-desc">Maryland's DC suburbs done right — Bethesda's restaurant row, Silver Spring's international food corridor, and the Red Line access that makes both genuinely easy.</div>
+    </div>
+    <div class="hood-panel" id="dc-hood-maryland">
+      <div><div class="hood-section-title">Eat + Drink</div>
+        <ul class="hood-list">
+          <li>El Sapo (Silver Spring) — the best Cuban food in the DMV</li>
+          <li>Wheaton Korean corridor — Wheaton Plaza area, the best Korean food near DC</li>
+          <li>Bethesda Row restaurant strip — 50+ restaurants, walkable dining district</li>
+          <li>7-Eleven Slurpee — the most Maryland thing (7-Eleven was invented in MD)</li>
+        </ul>
+      </div>
+      <div><div class="hood-section-title">See + Do</div>
+        <ul class="hood-list">
+          <li>Capital Crescent Trail — 11 miles from Georgetown to Silver Spring, bike or walk</li>
+          <li>Discovery Trail (Silver Spring) — walkable urban trail, great street art</li>
+          <li>AFI Silver Theatre — best repertory cinema near DC, Silver Spring</li>
+          <li>Strathmore — excellent performing arts venue in North Bethesda</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DC FOOD ══ -->
+<div id="dc-food" class="tab">
+  <div class="sh">
+    <div class="sh-tag">Where to Eat in DC + the DMV</div>
+    <h2>Eat <em>&amp; Drink</em></h2>
+    <p>DC has become one of America's great food cities — a José Andrés empire, the best Ethiopian food in the US, extraordinary Vietnamese in the suburbs, Chesapeake crab and oysters, and a cocktail scene that rivals anywhere. Filter by cuisine or explore the full list.</p>
+  </div>
+
+  <div class="filter-row" id="dc-food-filters">
+    <button class="filt on" onclick="dcFilter('all')">All</button>
+    <button class="filt" onclick="dcFilter('dc-classic')">🌭 DC Classics</button>
+    <button class="filt" onclick="dcFilter('ethiopian')">🇪🇹 Ethiopian</button>
+    <button class="filt" onclick="dcFilter('seafood')">🦀 Chesapeake Seafood</button>
+    <button class="filt" onclick="dcFilter('spanish')">🥘 Spanish + Mediterranean</button>
+    <button class="filt" onclick="dcFilter('latin')">🌮 Latin American</button>
+    <button class="filt" onclick="dcFilter('asian')">🍜 Asian</button>
+    <button class="filt" onclick="dcFilter('middleeast')">🧆 Middle Eastern</button>
+    <button class="filt" onclick="dcFilter('american')">🥩 American + Steaks</button>
+    <button class="filt" onclick="dcFilter('drinks')">🍸 Bars + Drinks</button>
+  </div>
+
+  <div id="dc-food-grid" class="g3">
+
+    <!-- DC CLASSICS -->
+    <div class="card dc food-item" data-cat="dc-classic">
+      <span class="ctag c-dc">U Street · Since 1958 · Non-Negotiable</span>
+      <div class="cname">Ben's Chili Bowl ⭐</div>
+      <div class="cloc">1213 U St NW</div>
+      <div class="cdesc">The half-smoke is the DC dish — a smoked pork-beef sausage unique to the District, in a steamed bun, topped with Ben's chili, mustard, and onions. Operating since 1958 on U Street through everything the city has endured. Obama, Anthony Bourdain, every DC visitor worth knowing has eaten here. The chili dog is second. Nothing is third.</div>
+      <div class="ctip">🌭 Half-smoke with chili — the single most DC food experience available anywhere</div>
+    </div>
+    <div class="card dc food-item" data-cat="dc-classic">
+      <span class="ctag c-dc">Everywhere · The DC Staple</span>
+      <div class="cname">Jumbo Slice</div>
+      <div class="cloc">Adams Morgan · 18th St NW</div>
+      <div class="cdesc">The DC late-night food institution — an enormous triangle of pizza (literally a quarter of a whole pizza) sold from Adams Morgan pizza shops after midnight on weekends. The correct experience: post-bar, 2am, cash only, eating a slice the size of your torso on the sidewalk. Not about quality. Completely about experience.</div>
+    </div>
+    <div class="card dc food-item" data-cat="dc-classic">
+      <span class="ctag c-dc">Southwest · Since 1805</span>
+      <div class="cname">Maine Avenue Fish Market ⭐</div>
+      <div class="cloc">1100 Maine Ave SW · Oldest Fish Market in US</div>
+      <div class="cdesc">The oldest continuously operating open-air fish market in the United States — operating since 1805. Blue crabs (steamed with Old Bay, eat them at the picnic tables), oysters by the dozen, shrimp, rockfish. Vendors selling from floating boats docked in the Potomac. Nothing in DC is more historically grounded than eating steamed crabs here.</div>
+      <div class="ctip">🦀 Steamed blue crabs with Old Bay — eat at the picnic tables, bring your own beer from the cooler vendors</div>
+    </div>
+    <div class="card dc food-item" data-cat="dc-classic">
+      <span class="ctag c-dc">Eastern Market · Weekend</span>
+      <div class="cname">Eastern Market</div>
+      <div class="cloc">225 7th St SE · Capitol Hill · Since 1873</div>
+      <div class="cdesc">The Capitol Hill farmers market + flea market since 1873. The Saturday morning blueberry buckwheat pancakes from the outdoor vendor have been a DC tradition for decades. Buy produce, buy art, eat breakfast, watch Capitol Hill residents run their weekend errands. The most neighborhood-feeling public market experience in DC.</div>
+    </div>
+
+    <!-- ETHIOPIAN -->
+    <div class="card warm food-item" data-cat="ethiopian">
+      <span class="ctag c-warm">Adams Morgan + Shaw · Ethiopian Capital of America</span>
+      <div class="cname">DC Ethiopian Row ⭐</div>
+      <div class="cloc">9th St NW + 18th St NW</div>
+      <div class="cdesc">DC has the largest Ethiopian community in the US — and the best Ethiopian food outside of Addis Ababa. The 9th St NW corridor in Shaw and the Adams Morgan cluster on 18th St NW are the two main areas. Injera (spongy fermented flatbread), misir wat (spiced red lentils), doro wat (chicken stew), tibs (sautéed beef). Ethiopian is the cuisine that defines DC the way pizza defines NYC.</div>
+      <div class="ctip">🇪🇹 Order the combination veggie platter for two — the best introduction to the breadth of Ethiopian cooking</div>
+    </div>
+    <div class="card warm food-item" data-cat="ethiopian">
+      <span class="ctag c-warm">Shaw · The Standard Bearer</span>
+      <div class="cname">Ethiopic ⭐</div>
+      <div class="cloc">401 H St NE · Shaw</div>
+      <div class="cdesc">The most celebrated Ethiopian restaurant in DC — exceptional doro wat, complex berbere spicing, excellent tej (honey wine). The vegetarian combination is the most complete way to experience Ethiopian cooking. Seat at the mesob (basket tables) and eat communally from the shared platter. The most essential DC restaurant experience.</div>
+    </div>
+    <div class="card warm food-item" data-cat="ethiopian">
+      <span class="ctag c-warm">Adams Morgan · Very Good</span>
+      <div class="cname">Dukem</div>
+      <div class="cloc">1114 U St NW</div>
+      <div class="cdesc">A long-standing U Street Ethiopian restaurant — tibs, kitfo (Ethiopian steak tartare), gored gored, and excellent vegetarian options. The kitfo here is one of the best in the city. A neighborhood institution that has survived every wave of Adams Morgan/U Street transformation.</div>
+    </div>
+    <div class="card warm food-item" data-cat="ethiopian">
+      <span class="ctag c-warm">Maryland · Rockville</span>
+      <div class="cname">Langano Skies</div>
+      <div class="cloc">Rockville, MD · Ethiopian Fine Dining</div>
+      <div class="cdesc">Elevated Ethiopian in Rockville, Maryland — upscale presentation of traditional flavors, exceptional wine list, a different take than the communal injection of DC proper. Worth the Red Line trip for Ethiopian cooking taken seriously as a fine dining cuisine.</div>
+    </div>
+
+    <!-- CHESAPEAKE SEAFOOD -->
+    <div class="card sky food-item" data-cat="seafood">
+      <span class="ctag c-sky">The Wharf · Waterfront</span>
+      <div class="cname">Hank's Oyster Bar ⭐</div>
+      <div class="cloc">Multiple Locations · The Wharf Flagship</div>
+      <div class="cdesc">DC's definitive raw bar — rotating East and West Coast oysters, excellent clam chowder, whole lobster, Chesapeake crab cakes. The Wharf location has the waterfront setting; the Dupont location has the original neighborhood feel. The happy hour oyster special is the best deal in the city.</div>
+      <div class="ctip">🦪 Happy hour oyster specials — $1.50 each, weekdays 4–7pm, the best deal in DC</div>
+    </div>
+    <div class="card sky food-item" data-cat="seafood">
+      <span class="ctag c-sky">Southwest · The Tradition</span>
+      <div class="cname">Blue Crabs + Old Bay</div>
+      <div class="cloc">Maine Ave Fish Market · Joe's Crab Shack · LP Steamers (Baltimore)</div>
+      <div class="cdesc">Chesapeake blue crabs steamed with Old Bay seasoning are the defining food of the DMV region — messy, communal, and essential. At the Maine Ave Fish Market for the full experience. The highest level: drive 45 minutes to Baltimore's LP Steamers or Thames Street Oyster House for the full Maryland crab feast.</div>
+    </div>
+    <div class="card sky food-item" data-cat="seafood">
+      <span class="ctag c-sky">Penn Quarter · Elegant</span>
+      <div class="cname">Old Ebbitt Grill</div>
+      <div class="cloc">675 15th St NW · Since 1856</div>
+      <div class="cdesc">DC's oldest saloon, now a grand Victorian restaurant next to the White House. The raw bar is excellent — the oyster selection changes daily, the clam chowder is a standard, the lobster bisque is old-school and good. The political art on the walls documents DC power through the decades. The most historically atmospheric dining room in DC.</div>
+    </div>
+    <div class="card sky food-item" data-cat="seafood">
+      <span class="ctag c-sky">Navy Yard · Modern Seafood</span>
+      <div class="cname">RPM Seafood</div>
+      <div class="cloc">Navy Yard · Waterfront</div>
+      <div class="cdesc">Modern coastal American seafood in the Navy Yard — excellent whole fish preparations, great shellfish tower, polished room. The best upscale seafood restaurant in DC proper. The view of Nationals Park from some tables adds a distinctly DC element.</div>
+    </div>
+
+    <!-- SPANISH + MEDITERRANEAN -->
+    <div class="card red food-item" data-cat="spanish">
+      <span class="ctag c-red">Penn Quarter · José Andrés Empire</span>
+      <div class="cname">Jaleo ⭐</div>
+      <div class="cloc">480 7th St NW · Spanish Tapas</div>
+      <div class="cdesc">José Andrés' flagship — the restaurant that changed DC dining when it opened in 1993. The best Spanish tapas in the US: pan con tomate, jamón ibérico, gambas al ajillo, the legendary tortilla española. Book at least 2 weeks ahead. The DC dining scene before and after Jaleo are two completely different cities.</div>
+    </div>
+    <div class="card red food-item" data-cat="spanish">
+      <span class="ctag c-red">Penn Quarter · Andrés Again</span>
+      <div class="cname">Zaytinya</div>
+      <div class="cloc">701 9th St NW · Eastern Mediterranean</div>
+      <div class="cdesc">José Andrés' Eastern Mediterranean restaurant — Greek, Lebanese, Turkish mezze in a beautiful Penn Quarter space. The hummus, the crispy cauliflower, the lamb dishes. Consistently the most reliable of the Andrés group. Good for vegetarians and omnivores equally.</div>
+    </div>
+    <div class="card red food-item" data-cat="spanish">
+      <span class="ctag c-red">14th St · James Beard Nominated</span>
+      <div class="cname">Estadio</div>
+      <div class="cloc">1520 14th St NW · Spanish Tapas</div>
+      <div class="cdesc">The other great Spanish tapas restaurant in DC — consistently excellent patatas bravas, grilled octopus, cured meats, and a remarkable sherry and Spanish wine list. More neighborhood than Jaleo, equally excellent food. The happy hour vermouth is one of DC's best deals.</div>
+    </div>
+    <div class="card red food-item" data-cat="spanish">
+      <span class="ctag c-red">14th St · Buzzy + Hot</span>
+      <div class="cname">Maydan ⭐</div>
+      <div class="cloc">1346 Florida Ave NW · Middle Eastern</div>
+      <div class="cdesc">Wood-fire Middle Eastern cooking — whole roasted lamb, flatbreads baked in the open fire, mezze from across the Levant, North Africa, and the Caucasus. The most exciting restaurant to open in DC in the past decade. Loud, communal, no reservations (show up early or wait). The most-talked-about dinner in DC right now.</div>
+      <div class="ctip">🔥 Arrive at 5:30pm when they open — it fills within 20 minutes and doesn't take reservations</div>
+    </div>
+
+    <!-- LATIN -->
+    <div class="card warm food-item" data-cat="latin">
+      <span class="ctag c-warm">Rockville · Peruvian</span>
+      <div class="cname">Ceviche 105</div>
+      <div class="cloc">Rockville, MD · Best Peruvian in DMV</div>
+      <div class="cdesc">The best Peruvian food in the DMV — and therefore some of the best in the US. The ceviche (leche de tigre done right), tiradito, lomo saltado, chaufa. Rockville, Maryland has an extraordinary concentration of Peruvian, Salvadoran, and Central American restaurants. Worth the Red Line ride.</div>
+    </div>
+    <div class="card warm food-item" data-cat="latin">
+      <span class="ctag c-warm">Falls Church · Salvadoran</span>
+      <div class="cname">El Pollo Rico ⭐</div>
+      <div class="cloc">932 N Kenmore St, Arlington</div>
+      <div class="cdesc">The best rotisserie chicken in the DMV — possibly in the US. Marinated, perfectly charred Peruvian-style chicken, served with aji sauce that people have been known to put on everything. Always a line. Cash only. Bring extra napkins. A 25-year Arlington institution.</div>
+    </div>
+    <div class="card warm food-item" data-cat="latin">
+      <span class="ctag c-warm">Falls Church · Eden Center</span>
+      <div class="cname">Eden Center Vietnamese Complex ⭐</div>
+      <div class="cloc">6751 Wilson Blvd, Falls Church, VA</div>
+      <div class="cdesc">The most important Vietnamese food destination on the East Coast — a 120-unit strip mall in Falls Church, Virginia that is the center of the DMV Vietnamese community. Pho, banh mi, bun bo Hue, che desserts, Vietnamese coffee, groceries. Better than anything in DC proper and requiring just a drive or bus ride into Virginia. This is the real deal.</div>
+      <div class="ctip">🍜 Any pho shop here beats anything in DC proper — Song Que and Pho 75 are the anchor restaurants</div>
+    </div>
+    <div class="card warm food-item" data-cat="latin">
+      <span class="ctag c-warm">Penn Quarter · Mexican</span>
+      <div class="cname">Oyamel</div>
+      <div class="cloc">401 7th St NW · José Andrés Mexican</div>
+      <div class="cdesc">José Andrés' Mexican restaurant — excellent tacos, complex mole, good margaritas with real lime. The grasshopper guacamole (chapulines on top — the protein is optional) is the dish that gets talked about. The ant salt margarita is genuinely good. Better than it has any right to be for a Penn Quarter tourist corridor restaurant.</div>
+    </div>
+
+    <!-- ASIAN -->
+    <div class="card teal food-item" data-cat="asian">
+      <span class="ctag c-teal">Wheaton · Best Korean in DMV</span>
+      <div class="cname">Wheaton Korean Corridor ⭐</div>
+      <div class="cloc">Wheaton, MD · Georgia Ave · Red Line</div>
+      <div class="cdesc">The best Korean food in the DMV is not in DC — it's in Wheaton, Maryland, a 20-minute Red Line ride north. The Georgia Ave and Reedie Dr area has excellent Korean BBQ, sundubu jjigae, Korean fried chicken, and jajangmyeon. Lighthouse Tofu and Honey Pig are the anchor names. Better than K-Street in DC at half the price.</div>
+    </div>
+    <div class="card teal food-item" data-cat="asian">
+      <span class="ctag c-teal">Annandale · Virginia · Koreatown</span>
+      <div class="cname">Annandale Korean BBQ</div>
+      <div class="cloc">Annandale, VA · Little Korea</div>
+      <div class="cdesc">Annandale, Virginia is "Little Korea" of the DMV — the highest concentration of Korean restaurants, grocery stores, and businesses outside of K-Street in DC. Excellent late-night KBBQ. Gogung, Jong Kak, and Lighthouse Tofu Annandale branch are the anchors. Take the 29 bus from DC or drive.</div>
+    </div>
+    <div class="card teal food-item" data-cat="asian">
+      <span class="ctag c-teal">Penn Quarter · Ramen</span>
+      <div class="cname">Daikaya</div>
+      <div class="cloc">705 6th St NW · Sapporo-Style Ramen</div>
+      <div class="cdesc">Sapporo-style miso ramen in Penn Quarter — rich, buttery broth, corn, butter, bamboo shoots. The izakaya upstairs serves excellent Japanese small plates. The best ramen in DC proper. The broth takes 12 hours; the line sometimes takes 45 minutes. Worth it.</div>
+    </div>
+    <div class="card teal food-item" data-cat="asian">
+      <span class="ctag c-teal">Chinatown · The Last Real One</span>
+      <div class="cname">Full Kee</div>
+      <div class="cloc">509 H St NW · DC Chinatown</div>
+      <div class="cdesc">DC's Chinatown has been almost entirely displaced by development — it's now mostly a Chinatown in name only. Full Kee is the last authentic Cantonese restaurant in the neighborhood: wonton noodle soup, roast duck, congee. A piece of DC history that hasn't moved even as everything around it changed.</div>
+    </div>
+    <div class="card teal food-item" data-cat="asian">
+      <span class="ctag c-teal">Rockville · Sichuan</span>
+      <div class="cname">Sichuan Pavilion</div>
+      <div class="cloc">Rockville, MD · Best Chinese in DMV</div>
+      <div class="cdesc">The best Chinese food in the DMV is overwhelmingly in suburban Maryland — Rockville and Gaithersburg have extraordinary concentrations of regional Chinese restaurants. Sichuan Pavilion is the anchor for Sichuan cooking; the mala hot pot and the twice-cooked pork are the essential orders.</div>
+    </div>
+
+    <!-- MIDDLE EASTERN -->
+    <div class="card sage food-item" data-cat="middleeast">
+      <span class="ctag c-sage">14th St · The Hottest Table</span>
+      <div class="cname">Maydan ⭐</div>
+      <div class="cloc">1346 Florida Ave NW</div>
+      <div class="cdesc">Already covered above — the wood-fire whole-animal Middle Eastern experience is worth listing twice. Come early, don't make other plans, and order the lamb.</div>
+    </div>
+    <div class="card sage food-item" data-cat="middleeast">
+      <span class="ctag c-sage">Glover Park · Lebanese</span>
+      <div class="cname">Lebanese Taverna</div>
+      <div class="cloc">Multiple Locations · DMV Institution</div>
+      <div class="cdesc">The Lebanese restaurant family that has fed DC for 40+ years — excellent mezze (hummus, fattoush, kibbeh), excellent whole fish, very good mixed grill. The Woodley Park location has been the Sunday afternoon standard for DC families since the 1980s. Reliable, excellent, and genuinely beloved.</div>
+    </div>
+    <div class="card sage food-item" data-cat="middleeast">
+      <span class="ctag c-sage">Adams Morgan · Eritrean</span>
+      <div class="cname">Etete Ethiopian</div>
+      <div class="cloc">1942 9th St NW · Shaw</div>
+      <div class="cdesc">One of the longest-running Ethiopian restaurants in DC's Shaw corridor — excellent doro wat, tibs firfir, and one of the most welcoming rooms in the neighborhood. The injera is made in-house and is noticeably better than at many competitors.</div>
+    </div>
+
+    <!-- AMERICAN + STEAKS -->
+    <div class="card gold food-item" data-cat="american">
+      <span class="ctag c-gold">14th St · The Reservation</span>
+      <div class="cname">Le Diplomate ⭐</div>
+      <div class="cloc">1601 14th St NW · French Brasserie</div>
+      <div class="cdesc">The most coveted reservation in DC for the past decade — a near-perfect recreation of a Paris brasserie on 14th Street. Steak tartare, moules frites, excellent pastry, the best French onion soup in DC. Book 4–6 weeks out. The Sunday brunch is slightly easier to get into and equally excellent.</div>
+    </div>
+    <div class="card gold food-item" data-cat="american">
+      <span class="ctag c-gold">Shaw · James Beard Winner</span>
+      <div class="cname">The Dabney ⭐</div>
+      <div class="cloc">122 Blagden Alley NW · Mid-Atlantic</div>
+      <div class="cdesc">James Beard Award winner for Best Chef Mid-Atlantic. Hyper-local Mid-Atlantic cooking — Chesapeake shellfish, Virginia lamb, Shenandoah Valley produce. The wood-burning hearth is the soul of the kitchen. The most important restaurant in DC for understanding what the region actually tastes like when treated with full seriousness.</div>
+    </div>
+    <div class="card gold food-item" data-cat="american">
+      <span class="ctag c-gold">Penn Quarter · Since 1856</span>
+      <div class="cname">Old Ebbitt Grill</div>
+      <div class="cloc">675 15th St NW</div>
+      <div class="cdesc">DC's oldest saloon — a grand Victorian dining room one block from the White House. Power breakfast, power lunch, excellent happy hour (4–7pm, $1 oysters). The walls are covered in political caricatures. Presidents, senators, and lobbyists have eaten here across every era of American history. The most atmospheric restaurant in DC.</div>
+      <div class="ctip">🦪 Happy hour $1 oysters 4–7pm weekdays — best deal in DC, always packed</div>
+    </div>
+    <div class="card gold food-item" data-cat="american">
+      <span class="ctag c-gold">Downtown · Power Steakhouse</span>
+      <div class="cname">BLT Steak</div>
+      <div class="cloc">1625 I St NW · K Street Power Lunch</div>
+      <div class="cdesc">The DC power steakhouse — lobbyists, lawyers, and government officials eating USDA prime steaks. The gruyère popovers that arrive automatically are extraordinary. The political theater of the dining room is half the reason to go. Expensive, excellent, and specifically, distinctly DC in its clientele and energy.</div>
+    </div>
+
+    <!-- BARS + DRINKS -->
+    <div class="card dc food-item" data-cat="drinks">
+      <span class="ctag c-dc">Shaw · Tasting Menu Bar</span>
+      <div class="cname">Columbia Room ⭐</div>
+      <div class="cloc">124 Blagden Alley NW · The Pinnacle</div>
+      <div class="cdesc">The best cocktail bar in DC — possibly in the US. A tasting menu format (3 courses, paired cocktails) in an intimate Shaw alley. Award-winning bar program by Derek Brown. Book well ahead for the Tasting Room; the Punch Garden downstairs is walk-in with excellent cocktails. The most serious cocktail experience in Washington.</div>
+    </div>
+    <div class="card dc food-item" data-cat="drinks">
+      <span class="ctag c-dc">Blagden Alley · Great Block</span>
+      <div class="cname">Blagden Alley Bar Row</div>
+      <div class="cloc">Shaw · 9th + N St NW</div>
+      <div class="cdesc">The single best block for drinks in DC — Blagden Alley in Shaw has Columbia Room, Calico, Right Proper Brewing, and several other excellent bars all within one pedestrian alley. Start at one end and work toward the other. The alley has the kind of concentrated quality that cities usually stumble into by accident and then try to preserve.</div>
+    </div>
+    <div class="card dc food-item" data-cat="drinks">
+      <span class="ctag c-dc">Georgetown · Historic</span>
+      <div class="cname">Tombs</div>
+      <div class="cloc">1226 36th St NW · Georgetown University</div>
+      <div class="cdesc">The Georgetown bar — basement pub below 1789 Restaurant, Georgetown University's unofficial living room since 1962. Every Georgetown alum has eaten here. The burgers are excellent, the atmosphere is exactly what a collegiate pub should be. The rowing memorabilia on the walls tracks generations of Hoyas.</div>
+    </div>
+    <div class="card dc food-item" data-cat="drinks">
+      <span class="ctag c-dc">U Street · Live Music + Cocktails</span>
+      <div class="cname">Marvin</div>
+      <div class="cloc">2007 14th St NW · Belgian-Soul</div>
+      <div class="cdesc">Named for Marvin Gaye (who grew up on U Street) — Belgian beers and Southern food in a multi-floor space with rooftop views and live music. Belgian frites with aioli, good mussels, great cocktails. The rooftop is one of the best outdoor drinking spots in DC in summer.</div>
+    </div>
+    <div class="card dc food-item" data-cat="drinks">
+      <span class="ctag c-dc">Dupont · Literary Bar</span>
+      <div class="cname">Kramerbooks Afterwords Cafe</div>
+      <div class="cloc">1517 Connecticut Ave NW · Open 24/7 Weekends</div>
+      <div class="cdesc">Part bookstore, part bar, part café — open 24 hours on weekends. DC's most beloved late-night spot that doesn't feel like a late-night spot. Order the book you just browsed for and a glass of wine and stay until 3am. The most Dupont Circle thing in Dupont Circle.</div>
+    </div>
+
+  </div><!-- /dc-food-grid -->
+</div>
+
+<!-- ══ DC MUSEUMS ══ -->
+<div id="dc-museums" class="tab">
+  <div class="sh">
+    <div class="sh-tag">The Smithsonian + Beyond</div>
+    <h2>Museums <em>&amp; Arts</em></h2>
+    <p>20 Smithsonian museums, all free. The National Gallery. The Phillips Collection. The Kennedy Center. DC has more world-class free culture than any city in the US.</p>
+  </div>
+
+  <div class="dl">🏛️ The Smithsonian (All Free)</div>
+  <div class="g3">
+    <div class="card plum">
+      <span class="ctag c-plum">National Mall · Book 2–3 Months Ahead</span>
+      <div class="cname">National Museum of African American History &amp; Culture ⭐</div>
+      <div class="cloc">1400 Constitution Ave NW · Timed Entry Required</div>
+      <div class="cdesc">The most important museum opened in the US in the 21st century. Five floors from the Middle Passage through slavery, Jim Crow, the Civil Rights movement, and Black American cultural achievement. The building's bronze lattice exterior (David Adjaye, 2016) is itself a masterpiece. Free but timed passes required — book at 8am on recreation.gov, 30 days in advance, on the first of every month. Do not miss this.</div>
+      <div class="ctip">🎟️ Timed passes release at 8am EST on the first of each month for the following month — set an alarm</div>
+    </div>
+    <div class="card plum">
+      <span class="ctag c-plum">National Mall · Always Crowded · Worth It</span>
+      <div class="cname">National Museum of Natural History ⭐</div>
+      <div class="cloc">10th St + Constitution Ave NW</div>
+      <div class="cdesc">The Hope Diamond (45.52 carats, deep blue, history of bad luck), the African elephant in the rotunda, the Oceans Hall, the Human Origins exhibition. Free. The most visited museum in the Western hemisphere at 7 million visitors per year. Go early (10am opening) on a weekday to experience it at anything other than full capacity. The butterfly pavilion ($7) is worth the admission.</div>
+    </div>
+    <div class="card plum">
+      <span class="ctag c-plum">National Mall · Air + Space</span>
+      <div class="cname">National Air and Space Museum ⭐</div>
+      <div class="cloc">Independence Ave + 6th St SW · Being Renovated</div>
+      <div class="cdesc">The Wright Brothers' Flyer, Charles Lindbergh's Spirit of St. Louis, John Glenn's Mercury capsule, a piece of Moon rock you can touch. The most visited museum in the US. The renovation-era version at the Udvar-Hazy Center in Chantilly (near Dulles Airport) has the Space Shuttle Discovery and a Concorde. Free, both locations.</div>
+    </div>
+    <div class="card plum">
+      <span class="ctag c-plum">Penn Quarter · Art + Architecture</span>
+      <div class="cname">Smithsonian American Art Museum + Portrait Gallery</div>
+      <div class="cloc">8th + F St NW · Free</div>
+      <div class="cdesc">Two Smithsonian museums sharing one extraordinary building — the 1836 Patent Office Building (the most beautiful Neoclassical building in DC). The American Art collection includes major works from Winslow Homer, Georgia O'Keeffe, and Edward Hopper. The Portrait Gallery has every Presidential portrait. The inner courtyard (Kogod Courtyard, glass-roofed by Norman Foster) is one of the most beautiful interior spaces in DC. Free.</div>
+    </div>
+    <div class="card plum">
+      <span class="ctag c-plum">National Mall · History</span>
+      <div class="cname">National Museum of American History</div>
+      <div class="cloc">14th St + Constitution Ave NW · Free</div>
+      <div class="cdesc">The Star-Spangled Banner (the actual flag from Fort McHenry, 1814), Julia Child's kitchen, the first ladies' gowns, the Greensboro lunch counter from the 1960 civil rights sit-in, Kermit the Frog. The museum that most honestly grapples with American identity in all its contradiction and achievement. Free.</div>
+    </div>
+    <div class="card plum">
+      <span class="ctag c-plum">National Mall · Modern Art</span>
+      <div class="cname">Hirshhorn Museum + Sculpture Garden</div>
+      <div class="cloc">Independence Ave + 7th SW · Free</div>
+      <div class="cdesc">The Smithsonian modern and contemporary art museum — a circular concrete drum that critics hated in 1974 and that now looks like a visionary building. The sculpture garden in front has major works you walk past without realizing (Rodin's Burghers of Calais). Inside: Rothko, Calder, Basquiat, Koons, Ai Weiwei. Free.</div>
+    </div>
+  </div>
+
+  <div class="dl">🎨 Beyond the Smithsonian</div>
+  <div class="g3">
+    <div class="card plum">
+      <span class="ctag c-plum">National Mall · The Best Art Museum</span>
+      <div class="cname">National Gallery of Art ⭐</div>
+      <div class="cloc">6th St + Constitution Ave NW · Free</div>
+      <div class="cdesc">Two buildings spanning from medieval to contemporary — the West Building (Renaissance through Impressionism, including the only Leonardo da Vinci in the Americas) and the I.M. Pei East Building (the best example of brutalist architecture designed for joy rather than intimidation). The Cassat, the Vermeer, the Calder mobile in the East atrium. Free, always. The most important art museum in DC.</div>
+      <div class="ctip">🎨 The only Leonardo da Vinci painting in the Americas is here — Ginevra de' Benci, West Building ground floor</div>
+    </div>
+    <div class="card plum">
+      <span class="ctag c-plum">Dupont Circle · America's First Modern Museum</span>
+      <div class="cname">The Phillips Collection</div>
+      <div class="cloc">1600 21st St NW · Pay What You Wish Sundays</div>
+      <div class="cdesc">America's first museum of modern art (1921) — a beautiful mansion and adjoining gallery in Dupont Circle. Renoir's "Luncheon of the Boating Party" is the centerpiece. Intimate, personal, the opposite of the Mall's grand institutions. Sunday pay-what-you-wish. One of DC's most genuinely pleasurable museum experiences.</div>
+    </div>
+    <div class="card plum">
+      <span class="ctag c-plum">Foggy Bottom · The Kennedy Center</span>
+      <div class="cname">Kennedy Center for the Performing Arts</div>
+      <div class="cloc">2700 F St NW · Free Evening Performances</div>
+      <div class="cdesc">The national performing arts center — the National Symphony Orchestra, Washington National Opera, Broadway shows, jazz, comedy. The Grand Foyer (the longest room in the US, 630 feet) is free to walk through at any time. Free performances every evening at 6pm on the Millennium Stage (the most attended free performance program in DC). The rooftop terrace has sweeping Potomac views.</div>
+      <div class="ctip">🎵 Free Millennium Stage performance every evening at 6pm — no tickets, just show up</div>
+    </div>
+    <div class="card plum">
+      <span class="ctag c-plum">Near-Georgetown · Dumbarton Oaks</span>
+      <div class="cname">Dumbarton Oaks</div>
+      <div class="cloc">1703 32nd St NW · Georgetown</div>
+      <div class="cdesc">A Harvard research center with extraordinary 10-acre gardens and a small but world-class Byzantine and Pre-Columbian art collection. The 1944 conference that led to the creation of the United Nations was held here. The garden in spring (April–May) with the wisteria and cherry blossoms is one of DC's most beautiful spaces. $10 garden admission; museum free.</div>
+    </div>
+    <div class="card plum">
+      <span class="ctag c-plum">Penn Quarter · Fun Paid Museum</span>
+      <div class="cname">International Spy Museum</div>
+      <div class="cloc">700 L'Enfant Plaza SW · $25</div>
+      <div class="cdesc">The most genuinely entertaining paid museum in DC — actual spy equipment, Cold War history, interactive exhibits, and a surprisingly deep dive into the history of espionage from ancient Rome to the present. Worth the $25 for adults and considerably more for curious teenagers. One of the few paid museums in DC that justifies the price without question.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DC PARKS ══ -->
+<div id="dc-parks" class="tab">
+  <div class="sh">
+    <div class="sh-tag">Green Spaces + the Outdoors</div>
+    <h2>DC Parks <em>&amp; Outdoors</em></h2>
+    <p>DC has 7,000+ acres of parkland plus the C&O Canal towpath, the Capital Crescent Trail, and Rock Creek Park — one of the largest urban national parks in the US. The DMV adds Shenandoah 90 minutes west.</p>
+  </div>
+
+  <div class="dl">🌿 DC Parks</div>
+  <div class="g3">
+    <div class="card sage">
+      <span class="ctag c-sage">Northwest DC · Urban National Park</span>
+      <div class="cname">Rock Creek Park ⭐</div>
+      <div class="cloc">4300 Glover Rd NW · 2,000 Acres</div>
+      <div class="cdesc">A 2,000-acre national park in the middle of northwest DC — more than twice the size of Central Park. Horse stables (riding lessons available), 32 miles of hiking and biking trails, tennis courts, a nature center, and Peirce Mill (the 19th-century grist mill still stands). Beach Drive is closed to cars on weekends, becoming a cycling and running corridor. Free, always open.</div>
+    </div>
+    <div class="card sage">
+      <span class="ctag c-sage">Tidal Basin · Spring Pilgrimage</span>
+      <div class="cname">Tidal Basin + Cherry Trees</div>
+      <div class="cloc">Ohio Dr SW · Spring Bloom</div>
+      <div class="cdesc">3,800 cherry trees surrounding the Tidal Basin, gifted by Japan in 1912. Peak bloom (late March–mid April, variable by year) is one of the great natural spectacles in any American city — the Jefferson Memorial framed in pink is the most reproduced image in DC. Dawn visits during peak week are transcendent. The rest of the year: the path around the Tidal Basin (1.9 miles) is one of the best walks in DC year-round.</div>
+    </div>
+    <div class="card sage">
+      <span class="ctag c-sage">Adams Morgan · Weekly Drum Circle</span>
+      <div class="cname">Meridian Hill Park</div>
+      <div class="cloc">16th + Euclid St NW · Malcolm X Park</div>
+      <div class="cdesc">A terraced 12-acre park with the longest cascading fountain in North America — 13 pools down a hillside. The Saturday afternoon drum circle (since the 1950s, every week regardless of weather) is one of DC's great neighborhood traditions. Also called Malcolm X Park. The view down 16th Street from the park bench is one of the best in DC.</div>
+      <div class="ctip">🥁 Saturday drum circle — starts around 3pm, every week, free, bring a blanket</div>
+    </div>
+    <div class="card sage">
+      <span class="ctag c-sage">Georgetown · C&O Canal · 184 Miles</span>
+      <div class="cname">C&O Canal Towpath</div>
+      <div class="cloc">Georgetown to Cumberland, MD · NPS</div>
+      <div class="cdesc">The Chesapeake &amp; Ohio Canal National Historic Park — 184.5 miles of towpath from Georgetown to Cumberland, Maryland. The best urban section: the Georgetown stretch, walking among the 19th-century canal locks. The section to Great Falls (14.6 miles) is one of the best day-hike-or-bike experiences accessible from DC. Great Falls itself is extraordinary — the Potomac drops 76 feet through dramatic rock formations.</div>
+      <div class="ctip">🚴 Bike the full Georgetown to Great Falls section (29 mi round trip) — the best day trip from DC that isn't a day trip</div>
+    </div>
+    <div class="card sage">
+      <span class="ctag c-sage">Virginia · 90 Minutes</span>
+      <div class="cname">Shenandoah National Park + Skyline Drive</div>
+      <div class="cloc">Front Royal, VA · 90-minute drive</div>
+      <div class="cdesc">105,000 acres of Blue Ridge Mountain wilderness, 90 minutes from DC. Skyline Drive (105 miles, no trucks, speed limit 35 mph) is one of the great American scenic drives. Old Rag Mountain (9-mile loop, some rock scrambling, the most popular hike in Virginia) and Whiteoak Canyon Falls are the standout hikes. Peak foliage (mid-October) is extraordinary. $35/vehicle entry pass.</div>
+      <div class="ctip">🍂 Peak foliage mid-October — arrive at overlooks before 9am, the drive fills completely by 11am</div>
+    </div>
+    <div class="card sage">
+      <span class="ctag c-sage">Maryland · 45 Minutes</span>
+      <div class="cname">Annapolis + the Chesapeake</div>
+      <div class="cloc">Annapolis, MD · 45-minute drive</div>
+      <div class="cdesc">The most beautiful small city in the Mid-Atlantic — 18th-century brick streets, the US Naval Academy, the Chesapeake Bay waterfront. Eat crabs at Cantler's Riverside Inn (since 1974, the best crab feast near DC). Sail on the Chesapeake. Walk the Maryland State House grounds (oldest in continuous use in the US). An essential DMV day trip.</div>
+    </div>
+    <div class="card sage">
+      <span class="ctag c-sage">Virginia · 1.5 Hours</span>
+      <div class="cname">Virginia Wine Country</div>
+      <div class="cloc">Loudoun County + Fauquier County · VA</div>
+      <div class="cdesc">Northern Virginia wine country — Loudoun County ("DC's Wine Country") has 40+ wineries, most within 60 miles of the city. The Naked Mountain and Linden Vineyards areas are the best quality. Pair with a stop in Middleburg (the Hunt Country village, equestrian estates) or Harpers Ferry, WV (where the Shenandoah meets the Potomac).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DC TRANSIT ══ -->
+<div id="dc-transit" class="tab">
+  <div class="sh">
+    <div class="sh-tag">Getting Around</div>
+    <h2>DC <em>Transit</em></h2>
+    <p>DC is one of the most walkable cities in America for the core areas. The Metro is clean, reliable, and genuinely beautiful. Understanding the grid makes everything easier.</p>
+  </div>
+
+  <div class="banner">
+    <h3>The DC Street Grid — Understand This First</h3>
+    <p>DC is divided into four quadrants (NW, NE, SW, SE) from the Capitol building. Numbered streets run north-south; lettered streets run east-west; diagonal avenues (named for states) cut across. Most of what visitors want is in NW. Saying just an address without the quadrant is like saying "123 Main" — which Main? Always include NW/NE/SW/SE.</p>
+  </div>
+
+  <div class="dl">🚇 The Metro — DC's 6 Lines</div>
+  <div class="g2">
+    <div class="tc">
+      <div><span class="tc-line" style="background:#BF0D3E">R</span><strong> Red Line — The Tourist Line</strong></div>
+      <div class="tc-body">The most useful line for visitors — runs from Union Station (Amtrak + bus hub) through downtown, Dupont Circle, Woodley Park (National Zoo), Cleveland Park, and out to Bethesda and Rockville, MD. The National Zoo is a free 163-acre zoo 15 minutes from downtown on the Red Line.</div>
+    </div>
+    <div class="tc">
+      <div><span class="tc-line" style="background:#0076A5">B</span><strong> Blue + Orange + Silver Lines</strong></div>
+      <div class="tc-body">Three lines sharing tracks through downtown — the most important for getting to Virginia (Arlington, Reagan Airport, Alexandria on Blue/Yellow) and to Dulles Airport (Silver Line to Wiehle-Reston, then Dulles Corridor). The Pentagon and Arlington Cemetery are Blue/Yellow.</div>
+    </div>
+    <div class="tc">
+      <div><span class="tc-line" style="background:#00A550">G</span><strong> Green + Yellow Lines</strong></div>
+      <div class="tc-body">Green runs from Greenbelt, MD through downtown to Branch Ave. Yellow runs express from Fort Totten through downtown to Huntington/Alexandria. Together they cover the Shaw, Columbia Heights, and U Street neighborhoods — essential for the restaurant and music corridor.</div>
+    </div>
+  </div>
+
+  <div class="dl">🚲 Bikes, Scooters + Getting to Airports</div>
+  <div class="g3">
+    <div class="card gold">
+      <span class="ctag c-gold">Everywhere · Docked + Dockless</span>
+      <div class="cname">Capital Bikeshare</div>
+      <div class="cdesc">The DC-area bikeshare system — 700+ stations across DC, Arlington, Alexandria. $2 for a 30-minute trip (tap your credit card at any dock), or $8/day pass. The core of DC from Georgetown to Capitol Hill is flat and bikeable. The C&O Canal towpath and Capital Crescent Trail are best done on a Capital Bikeshare bike. The most fun way to see DC.</div>
+    </div>
+    <div class="card gold">
+      <span class="ctag c-gold">Airports — 3 Options</span>
+      <div class="cname">Getting to DC Airports</div>
+      <div class="cdesc">Reagan National (DCA): Metro Yellow/Blue directly to the terminal — the easiest airport transit in the US, 20 min from downtown. Dulles (IAD): Silver Line Metro to Dulles Airport station — 45 min from downtown, $3. BWI (Baltimore): MARC Train from Union Station, 35 min, $7 — the cheapest airport rail option. For DCA, skip the cab and take the Metro.</div>
+    </div>
+    <div class="card gold">
+      <span class="ctag c-gold">Amtrak Hub · Union Station</span>
+      <div class="cname">Amtrak Northeast Corridor</div>
+      <div class="cdesc">DC sits on the Amtrak Northeast Corridor — the most heavily traveled rail line in the US. Trains to Baltimore (35 min), Philadelphia (1.5 hr), New York Penn Station (2.75 hr Acela, 3.5 hr regional). The DC-NYC Acela ($100–180) is faster than flying when you factor in airport time. Union Station itself (1907, Beaux-Arts) is worth seeing as architecture.</div>
+    </div>
+    <div class="card gold">
+      <span class="ctag c-gold">DC + Virginia</span>
+      <div class="cname">Driving + Parking Notes</div>
+      <div class="cdesc">Do not drive in DC unless you need to reach the suburbs. Parking near the Mall is paid and scarce; street parking in neighborhoods requires a DC permit. Virginia is a different story — for Eden Center, Annandale Korean, and Shenandoah, driving is the move. I-66 and I-395 from DC to Northern Virginia are clogged during rush hour; avoid 7–9am and 4–7pm.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DC DMV DAY TRIPS ══ -->
+<div id="dc-dmv" class="tab">
+  <div class="sh">
+    <div class="sh-tag">DC · Maryland · Virginia</div>
+    <h2>DMV <em>Day Trips</em></h2>
+    <p>The DMV is one of the best base camps in the US for day trips — the Blue Ridge Mountains, the Chesapeake Bay, Colonial history, and the Appalachian Trail all within two hours.</p>
+  </div>
+
+  <div class="dl">🚗 By Drive Time from DC</div>
+  <div class="g2">
+    <div class="cc gold">
+      <div class="cc-name">Annapolis, MD</div>
+      <div class="cc-sub">45 min · Chesapeake · Crabs + Sailing</div>
+      <div class="cc-body">The state capital, the Naval Academy, 18th-century brick streets. Cantler's Riverside Inn for a crab feast on the water. Sail on the Chesapeake — several rental and charter operations near the City Dock. The most beautiful small city in the Mid-Atlantic.</div>
+    </div>
+    <div class="cc">
+      <div class="cc-name">Great Falls, VA/MD</div>
+      <div class="cc-sub">30 min · C&O Canal · Dramatic Falls</div>
+      <div class="cc-body">The Potomac drops 76 feet through volcanic rock formations — extraordinary. Accessible from both the Virginia side (Great Falls Park, NPS) and the Maryland side (C&O Canal National Historic Park). The overlook of Mather Gorge is one of the most dramatic natural views accessible from any US capital city. Free with NPS pass or $20/vehicle.</div>
+    </div>
+    <div class="cc">
+      <div class="cc-name">Harpers Ferry, WV</div>
+      <div class="cc-sub">75 min · Where Three States Meet</div>
+      <div class="cc-body">The confluence of the Shenandoah and Potomac rivers, where Virginia, Maryland, and West Virginia meet. John Brown's raid (1859) was here. The NPS historic town is free to walk. The Appalachian Trail passes through — short hike to the Maryland Heights overlook for the most dramatic view. Best in October for fall foliage.</div>
+    </div>
+    <div class="cc">
+      <div class="cc-name">Mount Vernon, VA</div>
+      <div class="cc-sub">25 min · Washington's Estate</div>
+      <div class="cc-body">George Washington's estate on the Potomac — the 500-acre farm, the mansion (the most visited historic house in America), the distillery, and the slave memorial. $25 adults. In summer, take the Potomac riverboat from The Wharf in DC — the journey itself is worth it. A genuinely important American history experience.</div>
+    </div>
+    <div class="cc sage">
+      <div class="cc-name">Shenandoah National Park</div>
+      <div class="cc-sub">90 min · Blue Ridge Mountains · Skyline Drive</div>
+      <div class="cc-body">105 miles of scenic drive along the Blue Ridge crest, 500 miles of hiking trails, 30 peaks over 3,000 feet. Old Rag Mountain is the signature hike (9 miles, rock scramble, extraordinary views, book timed entry May–Nov). Whiteoak Canyon has the best waterfalls. Fall foliage (mid-October) is one of the great natural spectacles of the East Coast.</div>
+    </div>
+    <div class="cc sage">
+      <div class="cc-name">Baltimore, MD</div>
+      <div class="cc-sub">45 min · Crabs · Ravens · The Wire</div>
+      <div class="cc-body">A genuinely great American city that gets underrated by proximity to DC. The Inner Harbor, the National Aquarium, LP Steamers or Thames Street Oyster House for the true Maryland crab feast. Lexington Market (the oldest in the US). Fells Point for bars and oysters. The Maryland Museum of Art (the Walters) is free. Drive or MARC train from Union Station.</div>
+    </div>
+    <div class="cc">
+      <div class="cc-name">Middleburg + Virginia Wine</div>
+      <div class="cc-sub">1 hr · Hunt Country + Vineyards</div>
+      <div class="cc-body">Northern Virginia's horse country — Middleburg is a perfectly preserved 18th-century village surrounded by equestrian estates and 40+ wineries. The Red Fox Inn (since 1728) for lunch. Boxwood Winery, Chrysalis Vineyards, and Linden Vineyards for the best bottles. Pair with a Harpers Ferry stop on the way back.</div>
+    </div>
+    <div class="cc ember">
+      <div class="cc-name">Colonial Williamsburg, VA</div>
+      <div class="cc-sub">2.5 hr · Living History · 18th Century</div>
+      <div class="cc-body">The most comprehensive living history museum in the world — 301 acres of 18th-century Colonial Virginia reconstructed and staffed by historical interpreters. The Governor's Palace, the Capitol, the taverns. The surrounding area has Jamestown (first permanent English settlement, 1607), Yorktown (final Revolutionary battle), and excellent Colonial-era restaurants. Make it an overnight.</div>
+    </div>
+    <div class="cc">
+      <div class="cc-name">Eastern Shore, MD</div>
+      <div class="cc-sub">2 hr · Chesapeake · Chincoteague</div>
+      <div class="cc-body">Cross the Chesapeake Bay Bridge and enter a different world — flat farmland, crab shacks, oyster beds, and empty Atlantic beaches. Chestertown for preserved Colonial architecture. Oxford and St. Michaels for Chesapeake sailing culture. Chincoteague Island (crossing into Virginia) for wild ponies on Assateague Island. One of the most undervisited coastal areas in the US.</div>
+    </div>
+  </div>
+</div>
+
+  </div><!-- /dc-main -->
+
+  <div class="footer">
+    <strong>Washington D.C.</strong>
+    A Local's Guide &nbsp;·&nbsp; <a onclick="switchCity('sf')">← San Francisco</a> &nbsp;·&nbsp; <a onclick="switchCity('nyc')">New York City →</a>
+  </div>
+>
+
 <button id="btt" aria-label="Back to top">↑</button>
 
 <script>
-// ── CITY SWITCHER ──
+// ── CITY SWITCHER ──────────────────────────────
 function switchCity(city) {
   document.querySelectorAll('.city-section').forEach(s => s.classList.remove('active'));
   document.getElementById(city + '-section').classList.add('active');
-  document.querySelectorAll('.city-btn').forEach(b => {b.classList.remove('sf-on','nyc-on')});
+  document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('sf-on','nyc-on','dc-on'));
   document.getElementById('btn-' + city).classList.add(city + '-on');
-  // Update btt color
+  // btt color
   const btt = document.getElementById('btt');
-  if (city === 'nyc') { btt.style.background = 'var(--nyc)'; btt.style.color = 'var(--neon)'; }
-  else { btt.style.background = 'var(--bark)'; btt.style.color = 'var(--gold)'; }
-  window.scrollTo({top:0,behavior:'smooth'});
+  const colors = {sf:['var(--sf-bg)','var(--sf-gold)'], nyc:['var(--nyc-bg)','var(--nyc-amber)'], dc:['var(--dc-bg)','var(--dc-cherry)']};
+  btt.style.background = colors[city][0];
+  btt.style.color = colors[city][1];
+  window.scrollTo({top:0, behavior:'smooth'});
 }
 
-// ── SF NAV ──
-function goSF(t) {
-  document.querySelectorAll('#sf-section .tab').forEach(x => x.classList.remove('on'));
-  document.querySelectorAll('#sf-section .nb').forEach(b => b.classList.remove('on'));
-  const tab = document.getElementById(t);
+// ── SCOPED NAVIGATION ──────────────────────────
+function goCity(sectionId, navId, tabId, fnName) {
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+  section.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+  section.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+  const tab = document.getElementById(tabId);
   if (tab) { tab.classList.add('on'); revealCards(tab); }
-  document.querySelectorAll('#sf-section .nb').forEach(b => {
-    if (b.getAttribute('onclick') === "goSF('" + t + "')") b.classList.add('on');
+  section.querySelectorAll('.nb').forEach(b => {
+    if (b.getAttribute('onclick') === fnName + "('" + tabId + "')") b.classList.add('on');
   });
-  const nav = document.getElementById('sf-nav');
-  if (nav) window.scrollTo({top: nav.offsetTop - 52, behavior:'smooth'});
+  const nav = document.getElementById(navId);
+  if (nav) window.scrollTo({top: nav.offsetTop - 53, behavior:'smooth'});
 }
 
-// ── NYC NAV ──
-function goNYC(t) {
-  document.querySelectorAll('#nyc-section .tab').forEach(x => x.classList.remove('on'));
-  document.querySelectorAll('#nyc-section .nb').forEach(b => b.classList.remove('on'));
-  const tab = document.getElementById(t);
-  if (tab) { tab.classList.add('on'); revealCards(tab); }
-  document.querySelectorAll('#nyc-section .nb').forEach(b => {
-    if (b.getAttribute('onclick') === "goNYC('" + t + "')") b.classList.add('on');
-  });
-  const nav = document.getElementById('nyc-nav');
-  if (nav) window.scrollTo({top: nav.offsetTop - 52, behavior:'smooth'});
-}
+function goSF(t)  { goCity('sf-section',  'sf-nav',  t, 'goSF') }
+function goNYC(t) { goCity('nyc-section', 'nyc-nav', t, 'goNYC') }
+function goDC(t)  { goCity('dc-section',  'dc-nav',  t, 'goDC') }
 
-// ── HOOD EXPAND ──
+// ── NEIGHBORHOOD EXPAND ────────────────────────
 function toggleHood(id) {
   const panel = document.getElementById(id);
   if (!panel) return;
   const isOpen = panel.classList.contains('open');
-  document.querySelectorAll('.hood-panel').forEach(p => { p.classList.remove('open'); p.style.display = 'none'; });
+  document.querySelectorAll('.hood-panel').forEach(p => { p.classList.remove('open'); p.style.display='none'; });
   if (!isOpen) {
-    panel.classList.add('open');
-    panel.style.display = 'grid';
+    panel.classList.add('open'); panel.style.display='grid';
     panel.scrollIntoView({behavior:'smooth', block:'nearest'});
   }
 }
 
-// ── SF FOOD FILTER ──
-function sfFilter(cat) {
-  document.querySelectorAll('#sf-food-filters .filt').forEach(b => b.classList.remove('on'));
-  document.querySelectorAll('#sf-food-filters .filt').forEach(b => {
-    if (b.getAttribute('onclick') === "sfFilter('" + cat + "')") b.classList.add('on');
-  });
-  const grid = document.getElementById('sf-food-grid');
-  if (!grid) return;
-  grid.querySelectorAll('.food-item').forEach((el, i) => {
-    const match = cat === 'all' || el.dataset.cat === cat;
-    if (match) {
-      el.classList.remove('hidden');
-      el.style.animationDelay = (i % 14 * 0.032) + 's';
-      el.classList.remove('reveal'); void el.offsetWidth; el.classList.add('reveal');
-    } else { el.classList.add('hidden'); }
-  });
+// ── FOOD FILTERS ───────────────────────────────
+function makeFilter(filterId, gridId) {
+  return function(cat) {
+    document.querySelectorAll('#' + filterId + ' .filt').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('#' + filterId + ' .filt').forEach(b => {
+      const fn = filterId.replace('-food-filters', 'Filter').replace('sf-','sf').replace('nyc-','nyc').replace('dc-','dc');
+      const onclick = b.getAttribute('onclick');
+      if (onclick && onclick.includes("'" + cat + "'")) b.classList.add('on');
+    });
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+    grid.querySelectorAll('.food-item').forEach((el, i) => {
+      const match = cat === 'all' || el.dataset.cat === cat;
+      if (match) {
+        el.classList.remove('hidden');
+        el.style.animationDelay = (i % 16 * 0.030) + 's';
+        el.classList.remove('reveal'); void el.offsetWidth; el.classList.add('reveal');
+      } else { el.classList.add('hidden'); }
+    });
+  };
 }
 
-// ── NYC FOOD FILTER ──
-function nycFilter(cat) {
-  document.querySelectorAll('#nyc-food-filters .filt').forEach(b => b.classList.remove('on'));
-  document.querySelectorAll('#nyc-food-filters .filt').forEach(b => {
-    if (b.getAttribute('onclick') === "nycFilter('" + cat + "')") b.classList.add('on');
-  });
-  const grid = document.getElementById('nyc-food-grid');
-  if (!grid) return;
-  grid.querySelectorAll('.food-item').forEach((el, i) => {
-    const match = cat === 'all' || el.dataset.cat === cat;
-    if (match) {
-      el.classList.remove('hidden');
-      el.style.animationDelay = (i % 14 * 0.032) + 's';
-      el.classList.remove('reveal'); void el.offsetWidth; el.classList.add('reveal');
-    } else { el.classList.add('hidden'); }
+const sfFilter  = makeFilter('sf-food-filters',  'sf-food-grid');
+const nycFilter = makeFilter('nyc-food-filters', 'nyc-food-grid');
+const dcFilter  = makeFilter('dc-food-filters',  'dc-food-grid');
+
+// Fix filter button active state (simpler approach)
+function activateFilt(filterId, cat, fnName) {
+  document.querySelectorAll('#' + filterId + ' .filt').forEach(b => {
+    b.classList.remove('on');
+    const oc = b.getAttribute('onclick') || '';
+    if (oc.includes("'" + cat + "'")) b.classList.add('on');
   });
 }
+const _sfFilter = sfFilter, _nycFilter = nycFilter, _dcFilter = dcFilter;
+window.sfFilter  = function(c) { activateFilt('sf-food-filters',  c, 'sfFilter');  _sfFilter(c); };
+window.nycFilter = function(c) { activateFilt('nyc-food-filters', c, 'nycFilter'); _nycFilter(c); };
+window.dcFilter  = function(c) { activateFilt('dc-food-filters',  c, 'dcFilter');  _dcFilter(c); };
 
-// ── SCROLL REVEAL ──
+// ── SCROLL REVEAL ──────────────────────────────
 function revealCards(container) {
-  const cards = container.querySelectorAll('.card:not(.food-item), .pk, .mc, .ev, .cc');
+  const cards = container.querySelectorAll('.card:not(.food-item),.pk,.mc,.ev,.cc,.stat,.hc');
   cards.forEach((el, i) => {
-    el.style.animationDelay = (i * 0.038) + 's';
+    el.style.animationDelay = (i * 0.04) + 's';
     el.classList.remove('reveal'); void el.offsetWidth; el.classList.add('reveal');
   });
 }
 
-// ── BACK TO TOP ──
+// ── BACK TO TOP ────────────────────────────────
 const btt = document.getElementById('btt');
 window.addEventListener('scroll', () => { btt.classList.toggle('vis', window.scrollY > 400); }, {passive:true});
-btt.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+btt.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 
-// ── INIT ──
-document.querySelectorAll('.hood-panel').forEach(p => p.style.display = 'none');
+// ── INIT ───────────────────────────────────────
+document.querySelectorAll('.hood-panel').forEach(p => p.style.display='none');
+// Set default BTT color
+btt.style.background = 'var(--sf-bg)';
+btt.style.color = 'var(--sf-gold)';
+// Reveal initial tabs
 document.querySelectorAll('.tab.on').forEach(revealCards);
 </script>
 </body>
